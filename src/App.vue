@@ -1,6 +1,6 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <img id="logo" alt="Vue logo" src="./assets/logo.png">
+  <HelloWorld msg="Bienvenue sur le réseau social de Groupomania"/>
 </template>
 
 <script>
@@ -22,5 +22,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+#logo {
+  width: 200px;
 }
 </style>
