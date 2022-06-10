@@ -1,8 +1,3 @@
-<!-- <template>
-  <img id="logo" alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Bienvenue sur le réseau social de Groupomania"/>
-</template> -->
-
 <template>
   <img id="logo" alt="Vue logo" src="./assets/logo.png" />
   <router-view></router-view>
@@ -62,7 +57,7 @@ img {
   font-weight: 500;
 }
 .button {
-  background: rgba(253, 45, 1, 0.5);
+  background: #fd2d01;
   color: white;
   border-radius: 8px;
   font-weight: 800;
@@ -70,7 +65,7 @@ img {
   border: none;
   width: 100%;
   padding: 16px;
-  transition: 0.4s background-color;
+  transition: 0.4s all ease-in-out;
 }
 .card__action {
   color: #fd2d01;
@@ -81,7 +76,10 @@ img {
 }
 .button:hover {
   cursor: pointer;
-  background: #fd2d01;
+  background-color: #fd2d01;
+  box-shadow: 1px 1px 5px grey;
+  transform: scale(1.01);
+  transition: 0.3s all;
 }
 .button--disabled {
   background: #cecece;

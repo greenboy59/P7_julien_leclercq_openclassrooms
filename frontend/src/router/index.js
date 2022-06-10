@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router";
 import Login from "@/views/Login.vue";
-// import Profile from "@/views/Profil.vue";
+import Profil from "@/views/Profil.vue";
+// import PostsComponent from "@/views/Posts.vue";// EN ATTENTE DE CREATION DE LA PAGE POSTS
 
 const routes = [
   { 
@@ -8,12 +9,18 @@ const routes = [
     path: '/', 
     component: Login,
   },
-  // { 
-  //   name: 'profil',
-  //   path: '/profil', 
-  //   component: Profil, 
-  //   props:true 
-  // },
+  { 
+    name: 'profil',
+    path: '/profil', 
+    component: Profil, 
+    props:true 
+  },
+  // EN ATTENTE DE CREATION DE LA PAGE POSTS
+  // {
+  //   name: 'posts',
+  //   path: '/posts',
+  //   component: PostsComponent,
+  // }
 ]
 
 const router = createRouter({

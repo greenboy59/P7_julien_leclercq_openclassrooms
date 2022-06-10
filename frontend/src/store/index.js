@@ -3,7 +3,7 @@ import { createStore } from 'vuex'
 const axios = require('axios');
 
 const instance = axios.create({
-  baseURL: 'http://localhost:3000/api/auth/'
+  baseURL: 'http://localhost:3000/api/'
 });
 
 let user = localStorage.getItem('user');
@@ -24,7 +24,7 @@ if (!user) {
   }
 }
 
-// Create a new store instance.
+// Creation d'une nouvelle instance de store.
 const store = createStore({
   state: {
     status: '',
@@ -58,7 +58,7 @@ const store = createStore({
     login: ({commit}, userInfos) => {
       commit('setStatus', 'loading');
       return new Promise((resolve, reject) => {
-        instance.post('/login', userInfos)
+        instance.post('/auth/login', userInfos)
         .then(function (response) {
           commit('setStatus', '');
           commit('logUser', response.data);
@@ -70,11 +70,11 @@ const store = createStore({
         });
       });
     },
-    createAccount: ({commit}, userInfos) => {
+    createAccount: ({ commit }, userInfos ) => {
       commit('setStatus', 'loading');
       return new Promise((resolve, reject) => {
         commit;
-        instance.post('/createAccount', userInfos)
+        instance.post('/auth/signup', userInfos)
         .then(function (response) {
           commit('setStatus', 'created');
           resolve(response);

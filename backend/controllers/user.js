@@ -3,12 +3,11 @@ const jwt = require('jsonwebtoken');
 require("dotenv").config();
 
 
-const regExpStrongPassword = require('../utils/regex');
+const regExpStrongPassword = require('../utils/regexPassword');
 const User = require('../models/User');
 
 // Création d'un compte utilisateur avec mot de passe fort
 exports.signup = (req, res, next) => {
-  if (regExpStrongPassword.test(req.body.password)) {
     // Hashage du mot de passe + salage (10 caractères)
     bcrypt.hash(req.body.password, 10)
       .then(hash => {
@@ -21,12 +20,6 @@ exports.signup = (req, res, next) => {
           .catch((error) => res.status(400).json({ error }))
       })
       .catch(error => res.status(500).json({ error }));
-  }
-  else {
-    res.status(400).json(
-      { message: 'Mot de passe trop faible, minimum 8 caractères, dont 1 majuscule, 1 minuscule, 1 nombre et 1 caractère spécial' }
-    )
-  }
 };
 
  // Login d'un utilisateur existant 
