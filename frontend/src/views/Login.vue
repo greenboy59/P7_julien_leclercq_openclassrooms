@@ -4,9 +4,7 @@
     <h1 class="card__title" v-else>Inscription</h1>
     <p class="card__subtitle" v-if="mode == 'login'">
       Vous n'avez pas encore de compte ?
-      <span class="card__action" @click="switchToCreateAccount()"
-        >Créer un compte</span
-      >
+      <span class="card__action" @click="switchToCreateAccount()">Créer un compte</span>
     </p>
     <p class="card__subtitle" v-else>
       Vous avez déjà un compte ?
@@ -174,4 +172,3 @@ export default {
   color: #aaaaaa;
 }
 </style>
->

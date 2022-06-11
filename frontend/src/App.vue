@@ -1,6 +1,6 @@
 <template>
- <img id="logo" alt="Groupomania logo" src="./assets/logo.png">
   <router-view></router-view>
+  <img id="logo" alt="groupomania logo" src="../src/assets/logo.png">
 </template>
 
 <script>
