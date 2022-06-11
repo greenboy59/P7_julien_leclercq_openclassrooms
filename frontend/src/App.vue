@@ -1,9 +1,10 @@
 <template>
-  <img id="logo" alt="Vue logo" src="./assets/logo.png" />
+ <img id="logo" alt="Groupomania logo" src="./assets/logo.png">
   <router-view></router-view>
 </template>
 
 <script>
+// On injecte les composants dans la div #app
 export default {
   name: "App",
   components: {},
@@ -35,7 +36,10 @@ img {
 }
 #logo {
   position: absolute;
-  width: 300px;
+  z-index: -1;
+  object-fit: cover;
+  width: 250px;
+  height: 130px;
   top: 0;
   left: 50%;
   transform: translateX(-50%);

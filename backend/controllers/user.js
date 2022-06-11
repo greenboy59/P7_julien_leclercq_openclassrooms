@@ -2,8 +2,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require("dotenv").config();
 
-
-const regExpStrongPassword = require('../utils/regexPassword');
 const User = require('../models/User');
 
 // Création d'un compte utilisateur avec mot de passe fort
