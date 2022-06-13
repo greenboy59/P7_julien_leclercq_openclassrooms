@@ -1,7 +1,8 @@
 import { createWebHistory, createRouter } from "vue-router";
 import Login from "@/views/Login.vue";
 import Profil from "@/views/Profil.vue";
-// import PostsComponent from "@/views/Posts.vue";// EN ATTENTE DE CREATION DE LA PAGE POSTS
+
+// import PostsComponent from "@/views/AllPosts.vue";// EN ATTENTE DE CREATION DE LA PAGE POSTS
 
 const routes = [
   { 
@@ -19,7 +20,7 @@ const routes = [
   // {
   //   name: 'posts',
   //   path: '/posts',
-  //   component: PostsComponent,
+  //   component: AllPosts,
   // }
 ]
 

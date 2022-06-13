@@ -1,58 +1,61 @@
 <template>
-  <div class="card">
-    <h1 class="card__title" v-if="mode == 'login'">Connexion</h1>
-    <h1 class="card__title" v-else>Inscription</h1>
-    <p class="card__subtitle" v-if="mode == 'login'">
-      Vous n'avez pas encore de compte ?
-      <span class="card__action" @click="switchToCreateAccount()"
-        >Créer un compte</span
-      >
-    </p>
-    <p class="card__subtitle" v-else>
-      Vous avez déjà un compte ?
-      <span class="card__action" @click="switchToLogin()">Se connecter</span>
-    </p>
-    <div class="form-row">
-      <input
-        v-model="email"
-        class="form-row__input"
-        type="text"
-        placeholder="Adresse mail"
-      />
-    </div>
-    <div class="form-row">
-      <input
-        v-model="password"
-        class="form-row__input"
-        type="password"
-        placeholder="Mot de passe"
-      />
-    </div>
-    <div class="form-row" v-if="mode == 'login' && status == 'error_login'">
-      Adresse mail et/ou mot de passe invalide
-    </div>
-    <div class="form-row" v-if="mode == 'create' && status == 'error_create'">
-      Adresse mail déjà utilisée
-    </div>
-    <div class="form-row">
-      <button
-        @click="login()"
-        class="button"
-        :class="{ 'button--disabled': !validatedFields }"
-        v-if="mode == 'login'"
-      >
-        <span v-if="status == 'loading'">Connexion en cours...</span>
-        <span v-else>Connexion</span>
-      </button>
-      <button
-        @click="createAccount()"
-        class="button"
-        :class="{ 'button--disabled': !validatedFields }"
-        v-else
-      >
-        <span v-if="status == 'loading'">Création en cours...</span>
-        <span v-else>Créer mon compte</span>
-      </button>
+  <div>
+    <img id="logo" alt="Groupomania logo" :src="require('@/assets/logo.png')" />
+    <div class="card">
+      <h1 class="card__title" v-if="mode == 'login'">Connexion</h1>
+      <h1 class="card__title" v-else>Inscription</h1>
+      <p class="card__subtitle" v-if="mode == 'login'">
+        Vous n'avez pas encore de compte ?
+        <span class="card__action" @click="switchToCreateAccount()">
+          Créer un compte
+        </span>
+      </p>
+      <p class="card__subtitle" v-else>
+        Vous avez déjà un compte ?
+        <span class="card__action" @click="switchToLogin()">Se connecter</span>
+      </p>
+      <div class="form-row">
+        <input
+          v-model="email"
+          class="form-row__input"
+          type="text"
+          placeholder="Adresse mail"
+        />
+      </div>
+      <div class="form-row">
+        <input
+          v-model="password"
+          class="form-row__input"
+          type="password"
+          placeholder="Mot de passe"
+        />
+      </div>
+      <div class="form-row" v-if="mode == 'login' && status == 'error_login'">
+        Adresse mail et/ou mot de passe invalide
+      </div>
+      <div class="form-row" v-if="mode == 'create' && status == 'error_create'">
+        Adresse mail déjà utilisée
+      </div>
+      <div class="form-row">
+        <button
+          @click="login()"
+          class="button"
+          :class="{ 'button--disabled': !validatedFields }"
+          v-if="mode == 'login'"
+        >
+          <span v-if="status == 'loading'">Connexion en cours...</span>
+          <span v-else>Connexion</span>
+        </button>
+        <button
+          @click="createAccount()"
+          class="button"
+          :class="{ 'button--disabled': !validatedFields }"
+          v-else
+        >
+          <span v-if="status == 'loading'">Création en cours...</span>
+          <span v-else>Créer mon compte</span>
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -94,7 +97,7 @@ export default {
           return false;
         }
       }
-      // En mode connexion, on check dans la BDD si l'utilisateur existe et si son mot de passe est correcte
+      // En mode connexion, on check dans la BDD si l'utilisateur existe et si le mot de passe est correct
       else {
         if (
           regExpEmail.test(this.email) &&
@@ -108,6 +111,7 @@ export default {
     },
     ...mapState(["status"]),
   },
+  // Méthode pour être soit en mode login soit en mode create
   methods: {
     switchToCreateAccount: function () {
       this.mode = "create";
@@ -117,6 +121,7 @@ export default {
     },
     login: function () {
       const self = this;
+      // Dispatch des données de login vers le store
       this.$store
         .dispatch("login", {
           email: this.email,
@@ -135,6 +140,7 @@ export default {
     createAccount: function () {
       const self = this;
       this.$store
+      // Dispatch des données saisies pour la création de compte vers le store
         .dispatch("createAccount", {
           email: this.email,
           password: this.password,
@@ -174,4 +180,3 @@ export default {
   color: #aaaaaa;
 }
 </style>
->

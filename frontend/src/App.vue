@@ -1,5 +1,4 @@
 <template>
-  <img id="logo" alt="Vue logo" src="./assets/logo.png" />
   <router-view></router-view>
 </template>
 
@@ -29,16 +28,18 @@ body {
   min-height: 100vh;
   padding: 32px;
 }
-img {
-  max-width: 100%;
-  border-radius: 8px;
-}
 #logo {
   position: absolute;
   width: 300px;
+  height: 25%;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
+  object-fit: contain;
+}
+img {
+  max-width: 100%;
+  border-radius: 8px;
 }
 .card {
   max-width: 100%;

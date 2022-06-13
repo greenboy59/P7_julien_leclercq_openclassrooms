@@ -2,8 +2,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require("dotenv").config();
 
-
-const regExpStrongPassword = require('../utils/regexPassword');
 const User = require('../models/User');
 
 // Création d'un compte utilisateur avec mot de passe fort
@@ -46,4 +44,16 @@ exports.signup = (req, res, next) => {
          .catch(error => res.status(500).json({ error }));
      })
      .catch(error => res.status(500).json({ error }));
+ };
+
+// Infos sur l'utilisateur
+exports.infos = (req, res, next) => {
+  User.findOne({ email: req.body.email })
+    .then(user => {
+      res.status(200).json({
+        infos: {
+          email: user.email
+        }
+      })
+    })
 };

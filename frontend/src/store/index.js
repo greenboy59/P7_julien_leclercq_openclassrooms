@@ -54,9 +54,12 @@ const store = createStore({
       localStorage.removeItem('user');
     }
   },
+  // Création des méthods
   actions: {
+    // On récupère les données envoyées par login.vue avec commit
     login: ({commit}, userInfos) => {
       commit('setStatus', 'loading');
+      // Envoi des données au backend
       return new Promise((resolve, reject) => {
         instance.post('/auth/login', userInfos)
         .then(function (response) {
@@ -70,8 +73,11 @@ const store = createStore({
         });
       });
     },
+
+    // On récupère les données envoyées par login.vue lors d'une création de compte avec commit
     createAccount: ({ commit }, userInfos ) => {
       commit('setStatus', 'loading');
+      // Envoi des données au backend
       return new Promise((resolve, reject) => {
         commit;
         instance.post('/auth/signup', userInfos)
@@ -85,10 +91,13 @@ const store = createStore({
         });
       });
     },
+    
+    // On demande les infos au backend afin d'afficher le mail de l'utilisateur
     getUserInfos: ({commit}) => {
       instance.post('/infos')
       .then(function (response) {
         commit('userInfos', response.data.infos);
+        console.log()
       })
       .catch(function () {
       });
