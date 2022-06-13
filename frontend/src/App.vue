@@ -3,6 +3,7 @@
 </template>
 
 <script>
+// On injecte les composants dans la div #app
 export default {
   name: "App",
   components: {},
