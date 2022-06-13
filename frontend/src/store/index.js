@@ -57,52 +57,52 @@ const store = createStore({
   // Création des méthods
   actions: {
     // On récupère les données envoyées par login.vue avec commit
-    login: ({commit}, userInfos) => {
+    login: ({ commit }, userInfos) => {
       commit('setStatus', 'loading');
       // Envoi des données au backend
       return new Promise((resolve, reject) => {
         instance.post('/auth/login', userInfos)
-        .then(function (response) {
-          commit('setStatus', '');
-          commit('logUser', response.data);
-          resolve(response);
-        })
-        .catch(function (error) {
-          commit('setStatus', 'error_login');
-          reject(error);
-        });
+          .then(function (response) {
+            commit('setStatus', '');
+            commit('logUser', response.data);
+            resolve(response);
+          })
+          .catch(function (error) {
+            commit('setStatus', 'error_login');
+            reject(error);
+          });
       });
     },
 
     // On récupère les données envoyées par login.vue lors d'une création de compte avec commit
-    createAccount: ({ commit }, userInfos ) => {
+    createAccount: ({ commit }, userInfos) => {
       commit('setStatus', 'loading');
       // Envoi des données au backend
       return new Promise((resolve, reject) => {
         commit;
         instance.post('/auth/signup', userInfos)
-        .then(function (response) {
-          commit('setStatus', 'created');
-          resolve(response);
-        })
-        .catch(function (error) {
-          commit('setStatus', 'error_create');
-          reject(error);
-        });
+          .then(function (response) {
+            commit('setStatus', 'created');
+            resolve(response);
+          })
+          .catch(function (error) {
+            commit('setStatus', 'error_create');
+            reject(error);
+          });
       });
     },
-    
+
     // On demande les infos au backend afin d'afficher le mail de l'utilisateur
-    getUserInfos: ({commit}) => {
-      instance.post('/infos')
-      .then(function (response) {
-        commit('userInfos', response.data.infos);
-        console.log()
-      })
-      .catch(function () {
-      });
+    getUserInfos: ({ commit }, userInfos) => {
+      instance.post('/auth/infos', userInfos)
+        .then(function (response) {
+          commit('userInfos', response.data.infos);
+        })
+        .catch(function (error) {
+          console.log(error)
+        });
     }
-  }
-})
+  },
+});
 
 export default store;

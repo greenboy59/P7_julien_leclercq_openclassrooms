@@ -129,7 +129,7 @@ export default {
         })
         .then(
           function () {
-            self.$router.push("/profil");
+            self.$router.push("/AllPosts");
           },
           function (error) {
             console.log(error);
