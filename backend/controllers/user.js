@@ -6,12 +6,14 @@ const User = require('../models/User');
 
 // Création d'un compte utilisateur avec mot de passe fort
 exports.signup = (req, res, next) => {
-    // Hashage du mot de passe + salage (10 caractères)
-    bcrypt.hash(req.body.password, 10)
+    // Hashage du mot de passe + salage (24 caractères)
+    bcrypt.hash(req.body.password, 24)
       .then(hash => {
         const user = new User({
           email: req.body.email,
-          password: hash
+          password: hash,
+          nom: req.body.nom,
+          prenom: req.body.prenom
         });
         user.save()
           .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))

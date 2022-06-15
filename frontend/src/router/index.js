@@ -1,5 +1,5 @@
 import { createWebHistory, createRouter } from "vue-router";
-import Login from "@/views/Login.vue";
+import Login from "@/views/LoginPage.vue";
 import Profil from "@/views/Profil.vue";
 import AllPosts from "@/views/AllPosts.vue";
 
@@ -19,7 +19,7 @@ const routes = [
   },
   {
     name: 'posts',
-    path: '/AllPosts',
+    path: '/all-posts',
     component: AllPosts,
   }
 ]

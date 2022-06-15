@@ -54,9 +54,11 @@ img {
   font-weight: 800;
 }
 .card__subtitle {
-  text-align: center;
   color: #4e5166;
   font-weight: 500;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 }
 .button {
   background: #fd2d01;
