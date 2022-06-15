@@ -1,9 +1,9 @@
 <template>
   <div class="card">
-    <h1 class="card__title">Connexion</h1>
+    <h1 class="card__title">Inscription</h1>
     <div class="card__subtitle">
-      <h4>Vous n'avez pas encore de compte ?</h4>
-      <span class="card__action" @click="onClickCardAction">Créer un compte</span>
+      <h4>Vous avez déjà un compte ?</h4>
+      <span class="card__action" @click="onClickCardAction">Se connecter</span>
     </div>
     <div class="form-row">
       <input
@@ -11,6 +11,22 @@
         class="form-row__input"
         type="text"
         placeholder="Adresse mail"
+      />
+    </div>
+    <div class="form-row">
+      <input
+        v-model="nom"
+        class="form-row__input"
+        type="text"
+        placeholder="Nom"
+      />
+    </div>
+    <div class="form-row">
+      <input
+        v-model="prenom"
+        class="form-row__input"
+        type="text"
+        placeholder="Prénom"
       />
     </div>
     <div class="form-row">
@@ -27,12 +43,12 @@
     <div class="form-row">
       <button
         class="button"
-        @click="login()"
+        @click="signUp()"
       >
-        Se connecter
-        <!-- TO DO loading text in button -->
-        <!-- <span v-if="status == 'loading'">Connexion en cours...</span>
-        <span v-else>Connexion</span> -->
+        S'inscrire
+        <!--TO DO insérer un texte durant le loading-->
+        <!-- <span v-if="status == 'loading'">Création en cours...</span>
+          <span v-else>Créer mon compte</span> -->
       </button>
     </div>
   </div>
@@ -46,25 +62,29 @@ const instance = axios.create({
 });
 
 export default {
-  name: "LoginCard",
+  name: "SignUpCard",
 
-   data() {
+  data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      nom: '',
+      prenom:''
     }
   },
-
+  
   methods: {
     onClickCardAction() {
-      this.$emit('action-text-click')
+      this.$emit("action-text-click")
     },
 
-     async login () {
+    async signUp () {
       try {
-        await instance.post('auth/login', {
+         await instance.post('auth/signup', {
           email: this.email,
-          password: this.password
+          password: this.password,
+          nom: this.nom,
+          prenom: this.prenom
         })
        await this.$router.replace('/all-posts')
       } catch (err) {
@@ -72,7 +92,7 @@ export default {
       }
     }
   }
-};
+}
 </script>
 
 <style scoped>

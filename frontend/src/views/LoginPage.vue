@@ -1,70 +1,35 @@
 <template>
   <div>
-  <img id="logo" alt="Groupomania logo" :src="require('@/assets/logo.png')" />
-  <LoginCard
-  :title="title"
-  :subtitle="subtitle" 
-  :action-text= "actionText" 
-  @action-text-click="switchMode"
-  >
-  <button class="button" v-if="mode === 'login'">Login</button>
-    <button class="button" v-else>Signup</button>
-  </LoginCard>
+  <img id="logo" alt="Groupomania logo" src="../assets/logo.png" />
+  <LoginCard v-if="mode === 'login'" @action-text-click="switchMode"/>
+  <SignUpCard v-else @action-text-click="switchMode" />
   </div>
 </template>
 
 <script>
 import LoginCard from '@/components/LoginCard.vue'
-
-const titles = {
-  login: "Connexion",
-  signup: "Inscription"
-}
-
-const subtitles = {
-  login: "Vous n'avez pas encore de compte ?",
-  signup: "Vous avez déjà un compte ?"
-}
-
-const actionsText = {
-  login: "Créer un compte",
-  signup: "Se connecter"
-}
+import SignUpCard from '@/components/SignUpCard.vue'
 
 export default {
   name: "LoginComponent",
-  components: { LoginCard },
-
+  components: { SignUpCard, LoginCard },
   data() {
     return {
-      mode: "login",
-    };
-  },
-
-  computed: {
-    title() {
-      return titles[this.mode]
-    },
-    subtitle() {
-      return subtitles[this.mode]
-    },
-    actionText() {
-      return actionsText[this.mode]
+      mode: 'login',
     }
   },
 
-  // Méthode pour être soit en mode login soit en mode create
   methods: {
     switchMode() {
       if (this.mode === 'login') {
-        this.mode= 'signup'
+        this.mode = 'signup'
       } else {
-        this.mode='login'
+        this.mode = 'login'
       }
     }
-  },
+  }
+}
 
-  };
 </script>
 
 <style scoped>
