@@ -39,16 +39,11 @@
 </template>
 
 <script>
-import axios from 'axios';
-
-const instance = axios.create({
-  baseURL: 'http://localhost:3000/api/'
-});
 
 export default {
   name: "LoginCard",
 
-   data() {
+  data() {
     return {
       email: '',
       password: ''
@@ -60,19 +55,22 @@ export default {
       this.$emit('action-text-click')
     },
 
-     async login () {
+    async login() {
+      // Utilisation de axios (appelé dans main.js) afin de communiquer avec l'API 
       try {
-        await instance.post('auth/login', {
+        await this.axios.post('http://localhost:3000/api/auth/login', {
           email: this.email,
           password: this.password
-        })
-       await this.$router.replace('/all-posts')
-      } catch (err) {
+      })
+      }
+      catch (err) {
         console.log(err)
       }
+      // Dès que les data ont bien été envoyées a l'API, on envoi l'utilisateur vers la page des posts
+       await this.$router.replace('/all-posts')
     }
   }
-};
+}
 </script>
 
 <style scoped>

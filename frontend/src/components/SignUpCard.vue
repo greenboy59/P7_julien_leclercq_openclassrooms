@@ -55,11 +55,6 @@
 </template>
 
 <script>
-import axios from 'axios';
-
-const instance = axios.create({
-  baseURL: 'http://localhost:3000/api/'
-});
 
 export default {
   name: "SignUpCard",
@@ -80,16 +75,18 @@ export default {
 
     async signUp() {
       try {
-        await instance.post('auth/signup', {
+        await this.axios.post('http://localhost:3000/api/auth/signup', {
           email: this.email,
           password: this.password,
           nom: this.nom,
           prenom: this.prenom
-        })
-        await this.$router.replace('/all-posts')
-      } catch (err) {
+      })
+      }
+      catch (err) {
         console.log(err)
       }
+      // Dès que les data ont bien été envoyées a l'API, on envoi l'utilisateur vers la page des posts
+       await this.$router.replace('/all-posts')
     }
   }
 };
