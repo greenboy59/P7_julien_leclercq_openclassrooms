@@ -69,30 +69,30 @@ export default {
       email: '',
       password: '',
       nom: '',
-      prenom:''
+      prenom: ''
     }
   },
-  
+
   methods: {
     onClickCardAction() {
       this.$emit("action-text-click")
     },
 
-    async signUp () {
+    async signUp() {
       try {
-         await instance.post('auth/signup', {
+        await instance.post('auth/signup', {
           email: this.email,
           password: this.password,
           nom: this.nom,
           prenom: this.prenom
         })
-       await this.$router.replace('/all-posts')
+        await this.$router.replace('/all-posts')
       } catch (err) {
         console.log(err)
       }
     }
   }
-}
+};
 </script>
 
 <style scoped>
