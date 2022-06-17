@@ -3,30 +3,51 @@ import Login from "@/views/LoginPage.vue";
 import Profil from "@/views/Profil.vue";
 import AllPosts from "@/views/AllPosts.vue";
 
-// import PostsComponent from "@/views/AllPosts.vue";// EN ATTENTE DE CREATION DE LA PAGE POSTS
-
 const routes = [
   { 
-    name: 'login',
     path: '/', 
+    name: 'login',
     component: Login,
+    meta: { auth: false }
   },
   { 
-    name: 'profil',
-    path: '/profil', 
-    component: Profil, 
-    props:true 
+    path: '/profil',
+    name: 'profil', 
+    component: Profil,
+    meta: { auth: true }
   },
   {
-    name: 'posts',
     path: '/all-posts',
+    name: 'posts',
     component: AllPosts,
-  }
+    meta: { auth: true }
+  },
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
 })
+
+// Protection des routes front via le token et la meta auth
+router.beforeEach((to, from, next) => {
+  let token = JSON.parse( localStorage.getItem('token') );
+   
+  if (
+    'auth' in to.meta &&
+    to.meta.auth &&
+    !token) {
+    next('/');
+  }
+  else if (
+    'auth' in to.meta &&
+    !to.meta.auth
+    && token) {
+    next('/all-posts');
+  }
+  else {
+    next();
+  }
+});
 
 export default router;

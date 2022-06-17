@@ -7,14 +7,6 @@
     </div>
     <div class="form-row">
       <input
-        v-model="email"
-        class="form-row__input"
-        type="text"
-        placeholder="Adresse mail"
-      />
-    </div>
-    <div class="form-row">
-      <input
         v-model="nom"
         class="form-row__input"
         type="text"
@@ -27,6 +19,14 @@
         class="form-row__input"
         type="text"
         placeholder="Prénom"
+      />
+    </div>
+    <div class="form-row">
+      <input
+        v-model="email"
+        class="form-row__input"
+        type="text"
+        placeholder="Adresse mail"
       />
     </div>
     <div class="form-row">

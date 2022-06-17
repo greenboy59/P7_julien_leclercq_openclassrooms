@@ -60,8 +60,14 @@ export default {
       try {
         await this.axios.post('http://localhost:3000/api/auth/login', {
           email: this.email,
-          password: this.password
-      })
+          password: this.password,
+        })
+        // Récupération du token de connexion afin de le stocker dans le local storage
+          .then(r => {
+          this.axios.defaults.headers.common['Authorization'] = 'Bearer ' + r.data.token;
+          localStorage.setItem( 'token', JSON.stringify(r.data.token) );
+        }
+        )
       }
       catch (err) {
         console.log(err)
