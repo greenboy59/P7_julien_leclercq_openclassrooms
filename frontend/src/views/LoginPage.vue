@@ -11,7 +11,7 @@ import LoginCard from '@/components/LoginCard.vue'
 import SignUpCard from '@/components/SignUpCard.vue'
 
 export default {
-  name: "LoginComponent",
+  name: "LoginPage",
   components: { SignUpCard, LoginCard },
   data() {
     return {
@@ -23,7 +23,8 @@ export default {
     switchMode() {
       if (this.mode === 'login') {
         this.mode = 'signup'
-      } else {
+    }
+      else {
         this.mode = 'login'
       }
     }

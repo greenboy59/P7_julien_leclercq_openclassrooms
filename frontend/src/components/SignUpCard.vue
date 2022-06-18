@@ -55,7 +55,6 @@
 </template>
 
 <script>
-
 export default {
   name: "SignUpCard",
 
@@ -71,8 +70,10 @@ export default {
   methods: {
     onClickCardAction() {
       this.$emit("action-text-click")
+      this.$router.replace('/login')
     },
 
+// fonction asynchrone afin d'envoyer les données au backend et rediriger vers page de login
     async signUp() {
       try {
         await this.axios.post('http://localhost:3000/api/auth/signup', {
@@ -85,8 +86,7 @@ export default {
       catch (err) {
         console.log(err)
       }
-      // Dès que les data ont bien été envoyées a l'API, on envoi l'utilisateur vers la page des posts
-       await this.$router.replace('/all-posts')
+      await this.$router.replace('/login')
     }
   }
 };
