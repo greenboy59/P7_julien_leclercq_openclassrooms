@@ -37,7 +37,7 @@
     </div>
     </form>
      <p class= "errorMessage" v-if="errors.length">
-    <b>⛔️ Veuillez corriger les erreurs suivantes ⛔️</b>
+    <b>⚠️ Veuillez corriger les erreurs suivantes ⚠️</b>
     <ul>
       <li v-for="error in errors" :key="error.message">{{ error }}</li>
     </ul>
@@ -46,8 +46,8 @@
 </template>
 
 <script>
-const regExpEmail = new RegExp("^[a-zA-Z0-9.-_-]+[@]{1}[a-zA-Z0-9.-_-]+[.]{1}[a-z]{2,10}$");
-const regExpStrongPassword = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})");
+import { regExpEmail } from '@/helpers/regex.js';
+import { regExpStrongPassword } from '@/helpers/regex.js';
 
 export default {
   name: "LoginCard",

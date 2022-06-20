@@ -56,7 +56,7 @@
       </div>
     </form>
      <p class= "errorMessage" v-if="errors.length">
-    <b>⛔️ Veuillez corriger les erreurs suivantes ⛔️</b>
+    <b>⚠️ Veuillez corriger les erreurs suivantes ⚠️</b>
     <ul>
       <li v-for="error in errors" :key="error.message">{{ error }}</li>
     </ul>
@@ -65,11 +65,9 @@
 </template>
 
 <script>
-// A VOIR LORS DU MENTORAT, IMPORT NE FONCTIONNE PAS
-// import regExpEmail from '@/helpers/regex.js'
-const regExpEmail = new RegExp("^[a-zA-Z0-9.-_-]+[@]{1}[a-zA-Z0-9.-_-]+[.]{1}[a-z]{2,10}$");
-const regExpStrongPassword = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})");
-const regExpName = new RegExp("^[a-zA-Zà-ùÀ-Ù- -']+$");
+import { regExpEmail } from '@/helpers/regex.js';
+import { regExpStrongPassword } from '@/helpers/regex.js';
+import { regName } from '@/helpers/regex.js';
 
 export default {
   name: "SignUpCard",
@@ -95,12 +93,12 @@ export default {
       this.errors = [];
         if (!this.nom) {
           this.errors.push("Votre Nom est requis.");
-        } else if (!regExpName.test(this.nom)) {
+        } else if (!regName.test(this.nom)) {
           this.errors.push("Votre Nom comporte une ou plusieurs erreurs (chiffres et caractères spéciaux non autorisés).");
         }
         if (!this.prenom) {
           this.errors.push("Votre Prénom est requis.");
-        } else if (!regExpName.test(this.prenom)) {
+        } else if (!regName.test(this.prenom)) {
           this.errors.push("Votre Prénom comporte une ou plusieurs erreurs (chiffres et caractères spéciaux non autorisés).");
         }
         if (!this.email) {

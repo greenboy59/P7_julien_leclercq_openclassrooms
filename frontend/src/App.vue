@@ -101,12 +101,4 @@ ul {
   transform: scale(1.01);
   transition: 0.3s all;
 }
-.button--disabled {
-  background: #cecece;
-  color: #ececec;
-}
-.button--disabled:hover {
-  cursor: not-allowed;
-  background: #cecece;
-}
 </style>
