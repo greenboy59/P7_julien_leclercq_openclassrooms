@@ -42,6 +42,15 @@ img {
   max-width: 100%;
   border-radius: 8px;
 }
+.errorMessage {
+  font-weight: bold;
+  text-align: center;
+}
+ul {
+  margin-top: 15px;
+ text-align: left;
+ color: red;
+}
 .card {
   max-width: 100%;
   width: 540px;

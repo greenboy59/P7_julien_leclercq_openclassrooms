@@ -5,91 +5,135 @@
       <h4>Vous avez déjà un compte ?</h4>
       <span class="card__action" @click="onClickCardAction">Se connecter</span>
     </div>
-    <div class="form-row">
-      <input
-        v-model="nom"
-        class="form-row__input"
-        type="text"
-        placeholder="Nom"
-      />
-    </div>
-    <div class="form-row">
-      <input
-        v-model="prenom"
-        class="form-row__input"
-        type="text"
-        placeholder="Prénom"
-      />
-    </div>
-    <div class="form-row">
-      <input
-        v-model="email"
-        class="form-row__input"
-        type="text"
-        placeholder="Adresse mail"
-      />
-    </div>
-    <div class="form-row">
-      <input
-        v-model="password"
-        class="form-row__input"
-        type="password"
-        placeholder="Mot de passe"
-      />
-    </div>
-    <!-- <div class="form-row" v-if="mode == 'login' && status == 'error_login'">
-      Adresse mail et/ou mot de passe invalide
-    </div> -->
-    <div class="form-row">
-      <button
-        class="button"
-        @click="signUp()"
-      >
-        S'inscrire
-        <!--TO DO insérer un texte durant le loading-->
-        <!-- <span v-if="status == 'loading'">Création en cours...</span>
+    <form>
+      <div class="form-row">
+        <label hidden for="name">Nom</label>
+        <input
+          name="name"
+          v-model="nom"
+          class="form-row__input"
+          type="text"
+          placeholder="Nom"
+        />
+      </div>
+      <div class="form-row">
+        <label hidden for="firstname">Prénom</label>
+        <input
+          name="firstname"
+          v-model="prenom"
+          class="form-row__input"
+          type="text"
+          placeholder="Prénom"
+        />
+      </div>
+      <div class="form-row">
+        <label hidden for="email">email</label>
+        <input
+          name="email"
+          v-model="email"
+          class="form-row__input"
+          type="email"
+          placeholder="Adresse mail"
+        />
+      </div>
+      <div class="form-row">
+        <label hidden for="password">mot de passe</label>
+        <input
+          name="password"
+          v-model="password"
+          class="form-row__input"
+          type="password"
+          placeholder="Mot de passe"
+        />
+      </div>
+      <div class="form-row">
+        <button type="button" class="button" @click="checkForm()">
+          S'inscrire
+          <!--TO DO insérer un texte durant le loading-->
+          <!-- <span v-if="status == 'loading'">Création en cours...</span>
           <span v-else>Créer mon compte</span> -->
-      </button>
-    </div>
+        </button>
+      </div>
+    </form>
+     <p class= "errorMessage" v-if="errors.length">
+    <b>⛔️ Veuillez corriger les erreurs suivantes ⛔️</b>
+    <ul>
+      <li v-for="error in errors" :key="error.message">{{ error }}</li>
+    </ul>
+  </p>
   </div>
 </template>
 
 <script>
+// A VOIR LORS DU MENTORAT, IMPORT NE FONCTIONNE PAS
+// import regExpEmail from '@/helpers/regex.js'
+const regExpEmail = new RegExp("^[a-zA-Z0-9.-_-]+[@]{1}[a-zA-Z0-9.-_-]+[.]{1}[a-z]{2,10}$");
+const regExpStrongPassword = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})");
+const regExpName = new RegExp("^[a-zA-Zà-ùÀ-Ù- -']+$");
+
 export default {
   name: "SignUpCard",
 
   data() {
     return {
-      email: '',
-      password: '',
-      nom: '',
-      prenom: ''
-    }
+      errors:[],
+      email: "",
+      password: "",
+      nom: "",
+      prenom: "",
+    };
   },
 
   methods: {
     onClickCardAction() {
-      this.$emit("action-text-click")
-      this.$router.replace('/login')
+      this.$emit("action-text-click");
+      this.$router.replace("/login");
     },
 
-// fonction asynchrone afin d'envoyer les données au backend et rediriger vers page de login
+    // Check du formulaire avec la méthode checkForm de Vue
+    checkForm: function () {
+      this.errors = [];
+        if (!this.nom) {
+          this.errors.push("Votre Nom est requis.");
+        } else if (!regExpName.test(this.nom)) {
+          this.errors.push("Votre Nom comporte une ou plusieurs erreurs (chiffres et caractères spéciaux non autorisés).");
+        }
+        if (!this.prenom) {
+          this.errors.push("Votre Prénom est requis.");
+        } else if (!regExpName.test(this.prenom)) {
+          this.errors.push("Votre Prénom comporte une ou plusieurs erreurs (chiffres et caractères spéciaux non autorisés).");
+        }
+        if (!this.email) {
+          this.errors.push("Une adresse Email est requise.");
+        } else if (!regExpEmail.test(this.email)) {
+          this.errors.push("Votre adresse Email comporte une ou plusieurs erreurs.");
+        }
+        if (!this.password) {
+          this.errors.push("Un mot de passe est requis.");
+        } else if (!regExpStrongPassword.test(this.password)) {
+          this.errors.push("Votre mot de passe est invalid (minimum 8 caractères dont: 1 caractère spécial, 1 chiffre, 1 majuscule et 1 minuscule).");
+        }
+      if (!this.errors.length) {
+          this.signUp()
+        }
+    },
+
+    // fonction asynchrone afin d'envoyer les données au backend et rediriger vers page de login
     async signUp() {
-      try {
-        await this.axios.post('http://localhost:3000/api/auth/signup', {
-          email: this.email,
-          password: this.password,
-          nom: this.nom,
-          prenom: this.prenom
-      })
+        try {
+          await this.axios.post("http://localhost:3000/api/auth/signup", {
+            email: this.email,
+            password: this.password,
+            nom: this.nom,
+            prenom: this.prenom,
+          });
+        } catch (err) {
+          console.log(err);
+        }
+        await this.$router.replace("/login");
       }
-      catch (err) {
-        console.log(err)
-      }
-      await this.$router.replace('/login')
     }
-  }
-};
+}
 </script>
 
 <style scoped>

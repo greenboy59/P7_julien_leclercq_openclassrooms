@@ -5,29 +5,31 @@
       <h4>Vous n'avez pas encore de compte ?</h4>
       <span class="card__action" @click="onClickCardAction">Créer un compte</span>
     </div>
+    <form>
     <div class="form-row">
+      <label hidden for="email">email</label>
       <input
+        name="email"
         v-model="email"
         class="form-row__input"
-        type="text"
+        type="email"
         placeholder="Adresse mail"
       />
     </div>
     <div class="form-row">
+      <label hidden for="password">mot de passe</label>
       <input
+        name="password"
         v-model="password"
         class="form-row__input"
         type="password"
         placeholder="Mot de passe"
       />
     </div>
-    <!-- <div class="form-row" v-if="mode == 'login' && status == 'error_login'">
-      Adresse mail et/ou mot de passe invalide
-    </div> -->
     <div class="form-row">
       <button
         class="button"
-        @click="login()"
+        @click="checkForm()"
       >
         Se connecter
         <!-- TO DO loading text in button -->
@@ -35,16 +37,26 @@
         <span v-else>Connexion</span> -->
       </button>
     </div>
+    </form>
+     <p class= "errorMessage" v-if="errors.length">
+    <b>⛔️ Veuillez corriger les erreurs suivantes ⛔️</b>
+    <ul>
+      <li v-for="error in errors" :key="error.message">{{ error }}</li>
+    </ul>
+  </p>
   </div>
 </template>
 
 <script>
+const regExpEmail = new RegExp("^[a-zA-Z0-9.-_-]+[@]{1}[a-zA-Z0-9.-_-]+[.]{1}[a-z]{2,10}$");
+const regExpStrongPassword = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})");
 
 export default {
   name: "LoginCard",
 
   data() {
     return {
+      errors:[],
       email: '',
       password: ''
     }
@@ -54,6 +66,25 @@ export default {
     onClickCardAction() {
       this.$emit('action-text-click')
       this.$router.replace('/signup')
+    },
+
+     // Check du formulaire avec la méthode checkForm de Vue
+    checkForm: function () {
+      this.errors = [];
+
+        if (!this.email) {
+          this.errors.push("Une adresse Email est requise.");
+        } else if (!regExpEmail.test(this.email)) {
+          this.errors.push("Votre adresse Email comporte une ou plusieurs erreurs.");
+        }
+        if (!this.password) {
+          this.errors.push("Un mot de passe est requis.");
+        } else if (!regExpStrongPassword.test(this.password)) {
+          this.errors.push("Votre mot de passe est invalid (minimum 8 caractères dont: 1 caractère spécial, 1 chiffre, 1 majuscule et 1 minuscule).");
+        }
+      if (!this.errors.length) {
+        this.login();
+        }
     },
 
     async login() {
