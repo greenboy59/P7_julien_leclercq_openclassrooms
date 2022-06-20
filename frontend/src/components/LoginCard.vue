@@ -9,6 +9,7 @@
     <div class="form-row">
       <label hidden for="email">email</label>
       <input
+        @input="checkForm()"
         name="email"
         v-model="email"
         class="form-row__input"
@@ -19,6 +20,7 @@
     <div class="form-row">
       <label hidden for="password">mot de passe</label>
       <input
+       @input="checkForm()"
         name="password"
         v-model="password"
         class="form-row__input"
@@ -27,15 +29,11 @@
       />
     </div>
     <div class="form-row">
-      <button
-        class="button"
-        @click="checkForm()"
-      >
-        Se connecter
-        <!-- TO DO loading text in button -->
+      <button v-if="errors.length" class="button" type="button" hidden>Se connecter</button>
+      <button class="button" type="button" v-else @click="checkForm(), login()"> Se connecter</button>
+         <!-- TO DO loading text in button -->
         <!-- <span v-if="status == 'loading'">Connexion en cours...</span>
-        <span v-else>Connexion</span> -->
-      </button>
+        // <span v-else>Connexion</span> -->
     </div>
     </form>
      <p class= "errorMessage" v-if="errors.length">
@@ -71,7 +69,6 @@ export default {
      // Check du formulaire avec la méthode checkForm de Vue
     checkForm: function () {
       this.errors = [];
-
         if (!this.email) {
           this.errors.push("Une adresse Email est requise.");
         } else if (!regExpEmail.test(this.email)) {
@@ -81,9 +78,6 @@ export default {
           this.errors.push("Un mot de passe est requis.");
         } else if (!regExpStrongPassword.test(this.password)) {
           this.errors.push("Votre mot de passe est invalid (minimum 8 caractères dont: 1 caractère spécial, 1 chiffre, 1 majuscule et 1 minuscule).");
-        }
-      if (!this.errors.length) {
-        this.login();
         }
     },
 

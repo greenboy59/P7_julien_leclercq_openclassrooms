@@ -1,5 +1,4 @@
 import { createWebHistory, createRouter } from "vue-router";
-import LoginCard from "@/components/LoginCard";
 import SignUpCard from "@/components/SignUpCard";
 import Login from "@/views/LoginPage.vue";
 import Profil from "@/views/Profil.vue";
@@ -15,7 +14,7 @@ const routes = [
   {
     path: "/login",
     name: "login",
-    components: { LoginCard, default: Login },
+    component: Login,
     meta: { auth: false },
   },
   {

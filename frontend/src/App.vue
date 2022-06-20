@@ -18,6 +18,13 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
+button:disabled {
+  background-color: gainsboro;
+}
+button:disabled:hover {
+  background-color: gainsboro;
+  cursor: not-allowed;
+}
 #app {
   max-width: 100%;
 }

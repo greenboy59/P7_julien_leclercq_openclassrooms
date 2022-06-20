@@ -1,36 +1,34 @@
 <template>
   <div>
-  <img id="logo" alt="Groupomania logo" src="../assets/logo.png" />
-  <LoginCard v-if="mode === 'login'" @action-text-click="switchMode"/>
-  <SignUpCard v-else @action-text-click="switchMode" />
+    <img id="logo" alt="Groupomania logo" src="../assets/logo.png" />
+    <LoginCard v-if="mode === 'login'" @action-text-click="switchMode" />
+    <SignUpCard v-else @action-text-click="switchMode" />
   </div>
 </template>
 
 <script>
-import LoginCard from '@/components/LoginCard.vue'
-import SignUpCard from '@/components/SignUpCard.vue'
+import LoginCard from "@/components/LoginCard.vue";
+import SignUpCard from "@/components/SignUpCard.vue";
 
 export default {
   name: "LoginPage",
   components: { SignUpCard, LoginCard },
   data() {
     return {
-      mode: 'login',
-    }
+      mode: "login",
+    };
   },
 
   methods: {
     switchMode() {
-      if (this.mode === 'login') {
-        this.mode = 'signup'
-    }
-      else {
-        this.mode = 'login'
+      if (this.mode === "login") {
+        this.mode = "signup";
+      } else {
+        this.mode = "login";
       }
-    }
-  }
-}
-
+    },
+  },
+};
 </script>
 
 <style scoped>
