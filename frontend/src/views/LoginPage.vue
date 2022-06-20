@@ -38,6 +38,7 @@ export default {
   gap: 16px;
   flex-wrap: wrap;
 }
+
 .form-row__input {
   padding: 8px;
   border: none;
@@ -49,6 +50,7 @@ export default {
   min-width: 100px;
   color: black;
 }
+
 .form-row__input::placeholder {
   color: #aaaaaa;
 }

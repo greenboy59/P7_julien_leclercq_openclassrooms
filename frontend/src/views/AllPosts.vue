@@ -1,5 +1,5 @@
 <template>
-  <h1>Bienvenue sur la page des posts de Groupomania</h1>
+  <h1>Bonjour Géraldine, Bienvenue sur le réseau social de Groupomania</h1>
 </template>
 
 <script>
