@@ -1,32 +1,64 @@
 <template>
-  <div class="container">
+  <div>
     <img id="logo" alt="Groupomania logo" src="../assets/logo.png" />
     <div class="card">
       <h1 class="card__title">Inscription</h1>
       <div class="card__subtitle">
         <h4>Vous avez déjà un compte ?</h4>
-        <span class="card__action" @click="onClickCardAction">Se connecter</span>
+        <span class="card__action"
+         @click="onClickCardAction">
+          Se connecter
+        </span>
       </div>
       <form>
         <div class="form-row">
-          <label hidden for="name">Nom</label>
-          <input name="name" v-model="nom" class="form-row__input" type="text" placeholder="Nom" />
+          <label hidden for="lastname">Nom</label>
+          <input
+            v-model="lastname"
+            id="lastname"
+            name="lastname"
+            class="form-row__input"
+            type="text"
+            placeholder="Nom"
+          />
         </div>
         <div class="form-row">
           <label hidden for="firstname">Prénom</label>
-          <input name="firstname" v-model="prenom" class="form-row__input" type="text" placeholder="Prénom" />
+          <input
+            v-model="firstname"
+            id="firstname"
+            name="firstname"
+            class="form-row__input"
+            type="text"
+            placeholder="Prénom"
+          />
         </div>
         <div class="form-row">
           <label hidden for="email">email</label>
-          <input name="email" v-model="email" class="form-row__input" type="email" placeholder="Adresse mail" />
+          <input
+            v-model="email"
+            id="email"
+            name="email"
+            class="form-row__input"
+            type="email"
+            placeholder="Adresse mail"
+          />
         </div>
         <div class="form-row">
           <label hidden for="password">mot de passe</label>
-          <input name="password" v-model="password" class="form-row__input" type="password"
-            placeholder="Mot de passe" />
+          <input
+            v-model="password"
+            id="password"
+            name="password"
+            class="form-row__input"
+            type="password"
+            placeholder="Mot de passe"
+          />
         </div>
         <div class="form-row">
-          <button type="button" class="button" @click="checkForm()">
+          <button type="button" 
+          class="button" 
+          @click="checkForm()">
             S'inscrire
             <!--TO DO insérer un texte durant le loading-->
             <!-- <span v-if="status == 'loading'">Création en cours...</span>
@@ -34,12 +66,12 @@
           </button>
         </div>
       </form>
-      <p class="errorMessage" v-if="errors.length">
+      <div class="errorMessage" v-if="errors.length">
         <b>⚠️ Veuillez corriger les erreurs suivantes ⚠️</b>
-      <ul>
-        <li v-for="error in errors" :key="error.message">{{ error }}</li>
-      </ul>
-      </p>
+        <ul>
+          <li v-for="error in errors" :key="error.message">{{ error }}</li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -57,8 +89,8 @@ export default {
       errors: [],
       email: "",
       password: "",
-      nom: "",
-      prenom: "",
+      lastname: "",
+      firstname: "",
     };
   },
 
@@ -69,18 +101,18 @@ export default {
     },
 
     // Check du formulaire avec la méthode checkForm de Vue
-    checkForm: function () {
+    checkForm () {
       this.errors = [];
-      if (!this.nom) {
+      if (!this.lastname) {
         this.errors.push("Votre Nom est requis.");
-      } else if (!regName.test(this.nom)) {
+      } else if (!regName.test(this.lastname)) {
         this.errors.push(
           "Votre Nom comporte une ou plusieurs erreurs (chiffres et caractères spéciaux non autorisés)."
         );
       }
-      if (!this.prenom) {
+      if (!this.firstname) {
         this.errors.push("Votre Prénom est requis.");
-      } else if (!regName.test(this.prenom)) {
+      } else if (!regName.test(this.firstname)) {
         this.errors.push(
           "Votre Prénom comporte une ou plusieurs erreurs (chiffres et caractères spéciaux non autorisés)."
         );
@@ -110,13 +142,13 @@ export default {
         await this.axios.post("http://localhost:3000/api/auth/signup", {
           email: this.email,
           password: this.password,
-          nom: this.nom,
-          prenom: this.prenom,
+          lastname: this.lastname,
+          firstname: this.firstname,
         });
+        await this.$router.replace("/all-posts");
       } catch (err) {
         console.log(err);
       }
-      await this.$router.replace("/login");
     },
   },
 };

@@ -1,8 +1,9 @@
 import { createWebHistory, createRouter } from "vue-router";
 import SignUpCard from "@/components/SignUpCard";
 import Login from "@/views/LoginPage.vue";
-import Profil from "@/views/Profil.vue";
+import ProfilePage from "@/views/ProfilePage.vue";
 import AllPosts from "@/views/AllPosts.vue";
+import UserClass from "@/classes/UserClass";
 
 const routes = [
   {
@@ -24,9 +25,9 @@ const routes = [
     meta: { auth: false },
   },
   {
-    path: "/profil",
-    name: "profil",
-    component: Profil,
+    path: "/profile",
+    name: "ProfilePage",
+    component: ProfilePage,
     meta: { auth: true },
   },
   {
@@ -44,12 +45,11 @@ const router = createRouter({
 
 // Protection des routes front via le token et la meta auth
 router.beforeEach((to, from, next) => {
-  let token = JSON.parse(localStorage.getItem("token"));
-
-  if ("auth" in to.meta && to.meta.auth && !token) {
+  if (UserClass.isAuthenticated && !to.meta.auth) {
+    next("/all-posts")
+  }
+  if (to.meta.auth && !UserClass.isAuthenticated) {
     next("/login");
-  } else if ("auth" in to.meta && !to.meta.auth && token) {
-    next("/all-posts");
   } else {
     next();
   }

@@ -10,8 +10,8 @@ exports.signup = (req, res, next) => {
   if (
     regExModule.regExpStrongPassword.test(req.body.password) &&
     regExModule.regExpEmail.test(req.body.email) &&
-    regExModule.regName.test(req.body.nom) &&
-    regExModule.regName.test(req.body.prenom)
+    regExModule.regName.test(req.body.lastname) &&
+    regExModule.regName.test(req.body.firstname)
   ) {
     // Hashage du mot de passe + salage (10 caractères)
     bcrypt
@@ -19,8 +19,8 @@ exports.signup = (req, res, next) => {
       .then((hash) => {
         const user = new User({
           email: req.body.email,
-          nom: req.body.nom,
-          prenom: req.body.prenom,
+          lastname: req.body.lastname,
+          firstname: req.body.firstname,
           password: hash,
         });
         user
@@ -53,9 +53,11 @@ exports.login = (req, res, next) => {
             return res.status(401).json({ error: "Mot de passe incorrect !" });
           }
           res.status(200).json({
-            userId: user._id,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            id: user._id,
             token: jwt.sign(
-              { userId: user._id },
+              { id: user._id },
               process.env.RANDOM_TOKEN_SECRET,
               { expiresIn: "24h" },
             ),

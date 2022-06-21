@@ -58,6 +58,9 @@ ul {
  text-align: left;
  color: red;
 }
+li {
+  list-style-type: circle;
+}
 .card {
   max-width: 100%;
   width: 540px;
