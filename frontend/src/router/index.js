@@ -1,8 +1,8 @@
 import { createWebHistory, createRouter } from "vue-router";
-import SignUpCard from "@/components/SignUpCard";
 import Login from "@/views/LoginPage.vue";
+import SignUp from "@/views/SignUpPage.vue";
 import ProfilePage from "@/views/ProfilePage.vue";
-import AllPosts from "@/views/AllPosts.vue";
+import AllPostsPage from "@/views/AllPostsPage.vue";
 import UserClass from "@/classes/UserClass";
 
 const routes = [
@@ -21,7 +21,7 @@ const routes = [
   {
     path: "/signup",
     name: "signup",
-    component: SignUpCard,
+    component: SignUp,
     meta: { auth: false },
   },
   {
@@ -33,7 +33,7 @@ const routes = [
   {
     path: "/all-posts",
     name: "posts",
-    component: AllPosts,
+    component: AllPostsPage,
     meta: { auth: true },
   },
 ];

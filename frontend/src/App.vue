@@ -18,13 +18,6 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
-button:disabled {
-  background-color: gainsboro;
-}
-button:disabled:hover {
-  background-color: gainsboro;
-  cursor: not-allowed;
-}
 #app {
   max-width: 100%;
 }
@@ -61,6 +54,28 @@ ul {
 li {
   list-style-type: circle;
 }
+.form-row {
+  display: flex;
+  margin: 16px 0px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.form-row__input {
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  background: #f2f2f2;
+  font-weight: 500;
+  font-size: 16px;
+  flex: 1;
+  min-width: 100px;
+  color: black;
+}
+
+.form-row__input::placeholder {
+  color: #aaaaaa;
+}
 .card {
   max-width: 100%;
   width: 540px;
@@ -90,18 +105,25 @@ li {
   padding: 16px;
   transition: 0.4s all ease-in-out;
 }
-.card__action {
-  color: #fd2d01;
-  text-decoration: underline;
-}
-.card__action:hover {
-  cursor: pointer;
-}
 .button:hover {
   cursor: pointer;
   background-color: #fd2d01;
   box-shadow: 1px 1px 5px grey;
   transform: scale(1.01);
   transition: 0.3s all;
+}
+button:disabled {
+  background-color: gainsboro;
+}
+button:disabled:hover {
+  background-color: gainsboro;
+  cursor: not-allowed;
+}
+.card__action {
+  color: #fd2d01;
+  text-decoration: underline;
+}
+.card__action:hover {
+  cursor: pointer;
 }
 </style>
