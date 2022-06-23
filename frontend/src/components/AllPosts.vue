@@ -5,12 +5,12 @@
 <script>
 import UserClass from '@/classes/UserClass'
 export default {
-  name: "AllPosts",
-  data() {
-    return {
-      user: UserClass.user,
-    }
- }
+    name: "AllPosts",
+    data() {
+        return {
+            user: UserClass.user,
+        };
+    },
 }
 </script>
 

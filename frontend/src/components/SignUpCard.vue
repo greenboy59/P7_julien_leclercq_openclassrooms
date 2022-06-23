@@ -157,7 +157,7 @@ export default {
       formData.append('password', this.password);
       try {
         document.querySelector(".submit-message").style.visibility = "visible";
-        setTimeout("showSubmit-message()", 4000);
+        setTimeout("showSubmit-message()", 15000);
         await this.axios.post("http://localhost:3000/api/auth/signup", formData, {
           headers: { "Content-Type": 'multipart/form-data' },
         })

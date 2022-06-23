@@ -18,7 +18,7 @@ exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
       .then(hash => {
         const user = new User({
-          image: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+          image: `${req.protocol}://${req.get('host')}/images/profilesPic/${req.file.filename}`,
           lastname: req.body.lastname,
           firstname: req.body.firstname,
           email: req.body.email,
@@ -50,6 +50,7 @@ exports.login = (req, res, next) => {
             return res.status(401).json({ error: "Mot de passe incorrect !" });
           }
           res.status(200).json({
+            image: user.image,
             firstname: user.firstname,
             lastname: user.lastname,
             id: user._id,
