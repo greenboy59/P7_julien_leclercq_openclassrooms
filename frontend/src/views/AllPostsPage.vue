@@ -1,10 +1,13 @@
 <template>
-  <h1>Bonjour Géraldine, Bienvenue sur le réseau social de Groupomania</h1>
+  <AllPosts/>
 </template>
 
 <script>
+import AllPosts from "@/components/AllPosts.vue";
+
 export default {
-  name: 'AllPosts',
+  name: 'AllPostsPage',
+  components: { AllPosts },
 }
 </script>
 

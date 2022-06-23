@@ -2,7 +2,7 @@
   <div class="card">
     <h1 class="card__title">Mon profil</h1>
     <h3 class="card__subtitle">{{ user.firstname }}{{ user.lastname }}</h3>
-    <img :src="user.photo" />
+    <img :src="user.image" />
     <div class="form-row">
       <button @click="logout()" class="button">Déconnexion</button>
     </div>
