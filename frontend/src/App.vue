@@ -11,7 +11,7 @@ export default {
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
 * {
   font-family: "Lato", sans-serif;
   margin: 0;
@@ -36,9 +36,9 @@ body {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  object-fit: contain;
 }
 img {
+  object-fit: fill;
   max-width: 100%;
   border-radius: 8px;
 }
@@ -53,6 +53,9 @@ ul {
 }
 li {
   list-style-type: circle;
+}
+a {
+  text-decoration: none;
 }
 .form-row {
   display: flex;

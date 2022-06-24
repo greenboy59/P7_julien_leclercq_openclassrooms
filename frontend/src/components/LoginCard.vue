@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img id="logo" alt="Groupomania logo" src="../assets/logo.png" />
+    <img id="logo" alt="Groupomania logo" src="../assets/icon-left-font-monochrome-black.svg" />
     <div class="card">
       <h1 class="card__title">Connexion</h1>
       <div class="card__subtitle">
@@ -18,7 +18,7 @@
             class="form-row__input"
             type="email"
             placeholder="Adresse mail"
-            @input="checkForm()"
+            @change="checkForm()"
           />
         </div>
         <div class="form-row">

@@ -1,17 +1,19 @@
 <template>
   <div>
     <MainNav />
+    <CreatePost />
     <AllPosts />
   </div>
 </template>
 
 <script>
 import MainNav from "@/components/MainNav";
-import AllPosts from "@/components/AllPosts.vue";
+import AllPosts from "@/components/AllPosts";
+import CreatePost from '@/components/CreatePost';
 
 export default {
   name: "AllPostsPage",
-  components: { AllPosts, MainNav },
+  components: { AllPosts, MainNav, CreatePost },
 };
 </script>
 

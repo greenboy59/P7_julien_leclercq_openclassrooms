@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img id="logo" alt="Groupomania logo" src="../assets/logo.png" />
+     <img id="logo" alt="Groupomania logo" src="../assets/icon-left-font-monochrome-black.svg" />
     <div class="card">
       <h1 class="card__title">Inscription</h1>
       <div class="card__subtitle">
@@ -90,6 +90,7 @@
 import { regExpEmail } from "@/helpers/regex.js";
 import { regExpStrongPassword } from "@/helpers/regex.js";
 import { regName } from "@/helpers/regex.js";
+import UserClass from "@/classes/UserClass";
 
 export default {
   name: "SignUpCard",
@@ -156,11 +157,20 @@ export default {
       formData.append('email', this.email);
       formData.append('password', this.password);
       try {
-        document.querySelector(".submit-message").style.visibility = "visible";
-        setTimeout("showSubmit-message()", 15000);
         await this.axios.post("http://localhost:3000/api/auth/signup", formData, {
           headers: { "Content-Type": 'multipart/form-data' },
         })
+         const { data } = await this.axios.post(
+          "http://localhost:3000/api/auth/login",
+          {
+            email: this.email,
+            password: this.password,
+          },
+        );
+        // Récupération des infos du user afin de les envoyer dans le local storage
+        this.axios.defaults.headers.common["Authorization"] = "Bearer" + data.token;
+        UserClass.setUser(data);
+        // Dès que les data ont bien été envoyées a l'API, on envoi l'utilisateur vers la page des posts
         await this.$router.replace("/all-posts")
       } catch (err) {
         console.log(err);

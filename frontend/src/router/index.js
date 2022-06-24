@@ -43,7 +43,7 @@ const router = createRouter({
   routes,
 });
 
-// Protection des routes front via le token et la meta auth
+// Routes guard via le token et la meta auth
 router.beforeEach((to, from, next) => {
   if (UserClass.isAuthenticated && !to.meta.auth) {
     next("/all-posts")
