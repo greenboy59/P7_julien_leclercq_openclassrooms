@@ -11,7 +11,7 @@ const MIME_TYPES = {
 // Mise en place de la logique multer
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, "images/profilesPic");
+    callback(null, "images");
   },
   filename: (req, file, callback) => {
     const fileWithoutExtension = file.originalname.split(".")[0]; // Récupération du fichier sans son extension d'origine

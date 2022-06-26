@@ -9,12 +9,10 @@
 <script>
 import MainNav from "@/components/MainNav";
 import AllPosts from "@/components/AllPosts";
-import CreatePost from '@/components/CreatePost';
+import CreatePost from "@/components/CreatePost";
 
 export default {
   name: "AllPostsPage",
-  components: { AllPosts, MainNav, CreatePost },
+  components: { AllPosts, CreatePost, MainNav },
 };
 </script>
-
-<style></style>

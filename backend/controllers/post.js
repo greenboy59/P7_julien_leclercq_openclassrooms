@@ -23,14 +23,16 @@ exports.getOnePost = (req, res, next) => {
 
 // Créer un nouveau post
 exports.createPost = (req, res, next) => {
-  const postObject = JSON.parse(req.body.post);
+  
   const post = new Post({
-    ...postObject,
-    image: `${req.protocol}://${req.get('host')}/images/postsPic/${req.file.filename}`,
+    image: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
     likes: 0,
     dislikes: 0,
     usersLiked: [],
     usersDisliked: [],
+    description: req.body.description,
+    userId: req.body.userId,
+    userName: req.body.userName,
   });
   post.save()
     .then(() => res.status(201).json({ message: 'Post enregistré !' }))

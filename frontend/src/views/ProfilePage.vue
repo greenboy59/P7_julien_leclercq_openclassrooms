@@ -1,7 +1,7 @@
 <template>
-<div>
-  <MainNav />
-  <ProfileCard/>
+  <div>
+    <MainNav />
+    <ProfileCard />
   </div>
 </template>
 
@@ -12,8 +12,5 @@ import ProfileCard from "@/components/ProfileCard";
 export default {
   name: "ProfilePage",
   components: { MainNav, ProfileCard },
-}
+};
 </script>
-
-<style>
-</style>

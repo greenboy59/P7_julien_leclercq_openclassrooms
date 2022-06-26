@@ -1,16 +1,16 @@
 <template>
-  <div>
+  <div class="nav-container">
     <div
       class="nav-back"
       @mouseover="hovered = true"
       @mouseleave="hovered = false"
     >
-     <a href="http://localhost:8080/all-posts">
-      <div class="return-arrow" v-if="hovered">
-        <i class="fa-solid fa-chevron-left"></i>
-        Retour
-      </div>
-     
+      <a href="http://localhost:8080/all-posts">
+        <div class="return-arrow" v-if="hovered">
+          <i class="fa-solid fa-chevron-left"></i>
+          Retour
+        </div>
+
         <img
           :class="{ 'display-none': hovered }"
           class="logo"
@@ -45,33 +45,36 @@ export default {
 </script>
 
 <style scoped>
+.nav-container {
+  display: block;
+  height: 50px;
+}
 .logout-button {
   color: #4e5166;
   border-radius: 10px;
   font-size: 1.1em;
-  padding: 10px;
+  padding: 15px;
   cursor: pointer;
   border: none;
+  outline: none;
   background: none;
   position: absolute;
-  top: 15px;
-  right: 20px;
+  right: 15px;
+  top: 10px;
   transition: 0.3s all;
 }
 .logout-button:hover {
-  border: rgba(255, 255, 255, 0.2) solid 1px;
-  box-shadow: 1px 1px 5px #fd2d01;
-  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 3px 3px 10px #fd2b0131, -5px -5px 10px #ffd7d7;
+  transform: scale(1.03);
   border-radius: 10px;
-  transform: scale(1.02);
+  background: #fecbc7;
 }
-.nav-back {
-  position: absolute;
-  left: 20px;
-  top: 20px;
-}
-.logo, .nav-back {
+.logo, .nav-back, .return-arrow {
   width: 200px;
+  height: 50px;
+  position: absolute;
+  top: 10px;
+  left: 15px;
 }
 .display-none {
   display: none;

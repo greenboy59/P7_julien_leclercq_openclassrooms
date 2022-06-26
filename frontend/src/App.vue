@@ -11,7 +11,7 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap");
 * {
   font-family: "Lato", sans-serif;
   margin: 0;
@@ -24,21 +24,20 @@ export default {
 body {
   background-image: linear-gradient(62deg, #fd2d01 0%, #ffd7d7 100%);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   min-height: 100vh;
   padding: 32px;
 }
 #logo {
   position: absolute;
-  width: 300px;
-  height: 25%;
-  top: 0;
+  top: 15px;
   left: 50%;
   transform: translateX(-50%);
+  width: 300px;
 }
 img {
-  object-fit: fill;
+  object-fit: contain;
   max-width: 100%;
   border-radius: 8px;
 }
@@ -48,8 +47,8 @@ img {
 }
 ul {
   margin-top: 15px;
- text-align: left;
- color: red;
+  text-align: left;
+  color: red;
 }
 li {
   list-style-type: circle;

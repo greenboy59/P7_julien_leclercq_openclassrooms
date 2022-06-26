@@ -1,6 +1,10 @@
 <template>
   <div>
-    <img id="logo" alt="Groupomania logo" src="../assets/icon-left-font-monochrome-black.svg" />
+    <img
+      id="logo"
+      alt="Groupomania logo"
+      src="../assets/icon-left-font-monochrome-black.svg"
+    />
     <div class="card">
       <h1 class="card__title">Connexion</h1>
       <div class="card__subtitle">
@@ -100,13 +104,10 @@ export default {
     async login() {
       // Utilisation de axios (appelé dans main.js) afin de communiquer avec l'API
       try {
-        const { data } = await this.axios.post(
-          "http://localhost:3000/api/auth/login",
-          {
-            email: this.email,
-            password: this.password,
-          },
-        );
+        const { data } = await this.axios.post("/auth/login", {
+          email: this.email,
+          password: this.password,
+        });
         // Récupération des infos du user afin de les envoyer dans le local storage
         this.axios.defaults.headers.common["Authorization"] =
           "Bearer" + data.token;
@@ -120,3 +121,5 @@ export default {
   },
 };
 </script>
+
+<style scoped></style>

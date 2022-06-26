@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SignUpCard/>
+    <SignUpCard />
   </div>
 </template>
 
