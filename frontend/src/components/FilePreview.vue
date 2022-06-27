@@ -5,15 +5,16 @@
       ref="fileInput"
       name="postPic"
       type="file"
-      @input="pickFile"/>
-     <button class="delete-image" @click="deleteImage()">
+      @input="pickFile"
+    />
+    <button class="delete-image" @click="deleteImage()">
       <i class="fa-solid fa-trash-can"></i>
     </button>
     <div
       class="imagePreviewWrapper"
       :style="{ 'background-image': `url(${previewImage})` }"
-      @click="selectImage">
-      </div>
+      @click="selectImage"
+    ></div>
   </div>
 </template>
 

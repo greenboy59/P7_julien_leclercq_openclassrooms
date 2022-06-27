@@ -83,7 +83,9 @@ export default {
       formData.append("userName", userName);
       formData.append("userId", userId);
       formData.append("userImage", userImage);
-      formData.append("date", date.toLocaleString("fr-FR", {
+      formData.append(
+        "date",
+        date.toLocaleString("fr-FR", {
           weekday: "long",
           year: "numeric",
           month: "long",
@@ -96,7 +98,7 @@ export default {
         await this.axios.post("/posts", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
-             "Authorization": `Bearer ${this.user.token}`,
+            Authorization: `Bearer ${this.user.token}`,
           },
         });
         await this.$router.go("/");

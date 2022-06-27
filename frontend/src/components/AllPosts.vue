@@ -80,6 +80,10 @@ export default {
         console.log(err);
       }
     },
+
+    async modifyPost(id) {
+      this.$router.go(`/post/?id=${id}`);
+    },
   },
 
   computed: {

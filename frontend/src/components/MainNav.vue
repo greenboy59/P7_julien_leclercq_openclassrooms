@@ -69,7 +69,9 @@ export default {
   border-radius: 10px;
   background: #fecbc7;
 }
-.logo, .nav-back, .return-arrow {
+.logo,
+.nav-back,
+.return-arrow {
   width: 200px;
   height: 50px;
   position: absolute;
