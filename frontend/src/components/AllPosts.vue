@@ -4,7 +4,7 @@
     <ul>
       <span class="search-bar"
         ><i class="fas fa-search"></i>
-        <input type="text" placeholder="Rechercher" v-model="inputFilter" />
+        <input type="text" placeholder="Rechercher par nom" v-model="inputFilter" />
       </span>
     </ul>
     <div class="error-message" v-if="inputFilter && !filteredPosts.length">
@@ -12,10 +12,10 @@
     </div>
     <div :key="post.id" v-for="post in filteredPosts" class="card">
       <div class="post-header">
-        <img :src="user.image" :alt="user.image" class="profile-picture" />
+        <img :src="post.userImage" :alt="post.userImage" class="profile-picture" />
         <div class="post-subtitle">
           <h4>{{ post.userName }}</h4>
-          <div class="post-date">posté le {{}}</div>
+          <div class="post-date">posté le {{ post.date }}</div>
         </div>
       </div>
       <p>{{ post.description }}</p>

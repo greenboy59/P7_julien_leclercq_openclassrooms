@@ -75,11 +75,22 @@ export default {
     async publish() {
       const userName = UserClass.user.firstname + " " + UserClass.user.lastname;
       const userId = UserClass.user.id;
+      const userImage = UserClass.user.image;
+      const date = new Date();
       const formData = new FormData();
       formData.append("image", this.image);
       formData.append("description", this.textarea);
       formData.append("userName", userName);
       formData.append("userId", userId);
+      formData.append("userImage", userImage);
+      formData.append("date", date.toLocaleString('fr-FR', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+      }));
       try {
         await this.axios.post("/posts", formData, {
           headers: { "Content-Type": "multipart/form-data" },

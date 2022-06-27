@@ -26,6 +26,7 @@ exports.createPost = (req, res, next) => {
   
   const post = new Post({
     image: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+    userImage: req.body.userImage,
     likes: 0,
     dislikes: 0,
     usersLiked: [],
@@ -33,6 +34,7 @@ exports.createPost = (req, res, next) => {
     description: req.body.description,
     userId: req.body.userId,
     userName: req.body.userName,
+    date: req.body.date,
   });
   post.save()
     .then(() => res.status(201).json({ message: 'Post enregistré !' }))
