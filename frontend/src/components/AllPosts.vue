@@ -1,7 +1,16 @@
 <template>
   <div v-if="posts.length > 0" id="posts-container">
     <h2>Posts</h2>
-    <div :key="post.id" v-for="post in posts" class="card">
+    <ul>
+      <span class="search-bar"
+        ><i class="fas fa-search"></i>
+        <input type="text" placeholder="Rechercher" v-model="inputFilter" />
+      </span>
+    </ul>
+    <div class="error-message" v-if="inputFilter && !filteredPosts.length">
+      <p>Aucun résultat trouvé !</p>
+    </div>
+    <div :key="post.id" v-for="post in filteredPosts" class="card">
       <div class="post-header">
         <img :src="user.image" :alt="user.image" class="profile-picture" />
         <div class="post-subtitle">
@@ -17,6 +26,7 @@
 
 <script>
 import UserClass from "@/classes/UserClass";
+
 export default {
   name: "AllPosts",
 
@@ -24,6 +34,7 @@ export default {
     return {
       user: UserClass.user,
       posts: "",
+      inputFilter: "",
     };
   },
 
@@ -32,11 +43,22 @@ export default {
   },
 
   methods: {
+    // Récupération des posts via l'API
     async getPosts() {
       let response = await this.axios.get("/posts");
       this.posts = response.data;
     },
   },
+
+  computed: {
+    filteredPosts() {
+      return this.posts.filter((post) => {
+        return post.userName
+          .toLowerCase()
+          .match(this.inputFilter.toLowerCase());
+      });
+    }
+  }
 };
 </script>
 
@@ -44,11 +66,11 @@ export default {
 #posts-container {
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
   gap: 30px;
 }
 .card {
   height: 450px;
+  padding: 25px;
 }
 .post-header {
   display: flex;
@@ -84,5 +106,22 @@ h2 {
 }
 h4 {
   color: #4e5166;
+}
+.search-bar {
+  transform: translateY(10px);
+}
+.fa-search {
+  color: white;
+  margin-right: 5px;
+}
+input:focus {
+  outline-color: #ffd7d7;
+  box-shadow: 1px 1px 5px #fd2d01;
+}
+input {
+  padding: 6px;
+  border: none;
+  border-radius: 16px;
+  border-left-style: none;
 }
 </style>

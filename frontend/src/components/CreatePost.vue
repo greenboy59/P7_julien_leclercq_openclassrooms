@@ -130,7 +130,7 @@ b {
   margin-top: 25px;
 }
 .button {
-  width: 25%;
+  width: fit-content;
 }
 .form-row {
   display: flex;
@@ -142,8 +142,17 @@ textarea {
   margin-bottom: 15px;
   resize: none;
 }
-textarea:focus {
+textarea:focus, input:focus {
   outline-color: #ffd7d7;
   box-shadow: 1px 1px 5px #fd2d01;
+}
+input {
+    padding: 6px;
+    border: none;
+    border-radius: 16px;
+    border-left-style: none;
+}
+span {
+    padding: 6px;
 }
 </style>

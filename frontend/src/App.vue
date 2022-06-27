@@ -128,4 +128,7 @@ button:disabled:hover {
 .card__action:hover {
   cursor: pointer;
 }
+.error-message {
+  font-weight: bold;
+}
 </style>
