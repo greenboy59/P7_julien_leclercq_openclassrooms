@@ -1,11 +1,11 @@
 <template>
   <div class="container">
     <div class="user-title">
-    <h1>
-      Bonjour,<br />
-      <strong>{{ user.firstname }} {{ user.lastname }}</strong>
-    </h1>
-    <img :src="user.image" :alt="user.image" class="profile-picture" />
+      <h1>
+        Bonjour,<br />
+        <strong>{{ user.firstname }} {{ user.lastname }}</strong>
+      </h1>
+      <img :src="user.image" :alt="user.image" class="profile-picture" />
     </div>
     <div class="card">
       <form
@@ -83,17 +83,21 @@ export default {
       formData.append("userName", userName);
       formData.append("userId", userId);
       formData.append("userImage", userImage);
-      formData.append("date", date.toLocaleString('fr-FR', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-      }));
+      formData.append("date", date.toLocaleString("fr-FR", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+        }),
+      );
       try {
         await this.axios.post("/posts", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: {
+            "Content-Type": "multipart/form-data",
+             "Authorization": `Bearer ${this.user.token}`,
+          },
         });
         await this.$router.go("/");
       } catch (err) {
@@ -153,17 +157,18 @@ textarea {
   margin-bottom: 15px;
   resize: none;
 }
-textarea:focus, input:focus {
+textarea:focus,
+input:focus {
   outline-color: #ffd7d7;
   box-shadow: 1px 1px 5px #fd2d01;
 }
 input {
-    padding: 6px;
-    border: none;
-    border-radius: 16px;
-    border-left-style: none;
+  padding: 6px;
+  border: none;
+  border-radius: 16px;
+  border-left-style: none;
 }
 span {
-    padding: 6px;
+  padding: 6px;
 }
 </style>

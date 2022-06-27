@@ -80,6 +80,7 @@ a {
 }
 .card {
   max-width: 100%;
+  height: fit-content;
   width: 540px;
   background: white;
   border-radius: 16px;

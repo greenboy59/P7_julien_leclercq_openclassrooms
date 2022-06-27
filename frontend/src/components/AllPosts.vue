@@ -2,17 +2,25 @@
   <div v-if="posts.length > 0" id="posts-container">
     <h2>Posts</h2>
     <ul>
-      <span class="search-bar"
-        ><i class="fas fa-search"></i>
-        <input type="text" placeholder="Rechercher par nom" v-model="inputFilter" />
+      <span class="search-bar">
+        <i class="fas fa-search"></i>
+        <input
+          type="text"
+          placeholder="Rechercher par nom"
+          v-model="inputFilter"
+        />
       </span>
     </ul>
     <div class="error-message" v-if="inputFilter && !filteredPosts.length">
       <p>Aucun résultat trouvé !</p>
     </div>
-    <div :key="post.id" v-for="post in filteredPosts" class="card">
+    <div :key="post.id" v-for="post in filteredPosts.reverse()" class="card">
       <div class="post-header">
-        <img :src="post.userImage" :alt="post.userImage" class="profile-picture" />
+        <img
+          :src="post.userImage"
+          :alt="post.userImage"
+          class="profile-picture"
+        />
         <div class="post-subtitle">
           <h4>{{ post.userName }}</h4>
           <div class="post-date">posté le {{ post.date }}</div>
@@ -20,6 +28,16 @@
       </div>
       <p>{{ post.description }}</p>
       <img :src="post.image" :alt="post.image" class="post-picture" />
+      <div v-if="this.user.id === post.userId" class="post-buttons">
+        <button class="button" @click="modifyPost(post._id)">
+          <i class="fas fa-edit modify"></i>
+          modifier
+        </button>
+        <button class="button" @click="deletePost(post._id)">
+          <i class="fas fa-trash-alt delete"></i>
+          supprimer
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -35,6 +53,7 @@ export default {
       user: UserClass.user,
       posts: "",
       inputFilter: "",
+      postId: "",
     };
   },
 
@@ -48,6 +67,19 @@ export default {
       let response = await this.axios.get("/posts");
       this.posts = response.data;
     },
+
+    async deletePost(id) {
+      try {
+        await this.axios.delete("/posts/" + id, {
+          headers: {
+            Authorization: `Bearer ${this.user.token}`,
+          },
+        });
+        await this.$router.go("/");
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
 
   computed: {
@@ -57,8 +89,8 @@ export default {
           .toLowerCase()
           .match(this.inputFilter.toLowerCase());
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -69,7 +101,6 @@ export default {
   gap: 30px;
 }
 .card {
-  height: 450px;
   padding: 25px;
 }
 .post-header {
@@ -123,5 +154,11 @@ input {
   border: none;
   border-radius: 16px;
   border-left-style: none;
+}
+.button {
+  width: fit-content;
+  height: 50px;
+  font-size: 12px;
+  margin: 5px 5px 0 0;
 }
 </style>
