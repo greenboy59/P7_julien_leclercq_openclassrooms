@@ -2,17 +2,17 @@
   <div>
     <MainNav />
     <CreatePost />
-    <AllPosts />
+    <AllPostsList />
   </div>
 </template>
 
 <script>
 import MainNav from "@/components/MainNav";
-import AllPosts from "@/components/AllPosts";
+import AllPostsList from "@/components/AllPostsList";
 import CreatePost from "@/components/CreatePost";
 
 export default {
   name: "AllPostsPage",
-  components: { AllPosts, CreatePost, MainNav },
+  components: { AllPostsList, CreatePost, MainNav },
 };
 </script>

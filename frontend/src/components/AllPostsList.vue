@@ -46,7 +46,7 @@
 import UserClass from "@/classes/UserClass";
 
 export default {
-  name: "AllPosts",
+  name: "AllPostsList",
 
   data() {
     return {
@@ -81,8 +81,8 @@ export default {
       }
     },
 
-    async modifyPost(id) {
-      this.$router.go(`/post/?id=${id}`);
+     async modifyPost(id) {
+     this.$router.push(`/post/${id}`)
     },
   },
 

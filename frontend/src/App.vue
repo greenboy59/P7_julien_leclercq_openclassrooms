@@ -103,7 +103,9 @@ a {
   border-radius: 8px;
   font-weight: 800;
   font-size: 15px;
+  cursor: pointer;
   border: none;
+  outline: none;
   width: 100%;
   padding: 16px;
   transition: 0.4s all ease-in-out;

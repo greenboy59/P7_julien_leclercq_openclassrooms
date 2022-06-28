@@ -3,6 +3,7 @@ import Login from "@/views/LoginPage.vue";
 import SignUp from "@/views/SignUpPage.vue";
 import ProfilePage from "@/views/ProfilePage.vue";
 import AllPostsPage from "@/views/AllPostsPage.vue";
+import PostPage from "@/views/PostPage.vue";
 import UserClass from "@/classes/UserClass";
 
 const routes = [
@@ -34,6 +35,12 @@ const routes = [
     path: "/all-posts",
     name: "posts",
     component: AllPostsPage,
+    meta: { auth: true },
+  },
+  {
+    path: "/post/:id",
+    name: "post",
+    component: PostPage,
     meta: { auth: true },
   },
 ];
