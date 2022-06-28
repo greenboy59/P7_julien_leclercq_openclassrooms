@@ -24,9 +24,9 @@ export default {
 body {
   background-image: linear-gradient(62deg, #fd2d01 0%, #ffd7d7 100%);
   display: flex;
+  min-height: 100vh;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
   padding: 32px;
 }
 #logo {
@@ -39,7 +39,7 @@ body {
 img {
   object-fit: contain;
   max-width: 100%;
-  border-radius: 8px;
+  max-height: 100%;
 }
 .errorMessage {
   font-weight: bold;
@@ -103,12 +103,15 @@ a {
   border-radius: 8px;
   font-weight: 800;
   font-size: 15px;
-  cursor: pointer;
-  border: none;
-  outline: none;
   width: 100%;
   padding: 16px;
   transition: 0.4s all ease-in-out;
+}
+button {
+  background: none;
+  outline: none;
+  border: none;
+  cursor: pointer;
 }
 .button:hover {
   cursor: pointer;
@@ -133,5 +136,11 @@ button:disabled:hover {
 }
 .error-message {
   font-weight: bold;
+}
+
+@media (max-width: 540px) {
+   body {
+    padding: 0;
+  }
 }
 </style>

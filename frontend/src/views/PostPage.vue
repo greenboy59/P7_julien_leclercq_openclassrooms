@@ -1,8 +1,6 @@
 <template>
-  <div>
     <MainNav />
     <PostCard />
-  </div>
 </template>
 
 <script>

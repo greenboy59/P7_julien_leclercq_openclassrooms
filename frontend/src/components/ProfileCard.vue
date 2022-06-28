@@ -12,8 +12,6 @@
 <script>
 import UserClass from "@/classes/UserClass";
 
-const user = JSON.parse(localStorage.getItem("user"));
-
 export default {
   name: "ProfileCard",
 
@@ -25,7 +23,7 @@ export default {
   methods: {
     // Au clic sur logout, le localstorage est vidé
     logout() {
-      localStorage.clear(user);
+      localStorage.clear();
       this.$router.go("/login");
     },
   },

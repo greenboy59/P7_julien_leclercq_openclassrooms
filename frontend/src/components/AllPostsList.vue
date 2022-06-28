@@ -1,7 +1,6 @@
 <template>
   <div v-if="posts.length > 0" id="posts-container">
     <h2>Posts</h2>
-    <ul>
       <span class="search-bar">
         <i class="fas fa-search"></i>
         <input
@@ -10,7 +9,6 @@
           v-model="inputFilter"
         />
       </span>
-    </ul>
     <div class="error-message" v-if="inputFilter && !filteredPosts.length">
       <p>Aucun résultat trouvé !</p>
     </div>
@@ -118,16 +116,17 @@ post-subtitle {
   flex-direction: column;
 }
 .profile-picture {
+  display: inline-block;
   width: 50px;
   height: 50px;
-  border-radius: 50%;
+  clip-path: circle(50%);
   margin-right: 15px;
   object-fit: cover;
   object-position: top;
 }
 .post-picture {
-  max-width: 100%;
-  width: 500px;
+  margin: 0 auto;
+  width: 100%;
   height: 250px;
 }
 .card p {
@@ -144,6 +143,7 @@ h4 {
 }
 .search-bar {
   transform: translateY(10px);
+  display: inline-block;
 }
 .fa-search {
   color: white;
@@ -164,5 +164,17 @@ input {
   height: 50px;
   font-size: 12px;
   margin: 5px 5px 0 0;
+}
+
+@media (max-width: 540px) {
+  .card {
+    border-radius: 0;
+    width: 100%;
+  }
+  .profile-picture {
+    clip-path: circle(40%);
+    width: 70px;
+    height: 70px;
+  }
 }
 </style>

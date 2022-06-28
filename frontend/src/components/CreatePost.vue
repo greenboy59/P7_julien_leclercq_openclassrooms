@@ -1,13 +1,24 @@
 <template>
-  <div class="container">
-    <div class="user-title">
-      <h1>
-        Bonjour,<br />
-        <strong>{{ user.firstname }} {{ user.lastname }}</strong>
-      </h1>
-      <img :src="user.image" :alt="user.image" class="profile-picture" />
-    </div>
+  <div class="user-title">
+    <h1>
+      Bonjour,<br />
+      <strong>{{ user.firstname }} {{ user.lastname }}</strong>
+    </h1>
+    <img :src="user.image" :alt="user.image" class="profile-picture" />
+  </div>
+  <div id="display-create-post">
+    <input
+      readonly="readonly"
+      class="form-row__input input-appear"
+      @focus="displayCreatePost"
+      placeholder="De quoi voulez-vous parler ?"
+    />
+  </div>
+  <div id="container">
     <div class="card">
+      <button @click="hideCreatePost">
+        <i class="fa-solid fa-circle-xmark"></i>
+      </button>
       <form
         method="post"
         enctype="multipart/form-data"
@@ -66,11 +77,23 @@ export default {
   },
 
   methods: {
+    displayCreatePost() {
+      const containerElement = document.getElementById("container");
+      containerElement.style.transform = "translateY(0%)";
+      containerElement.style.display = "flex";
+    },
+    hideCreatePost() {
+      const containerElement = document.getElementById("container");
+      containerElement.style.transform = "translateY(1000%)";
+      containerElement.style.display = "none";
+    },
+
     // Récupération de l'image
     setImage(payload) {
       const image = payload;
       this.image = image;
     },
+
     // fonction asynchrone afin d'envoyer les données au backend et rediriger vers page de login
     async publish() {
       const userName = UserClass.user.firstname + " " + UserClass.user.lastname;
@@ -111,18 +134,62 @@ export default {
 </script>
 
 <style scoped>
-.container {
+#display-create-post {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 16px 16px 0 0;
+}
+#display-create-post > input {
+  transform: translateY(-1000%);
+  opacity: 0;
+  width: 540px;
+  height: 80px;
+  background: white;
+}
+.input-appear {
+  animation: input-appear 1s 0.5s ease forwards;
+}
+@keyframes input-appear {
+  from {
+    transform: translateY(-1000%);
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+#container {
+  transition: all 0.5s ease;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 3;
+  top: 0;
+  left: 0;
   width: 100%;
+  height: 100%;
+  backdrop-filter: blur(5px);
+}
+.fa-circle-xmark {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  font-size: 2.5em;
+  color: red;
 }
 .user-title {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 15px;
 }
 .profile-picture {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  clip-path: circle(50%);
   object-fit: cover;
   object-position: top;
 }
@@ -145,6 +212,7 @@ b {
 }
 .card {
   margin-top: 25px;
+  position: relative;
 }
 .button {
   width: fit-content;
@@ -172,5 +240,11 @@ input {
 }
 span {
   padding: 6px;
+}
+@media (max-width: 540px) {
+  .card {
+    width: 100%;
+    border-radius: 0;
+  }
 }
 </style>

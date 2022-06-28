@@ -122,4 +122,11 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+@media (max-width: 540px) {
+  .card {
+    border-radius: 0;
+    width: 100%;
+  }
+}
+</style>

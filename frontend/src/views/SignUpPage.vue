@@ -1,7 +1,5 @@
 <template>
-  <div>
     <SignUpCard />
-  </div>
 </template>
 
 <script>
