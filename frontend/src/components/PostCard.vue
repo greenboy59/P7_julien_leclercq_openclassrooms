@@ -1,7 +1,6 @@
 <template>
-    <div class="card">
-      <div class="post-header">
-    </div>
+  <div class="card">
+    <p>{{id}}</p>
   </div>
 </template>
 
@@ -15,18 +14,17 @@ export default {
     return {
       user: UserClass.user,
       post: null,
+      id: this.$route.params.id,
     };
   },
 
- beforeRouteEnter () {
-   this.getPost()
+  beforeRouteEnter() {
+    this.getPost();
   },
 
   methods: {
-     getPost() {
-      this.post = this.$route.params.id
-     console.log(this.post)
-    }
+   async getPost() {
+    },
   },
 };
 </script>

@@ -62,7 +62,11 @@ export default {
   methods: {
     // Récupération des posts via l'API
     async getPosts() {
-      let response = await this.axios.get("/posts");
+      let response = await this.axios.get("/posts", {
+        headers: {
+          Authorization: `Bearer ${this.user.token}`,
+        },
+      });
       this.posts = response.data;
     },
 
