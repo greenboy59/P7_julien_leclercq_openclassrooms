@@ -143,7 +143,7 @@ export default {
 #display-create-post > input {
   transform: translateY(-1000%);
   opacity: 0;
-  width: 540px;
+  width: 100%;
   height: 80px;
   background: white;
 }
@@ -208,7 +208,6 @@ export default {
   height: 70px;
   clip-path: circle(50%);
   object-fit: cover;
-  object-position: top;
 }
 h1 {
   color: rgba(255, 255, 255, 0.6);
@@ -260,9 +259,22 @@ span {
   padding: 6px;
 }
 @media (max-width: 540px) {
+  .user-title {
+    flex-direction: column-reverse;
+    align-items: baseline;
+    padding: 0 25px;
+    margin-top: 70px;
+  }
   .card {
     width: 100%;
     border-radius: 0;
   }
+  #display-create-post {
+    padding: 0 25px;
+  }
+  .fa-circle-xmark {
+  top: -7px;
+  right: 30px;
+}
 }
 </style>

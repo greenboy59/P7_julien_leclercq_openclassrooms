@@ -1,14 +1,14 @@
 <template>
   <div v-if="posts.length > 0" id="posts-container">
     <h2>Posts</h2>
-      <span class="search-bar">
-        <i class="fas fa-search"></i>
-        <input
-          type="text"
-          placeholder="Rechercher par nom"
-          v-model="inputFilter"
-        />
-      </span>
+    <span class="search-bar">
+      <i class="fas fa-search"></i>
+      <input
+        type="text"
+        placeholder="Rechercher par nom"
+        v-model="inputFilter"
+      />
+    </span>
     <div class="error-message" v-if="inputFilter && !filteredPosts.length">
       <p>Aucun résultat trouvé !</p>
     </div>
@@ -26,15 +26,25 @@
       </div>
       <p>{{ post.description }}</p>
       <img :src="post.image" :alt="post.image" class="post-picture" />
-      <div v-if="this.user.id === post.userId" class="post-buttons">
-        <button class="button" @click="modifyPost(post._id)">
-          <i class="fas fa-edit modify"></i>
-          modifier
-        </button>
-        <button class="button" @click="deletePost(post._id)">
-          <i class="fas fa-trash-alt delete"></i>
-          supprimer
-        </button>
+      <div class="posts-options">
+        <div class="like-dislike-buttons">
+          <button class="button like">
+            <i class="fa-regular fa-thumbs-up"></i>
+          </button>
+          <button class="button dislike">
+            <i class="fa-regular fa-thumbs-down"></i>
+          </button>
+        </div>
+        <div v-if="this.user.id === post.userId" class="modify-delete-buttons">
+          <button class="button modify-button" @click="modifyPost(post._id)">
+            <i class="fas fa-edit modify"></i>
+            <b>modifier</b>
+          </button>
+          <button class="button delete-button" @click="deletePost(post._id)">
+            <i class="fas fa-trash-alt delete"></i>
+            <b>supprimer</b>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -49,7 +59,7 @@ export default {
   data() {
     return {
       user: UserClass.user,
-      posts: "",
+      posts: [],
       inputFilter: "",
       postId: "",
     };
@@ -62,12 +72,12 @@ export default {
   methods: {
     // Récupération des posts via l'API
     async getPosts() {
-      let response = await this.axios.get("/posts", {
+      const { data } = await this.axios.get("/posts", {
         headers: {
           Authorization: `Bearer ${this.user.token}`,
         },
       });
-      this.posts = response.data;
+      this.posts = data;
     },
 
     async deletePost(id) {
@@ -83,8 +93,8 @@ export default {
       }
     },
 
-     async modifyPost(id) {
-     this.$router.push(`/post/${id}`)
+    async modifyPost(id) {
+      this.$router.push(`/post/${id}`);
     },
   },
 
@@ -105,6 +115,7 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 30px;
+  margin-bottom: 60px;
 }
 .card {
   padding: 25px;
@@ -163,11 +174,25 @@ input {
   border-radius: 16px;
   border-left-style: none;
 }
-.button {
-  width: fit-content;
+.modify-delete-buttons,
+.like-dislike-buttons {
   height: 50px;
-  font-size: 12px;
-  margin: 5px 5px 0 0;
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.modify-button, .delete-button {
+  width: fit-content;
+}
+.posts-options {
+  margin-top: 15px;
+  display: flex;
+}
+.like,
+.dislike {
+  color: white;
+  width: 46%;
 }
 
 @media (max-width: 540px) {
@@ -179,6 +204,19 @@ input {
     clip-path: circle(40%);
     width: 70px;
     height: 70px;
+  }
+   h2 {
+    padding: 0 25px;
+  }
+  .search-bar {
+    padding: 25px;
+    width: 100%;
+  }
+  .modify-button > b, .delete-button > b {
+    display: none;
+  }
+  .modify-button, .delete-button {
+    width: 46%;
   }
 }
 </style>

@@ -87,9 +87,6 @@ export default {
   color: #4e5166;
   padding: 15px;
   background: none;
-  cursor: pointer;
-  border: none;
-  outline: none;
   transition: all 0.3s ease-out;
 }
 .fa-user,
@@ -97,10 +94,33 @@ export default {
   margin-right: 5px;
 }
 .logo {
-  width: 200px;
-  height: 50px;
+  width: 15em;
   position: absolute;
   top: 10px;
   left: 15px;
+}
+@media (max-width: 540px) {
+  .nav-container {
+    height: 0;
+  }
+  .nav-bar-buttons {
+    height: 60px;
+    z-index: 2;
+    width: 100%;
+    padding: unset;
+    bottom: 0;
+    position: fixed;
+    background: white;
+    box-shadow: 2px 2px 8px #FD2D01;
+  }
+  .profile-button, .logout-button {
+    width: 50%;
+    height: 100%;
+    position: unset;
+  }
+  .profile-button:hover, .logout-button:hover {
+    box-shadow: none;
+    background: none;
+  }
 }
 </style>
