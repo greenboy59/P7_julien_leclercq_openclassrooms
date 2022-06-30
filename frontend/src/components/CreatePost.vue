@@ -1,60 +1,62 @@
 <template>
-  <div class="user-title">
-    <h1>
-      Bonjour,<br />
-      <strong>{{ user.firstname }} {{ user.lastname }}</strong>
-    </h1>
-    <img :src="user.image" :alt="user.image" class="profile-picture" />
-  </div>
-  <div id="display-create-post">
-    <input
-      readonly="readonly"
-      class="form-row__input input-appear"
-      @focus="displayCreatePost"
-      placeholder="De quoi voulez-vous parler ?"
-    />
-  </div>
-  <div id="container">
-    <div class="card card-appear">
-      <button @click="hideCreatePost">
-        <i class="fa-solid fa-circle-xmark"></i>
-      </button>
-      <form
-        method="post"
-        enctype="multipart/form-data"
-        @submit.prevent="onSubmit"
-      >
-        <div class="form-row">
-          <label for="post-text">
-            Quelque chose a dire?<br />
-            <b>(max 1500 caractères)</b>
-          </label>
-          <button type="submit" class="button" @click="publish()">
-            Publier
-            <!--TO DO insérer un texte durant le loading-->
-            <!-- <span v-if="status == 'loading'">Création en cours...</span>
-          <span v-else>Créer mon compte</span> -->
-          </button>
-        </div>
-        <textarea
-          v-model="textarea"
-          class="form-row__input"
-          name="post-text"
-          cols="30"
-          rows="10"
-          minlength="1"
-          maxlength="1500"
-          placeholder="Ecrivez quelque chose..."
+  <div>
+    <div class="user-title">
+      <h1>
+        Bonjour,<br />
+        <strong>{{ user.firstname }} {{ user.lastname }}</strong>
+      </h1>
+      <img :src="user.image" :alt="user.image" class="profile-picture" />
+    </div>
+    <div id="display-create-post">
+      <input
+        readonly="readonly"
+        class="form-row__input input-appear"
+        @focus="displayCreatePost"
+        placeholder="De quoi voulez-vous parler ?"
+      />
+    </div>
+    <div id="container">
+      <div class="card card-appear">
+        <button @click="hideCreatePost">
+          <i class="fa-solid fa-circle-xmark"></i>
+        </button>
+        <form
+          method="post"
+          enctype="multipart/form-data"
+          @submit.prevent="onSubmit"
         >
-        </textarea>
-        <div>
-          <h2 for="postPic">
-            Mettez en avant votre post avec une image ou un gif ! <br />
-            <b>(max 5mo)</b>
-          </h2>
-          <FilePreview @upload="setImage" />
-        </div>
-      </form>
+          <div class="form-row">
+            <label for="post-text">
+              Quelque chose a dire?<br />
+              <b>(max 1500 caractères)</b>
+            </label>
+            <button type="submit" class="button" @click="publish()">
+              Publier
+              <!--TO DO insérer un texte durant le loading-->
+              <!-- <span v-if="status == 'loading'">Création en cours...</span>
+          <span v-else>Créer mon compte</span> -->
+            </button>
+          </div>
+          <textarea
+            v-model="textarea"
+            class="form-row__input"
+            name="post-text"
+            cols="30"
+            rows="10"
+            minlength="1"
+            maxlength="1500"
+            placeholder="Ecrivez quelque chose..."
+          >
+          </textarea>
+          <div>
+            <h2 for="postPic">
+              Mettez en avant votre post avec une image ou un gif ! <br />
+              <b>(max 5mo)</b>
+            </h2>
+            <FilePreview @upload="setImage" />
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </template>
@@ -85,7 +87,7 @@ export default {
     },
     hideCreatePost() {
       this.containerElement.style.transform = "translateY(100%)";
-      this.containerElement.style.transition = "all .8s ease"
+      this.containerElement.style.transition = "all .8s ease";
     },
 
     // Récupération de l'image
@@ -187,7 +189,7 @@ export default {
   color: red;
 }
 .card-appear {
-  animation: card-appear .8s ease;
+  animation: card-appear 0.8s ease;
 }
 @keyframes card-appear {
   from {
@@ -273,8 +275,8 @@ span {
     padding: 0 25px;
   }
   .fa-circle-xmark {
-  top: -7px;
-  right: 30px;
-}
+    top: -7px;
+    right: 30px;
+  }
 }
 </style>

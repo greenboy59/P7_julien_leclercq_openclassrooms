@@ -1,6 +1,8 @@
 <template>
+  <div>
     <MainNav />
     <ProfileCard />
+  </div>
 </template>
 
 <script>

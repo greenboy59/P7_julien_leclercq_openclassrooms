@@ -1,11 +1,10 @@
 <template>
-  <transition name="modal">
-    <ModalWindow v-if="showModal" @close="showModal = false" @logOut="logOut">
-    </ModalWindow>
-  </transition>
-
-  <div class="nav-container">
-    <div class="return-home">
+  <div>
+    <transition name="modal">
+      <ModalWindow v-if="showModal" @close="showModal = false" @logOut="logOut">
+      </ModalWindow>
+    </transition>
+    <nav id="nav-bar-container">
       <a href="http://localhost:8080/all-posts">
         <img
           class="logo"
@@ -13,32 +12,33 @@
           alt="logo Groupomania"
         />
       </a>
-    </div>
-    <div class="nav-bar-buttons">
-      <button class="profile-button" type="button" @click="goToProfile">
-        <i class="fa-solid fa-user"></i>
-        Profil
-      </button>
 
-      <button class="logout-button" type="button" @click="showModal = true">
-        <i class="fa-solid fa-right-from-bracket"></i>
-        déconnexion
-      </button>
-    </div>
+      <div class="nav-bar-buttons">
+        <button class="profile-button" type="button" @click="goToProfile">
+          <i class="fa-solid fa-user"></i>
+          Profil
+        </button>
+
+        <button class="logout-button" type="button" @click="showModal = true">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          déconnexion
+        </button>
+      </div>
+    </nav>
   </div>
 </template>
 
 <script>
-import ModalWindow from './ModalWindow.vue'
+import ModalWindow from "./ModalWindow.vue";
 
 export default {
   name: "MainNav",
-  components: {ModalWindow},
+  components: { ModalWindow },
 
   data() {
     return {
       showModal: false,
-    }
+    };
   },
 
   methods: {
@@ -58,12 +58,15 @@ export default {
 </script>
 
 <style scoped>
-.nav-container {
-  display: flex;
-  height: 50px;
+#nav-bar-container {
+  width: 100%;
+  height: 60px;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 .nav-bar-buttons {
-  font-size: 1.1em;
+  height: 100%;
 }
 .logout-button:hover,
 .profile-button:hover {
@@ -72,32 +75,31 @@ export default {
   border-radius: 10px;
   background: #fecbc7;
 }
-.logout-button {
+.logout-button,
+.profile-button {
   position: absolute;
+  color: #4e5166;
+  padding: 15px;
+  font-size: 1em;
+  transition: all 0.3s ease-out;
+}
+.logout-button {
   right: 15px;
   top: 10px;
 }
 .profile-button {
-  position: absolute;
-  right: 150px;
+  right: 175px;
   top: 10px;
-}
-.logout-button,
-.profile-button {
-  color: #4e5166;
-  padding: 15px;
-  background: none;
-  transition: all 0.3s ease-out;
 }
 .fa-user,
 .fa-right-from-bracket {
   margin-right: 5px;
 }
 .logo {
-  width: 15em;
   position: absolute;
   top: 10px;
   left: 15px;
+  width: 15em;
 }
 @media (max-width: 540px) {
   .nav-container {
@@ -111,14 +113,16 @@ export default {
     bottom: 0;
     position: fixed;
     background: white;
-    box-shadow: 2px 2px 8px #FD2D01;
+    box-shadow: 2px 2px 8px #fd2d01;
   }
-  .profile-button, .logout-button {
+  .profile-button,
+  .logout-button {
     width: 50%;
     height: 100%;
     position: unset;
   }
-  .profile-button:hover, .logout-button:hover {
+  .profile-button:hover,
+  .logout-button:hover {
     box-shadow: none;
     background: none;
   }

@@ -20,6 +20,7 @@ export default {
 }
 #app {
   max-width: 100%;
+  margin-top: 5%;
 }
 body {
   background-image: linear-gradient(62deg, #fd2d01 0%, #ffd7d7 100%);
@@ -80,11 +81,11 @@ a {
 }
 .card {
   max-width: 100%;
+  width: 540px;
   height: fit-content;
-  max-width: 540px;
   background: white;
   border-radius: 16px;
-  padding: 32px;
+  padding: 25px;
 }
 .card__title {
   text-align: center;
@@ -139,8 +140,13 @@ button:disabled:hover {
 }
 
 @media (max-width: 540px) {
-   body {
+  body {
     padding: 0;
+    justify-content: unset;
+  }
+   .card {
+    border-radius: 0;
+    width: 100%;
   }
 }
 </style>

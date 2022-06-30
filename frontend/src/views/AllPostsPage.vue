@@ -1,7 +1,9 @@
 <template>
+  <div>
     <MainNav />
     <CreatePost />
     <AllPostsList />
+  </div>
 </template>
 
 <script>

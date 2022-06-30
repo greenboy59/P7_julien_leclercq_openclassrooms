@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="container">
     <img
       id="logo"
       alt="Groupomania logo"
@@ -18,6 +18,7 @@
           <label hidden for="email">email</label>
           <input
             name="email"
+            id="email"
             v-model="email"
             class="form-row__input"
             type="email"
@@ -29,6 +30,7 @@
           <label hidden for="password">mot de passe</label>
           <input
             name="password"
+            id="password"
             v-model="password"
             class="form-row__input"
             type="password"

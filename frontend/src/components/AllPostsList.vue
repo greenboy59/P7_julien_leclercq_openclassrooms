@@ -28,10 +28,10 @@
       <img :src="post.image" :alt="post.image" class="post-picture" />
       <div class="posts-options">
         <div class="like-dislike-buttons">
-          <button class="button like">
+          <button @click="addLike(post._id)" class="button like">
             <i class="fa-regular fa-thumbs-up"></i>
           </button>
-          <button class="button dislike">
+          <button @click="addDislike(post._id)" class="button dislike">
             <i class="fa-regular fa-thumbs-down"></i>
           </button>
         </div>
@@ -69,6 +69,16 @@ export default {
     this.getPosts();
   },
 
+  computed: {
+    filteredPosts() {
+      return this.posts.filter((post) => {
+        return post.userName
+          .toLowerCase()
+          .match(this.inputFilter.toLowerCase());
+      });
+    },
+  },
+
   methods: {
     // Récupération des posts via l'API
     async getPosts() {
@@ -83,9 +93,7 @@ export default {
     async deletePost(id) {
       try {
         await this.axios.delete("/posts/" + id, {
-          headers: {
-            Authorization: `Bearer ${this.user.token}`,
-          },
+          headers: { Authorization: `Bearer ${this.user.token}` },
         });
         await this.$router.go("/");
       } catch (err) {
@@ -96,15 +104,31 @@ export default {
     async modifyPost(id) {
       this.$router.push(`/post/${id}`);
     },
-  },
 
-  computed: {
-    filteredPosts() {
-      return this.posts.filter((post) => {
-        return post.userName
-          .toLowerCase()
-          .match(this.inputFilter.toLowerCase());
-      });
+    async addLike(id) {
+      try {
+        await this.axios.post(`/posts/${id}/like`, {
+          headers: { Authorization: `Bearer ${this.user.token}` },
+          postId: id,
+          userId: this.user.id,
+          like: 1,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    async addDislike(id) {
+      try {
+        await this.axios.post(`/posts/${id}/like`, {
+          headers: { Authorization: `Bearer ${this.user.token}` },
+          postId: id,
+          userId: this.user.id,
+          like: -1,
+        });
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
 };
@@ -117,9 +141,6 @@ export default {
   gap: 30px;
   margin-bottom: 60px;
 }
-.card {
-  padding: 25px;
-}
 .post-header {
   display: flex;
   align-items: center;
@@ -127,15 +148,14 @@ export default {
 .post-date {
   color: #aaa;
 }
-post-subtitle {
-  flex-direction: column;
+.post-subtitle {
+  padding-left: 15px;
+  width: 80%;
 }
 .profile-picture {
-  display: inline-block;
   width: 50px;
   height: 50px;
   clip-path: circle(50%);
-  margin-right: 15px;
   object-fit: cover;
   object-position: top;
 }
@@ -158,7 +178,7 @@ h4 {
 }
 .search-bar {
   transform: translateY(10px);
-  display: inline-block;
+  width: 540px;
 }
 .fa-search {
   color: white;
@@ -182,7 +202,8 @@ input {
   align-items: center;
   justify-content: space-around;
 }
-.modify-button, .delete-button {
+.modify-button,
+.delete-button {
   width: fit-content;
 }
 .posts-options {
@@ -191,31 +212,50 @@ input {
 }
 .like,
 .dislike {
-  color: white;
   width: 46%;
+}
+.like,
+.dislike,
+.modify-button,
+.delete-button {
+  background: none;
+  position: relative;
+  border: 1px solid #fd2d01;
+  color: #fd2d01;
+}
+.like:hover,
+.dislike:hover,
+.modify-button:hover,
+.delete-button:hover {
+  color: white;
+  -webkit-box-shadow: inset -150px 0px 0px 0px #fd2d01;
+  box-shadow: inset -150px 0px 0px 0px #fd2d01;
+}
+.fa-trash-alt,
+.fa-edit {
+  margin-right: 5px;
 }
 
 @media (max-width: 540px) {
-  .card {
-    border-radius: 0;
-    width: 100%;
-  }
   .profile-picture {
-    clip-path: circle(40%);
-    width: 70px;
-    height: 70px;
+    -webkit-clip-path: circle(50%);
+    clip-path: circle(45%);
+    width: 20%;
+    height: 100%;
   }
-   h2 {
+  h2 {
     padding: 0 25px;
   }
   .search-bar {
     padding: 25px;
     width: 100%;
   }
-  .modify-button > b, .delete-button > b {
+  .modify-button > b,
+  .delete-button > b {
     display: none;
   }
-  .modify-button, .delete-button {
+  .modify-button,
+  .delete-button {
     width: 46%;
   }
 }
