@@ -98,7 +98,7 @@ export default {
     // fonction asynchrone afin d'envoyer les données au backend et rediriger vers page de login
     async publish() {
       const userName = UserClass.user.firstname + " " + UserClass.user.lastname;
-      const userId = UserClass.user.id;
+      const userId = UserClass.user.userId;
       const userImage = UserClass.user.image;
       const date = new Date();
       const formData = new FormData();

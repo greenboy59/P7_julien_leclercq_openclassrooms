@@ -30,14 +30,14 @@ exports.createPost = (req, res, next) => {
   const post = new Post({
     image: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
     userImage: req.body.userImage,
-    likes: 0,
-    dislikes: 0,
-    usersLiked: [],
-    usersDisliked: [],
     description: req.body.description,
     userId: req.body.userId,
     userName: req.body.userName,
     date: req.body.date,
+    likes: 0,
+    dislikes: 0,
+    usersLiked: [],
+    usersDisliked: [],
   });
   post
     .save()

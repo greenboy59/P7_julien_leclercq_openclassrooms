@@ -28,14 +28,14 @@
       <img :src="post.image" :alt="post.image" class="post-picture" />
       <div class="posts-options">
         <div class="like-dislike-buttons">
-          <button @click="addLike(post._id)" class="button like">
+          <button @click="addLike(post._id, post.usersLiked)" class="button like">
             <i class="fa-regular fa-thumbs-up"></i>
           </button>
-          <button @click="addDislike(post._id)" class="button dislike">
+          <button @click="addDislike(post._id, post.usersDisliked)" class="button dislike">
             <i class="fa-regular fa-thumbs-down"></i>
           </button>
         </div>
-        <div v-if="this.user.id === post.userId" class="modify-delete-buttons">
+        <div v-if="user.userId === post.userId" class="modify-delete-buttons">
           <button class="button modify-button" @click="modifyPost(post._id)">
             <i class="fas fa-edit modify"></i>
             <b>modifier</b>
@@ -62,6 +62,7 @@ export default {
       posts: [],
       inputFilter: "",
       postId: "",
+      data: null,
     };
   },
 
@@ -82,18 +83,16 @@ export default {
   methods: {
     // Récupération des posts via l'API
     async getPosts() {
-      const { data } = await this.axios.get("/posts", {
-        headers: {
-          Authorization: `Bearer ${this.user.token}`,
-        },
+      const axiosConfig = { headers: { 'Authorization': `Bearer ${this.user.token}` } }
+      const { data } = await this.axios.get("/posts", axiosConfig, {
       });
       this.posts = data;
     },
 
     async deletePost(id) {
+            const axiosConfig = { headers: { 'Authorization': `Bearer ${this.user.token}` } }
       try {
-        await this.axios.delete("/posts/" + id, {
-          headers: { Authorization: `Bearer ${this.user.token}` },
+        await this.axios.delete("/posts/" + id, axiosConfig, {
         });
         await this.$router.go("/");
       } catch (err) {
@@ -105,32 +104,31 @@ export default {
       this.$router.push(`/post/${id}`);
     },
 
-    async addLike(id) {
-      try {
-        await this.axios.post(`/posts/${id}/like`, {
-          headers: { Authorization: `Bearer ${this.user.token}` },
-          postId: id,
-          userId: this.user.id,
-          like: 1,
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    },
+    async addLike(id, usersLiked) {
+      const axiosConfig = { headers: { 'Authorization': `Bearer ${this.user.token}` } }
+      this.data = { userId: this.user.userId, like: 1, }
+      console.log(usersLiked)
 
-    async addDislike(id) {
       try {
-        await this.axios.post(`/posts/${id}/like`, {
-          headers: { Authorization: `Bearer ${this.user.token}` },
-          postId: id,
-          userId: this.user.id,
-          like: -1,
+        await this.axios.post(`/posts/${id}/like`, this.data, axiosConfig, {
         });
-      } catch (err) {
-        console.log(err);
-      }
-    },
+    } catch(err) {
+      console.log(err);
+    }
   },
+
+    async addDislike(id, usersDisliked) {
+       console.log(usersDisliked)
+     const axiosConfig = { headers: { 'Authorization': `Bearer ${this.user.token}` } }
+     const data = { userId: this.user.userId, like: -1, }
+    try {
+      await this.axios.post(`/posts/${id}/like`, data, axiosConfig, {
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  },
+}
 };
 </script>
 

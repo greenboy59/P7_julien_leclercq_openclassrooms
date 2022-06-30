@@ -1,11 +1,11 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 // Création du token, décodage puis valeur mise dans variable userId
 module.exports = (req, res, next) => {
   let userId;
   try {
-    const token = req.headers.authorization.split(' ')[1];
+    const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, process.env.RANDOM_TOKEN_SECRET);
     userId = decodedToken.userId;
   } catch (err) {
@@ -16,7 +16,7 @@ module.exports = (req, res, next) => {
   try {
     req.auth = { userId };
     if (req.body.userId && req.body.userId !== userId) {
-      throw 'Id utilisateur invalide !';
+      throw "Id utilisateur invalide !";
     } else {
       next();
     }
