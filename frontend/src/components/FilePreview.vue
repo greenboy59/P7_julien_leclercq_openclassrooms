@@ -73,7 +73,7 @@ export default {
   display: block;
   margin: 0 auto;
   transform: translateY(70%);
-  visibility: hidden;
+  opacity: 0;
   width: fit-content;
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
@@ -82,7 +82,7 @@ export default {
   content: "\f07b";
 }
 .imagePreviewWrapper:hover:before {
-  visibility: visible;
+  opacity: 1;
 }
 .delete-image {
   position: absolute;

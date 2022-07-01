@@ -87,6 +87,9 @@ a {
   border-radius: 16px;
   padding: 25px;
 }
+.card p {
+  margin: 20px 0;
+}
 .card__title {
   text-align: center;
   font-weight: 800;
@@ -97,6 +100,10 @@ a {
   display: flex;
   justify-content: center;
   gap: 10px;
+}
+.posts-options {
+  margin-top: 15px;
+  display: flex;
 }
 .button {
   background: #fd2d01;
@@ -135,10 +142,25 @@ button:disabled:hover {
 .card__action:hover {
   cursor: pointer;
 }
+textarea {
+  width: 100%;
+  max-height: 100px;
+  margin-bottom: 15px;
+  resize: none;
+}
+textarea:focus,
+input:focus {
+  outline-color: #ffd7d7;
+  box-shadow: 1px 1px 5px #fd2d01;
+}
 .error-message {
   font-weight: bold;
 }
-
+.message {
+  bottom: 5px;
+  color: green;
+  font-size: 0.8em;
+}
 @media (max-width: 540px) {
   body {
     padding: 0;
@@ -146,7 +168,6 @@ button:disabled:hover {
   }
    .card {
     border-radius: 0;
-    width: 100%;
   }
 }
 </style>

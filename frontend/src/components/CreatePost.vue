@@ -5,7 +5,7 @@
         Bonjour,<br />
         <strong>{{ user.firstname }} {{ user.lastname }}</strong>
       </h1>
-      <img :src="user.image" :alt="user.image" class="profile-picture" />
+      <img :src="user.image" :alt="user.image" class="profile-picture" @click="goToProfile" />
     </div>
     <div id="display-create-post">
       <input
@@ -95,29 +95,21 @@ export default {
       this.image = payload;
     },
 
+     goToProfile() {
+      this.$router.push("/profile");
+    },
+
     // fonction asynchrone afin d'envoyer les données au backend et rediriger vers page de login
     async publish() {
       const userName = UserClass.user.firstname + " " + UserClass.user.lastname;
       const userId = UserClass.user.userId;
       const userImage = UserClass.user.image;
-      const date = new Date();
       const formData = new FormData();
       formData.append("image", this.image);
       formData.append("description", this.textarea);
       formData.append("userName", userName);
       formData.append("userId", userId);
       formData.append("userImage", userImage);
-      formData.append(
-        "date",
-        date.toLocaleString("fr-FR", {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          hour: "numeric",
-          minute: "numeric",
-        }),
-      );
       try {
         await this.axios.post("/posts", formData, {
           headers: {
@@ -210,6 +202,7 @@ export default {
   height: 70px;
   clip-path: circle(50%);
   object-fit: cover;
+  cursor: pointer;
 }
 h1 {
   color: rgba(255, 255, 255, 0.6);
@@ -239,17 +232,6 @@ b {
 .form-row {
   display: flex;
   justify-content: space-between;
-}
-textarea {
-  width: 100%;
-  max-height: 100px;
-  margin-bottom: 15px;
-  resize: none;
-}
-textarea:focus,
-input:focus {
-  outline-color: #ffd7d7;
-  box-shadow: 1px 1px 5px #fd2d01;
 }
 input {
   padding: 6px;

@@ -70,9 +70,8 @@ export default {
 }
 .logout-button:hover,
 .profile-button:hover {
-  box-shadow: 3px 3px 10px #fd2b0131, -5px -5px 10px #ffd7d7;
+  box-shadow: 5px 5px 10px #fd2b0131, -5px -5px 10px #ffd7d7;
   transform: scale(1.03);
-  border-radius: 10px;
   background: #fecbc7;
 }
 .logout-button,
@@ -80,6 +79,7 @@ export default {
   position: absolute;
   color: #4e5166;
   padding: 15px;
+  border-radius: 10px;
   font-size: 1em;
   transition: all 0.3s ease-out;
 }

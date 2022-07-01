@@ -39,7 +39,7 @@ export default {
   height: 100%;
   backdrop-filter: blur(5px);
   display: table;
-  transition: opacity 0.3s ease;
+  transition: opacity .3s ease;
 }
 .modal-wrapper {
   display: table-cell;

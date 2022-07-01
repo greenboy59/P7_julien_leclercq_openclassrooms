@@ -28,12 +28,18 @@
       <img :src="post.image" :alt="post.image" class="post-picture" />
       <div class="posts-options">
         <div class="like-dislike-buttons">
-          <button @click="addLike(post._id, post.usersLiked)" class="button like">
-            <i class="fa-regular fa-thumbs-up"></i>
-          </button>
-          <button @click="addDislike(post._id, post.usersDisliked)" class="button dislike">
-            <i class="fa-regular fa-thumbs-down"></i>
-          </button>
+            <button
+              @click="addLike(post._id, post.usersLiked)" 
+              class="button like"
+            >
+              <i class="fa-regular fa-thumbs-up"></i>
+            </button>
+            <button
+              @click="addDislike(post._id, post.usersDisliked)"
+              class="button dislike"
+            >
+              <i class="fa-regular fa-thumbs-down"></i>
+            </button>
         </div>
         <div v-if="user.userId === post.userId" class="modify-delete-buttons">
           <button class="button modify-button" @click="modifyPost(post._id)">
@@ -48,6 +54,7 @@
       </div>
     </div>
   </div>
+  <h3 v-else>Soyez le premier à poster !</h3>
 </template>
 
 <script>
@@ -63,6 +70,7 @@ export default {
       inputFilter: "",
       postId: "",
       data: null,
+      message: "",
     };
   },
 
@@ -83,17 +91,19 @@ export default {
   methods: {
     // Récupération des posts via l'API
     async getPosts() {
-      const axiosConfig = { headers: { 'Authorization': `Bearer ${this.user.token}` } }
-      const { data } = await this.axios.get("/posts", axiosConfig, {
-      });
+      const axiosConfig = {
+        headers: { Authorization: `Bearer ${this.user.token}` },
+      };
+      const { data } = await this.axios.get("/posts", axiosConfig, {});
       this.posts = data;
     },
 
     async deletePost(id) {
-            const axiosConfig = { headers: { 'Authorization': `Bearer ${this.user.token}` } }
+      const axiosConfig = {
+        headers: { Authorization: `Bearer ${this.user.token}` },
+      };
       try {
-        await this.axios.delete("/posts/" + id, axiosConfig, {
-        });
+        await this.axios.delete("/posts/" + id, axiosConfig, {});
         await this.$router.go("/");
       } catch (err) {
         console.log(err);
@@ -105,30 +115,40 @@ export default {
     },
 
     async addLike(id, usersLiked) {
-      const axiosConfig = { headers: { 'Authorization': `Bearer ${this.user.token}` } }
-      this.data = { userId: this.user.userId, like: 1, }
-      console.log(usersLiked)
+      const axiosConfig = {headers: { Authorization: `Bearer ${this.user.token}` },};
+      this.data = { userId: this.user.userId, like: 1 };
+      console.log(usersLiked);
 
       try {
-        await this.axios.post(`/posts/${id}/like`, this.data, axiosConfig, {
-        });
-    } catch(err) {
-      console.log(err);
-    }
-  },
+        await this.axios
+          .post(`/posts/${id}/like`, this.data, axiosConfig, {})
+          .then((response) => {
+            this.message = response.data.message;
+            console.log(this.message);
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    },
 
     async addDislike(id, usersDisliked) {
-       console.log(usersDisliked)
-     const axiosConfig = { headers: { 'Authorization': `Bearer ${this.user.token}` } }
-     const data = { userId: this.user.userId, like: -1, }
-    try {
-      await this.axios.post(`/posts/${id}/like`, data, axiosConfig, {
-      });
-    } catch (err) {
-      console.log(err);
-    }
+      console.log(usersDisliked);
+      const axiosConfig = {
+        headers: { Authorization: `Bearer ${this.user.token}` },
+      };
+      const data = { userId: this.user.userId, like: -1 };
+      try {
+        await this.axios
+          .post(`/posts/${id}/like`, data, axiosConfig, {})
+          .then((response) => {
+            this.message = response.data.message;
+            console.log(this.message);
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
-}
 };
 </script>
 
@@ -162,9 +182,6 @@ export default {
   width: 100%;
   height: 250px;
 }
-.card p {
-  margin: 20px 0;
-}
 h2 {
   margin-top: 20px;
   color: white;
@@ -173,6 +190,9 @@ h2 {
 }
 h4 {
   color: #4e5166;
+}
+h3 {
+  margin-top: 15px;
 }
 .search-bar {
   transform: translateY(10px);
@@ -204,10 +224,6 @@ input {
 .delete-button {
   width: fit-content;
 }
-.posts-options {
-  margin-top: 15px;
-  display: flex;
-}
 .like,
 .dislike {
   width: 46%;
@@ -233,7 +249,6 @@ input {
 .fa-edit {
   margin-right: 5px;
 }
-
 @media (max-width: 540px) {
   .profile-picture {
     -webkit-clip-path: circle(50%);

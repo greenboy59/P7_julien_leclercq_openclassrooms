@@ -12,9 +12,29 @@
           <div class="post-date">posté le {{ post.date }}</div>
         </div>
       </div>
-      <p>{{ post.description }}</p>
-      <img :src="post.image" :alt="post.image" class="post-picture" />
-      <div v-if="this.user.id === post.userId" class="post-buttons">
+      <textarea
+        v-model="post.description"
+        class="form-row__input"
+        name="post-text"
+        cols="30"
+        rows="10"
+        minlength="1"
+        maxlength="1500"
+      >
+      </textarea>
+      <div id="post-image-wrapper">
+        <img
+          v-if="!this.image"
+          :src="post.image"
+          :alt="post.image"
+          class="post-picture"
+          @click="deleteImage"
+        />
+      </div>
+
+      <FilePreview @upload="setImage" />
+
+      <div v-if="user.userId === post.userId" class="posts-options">
         <button class="button" @click="modifyPost(post._id)">
           <i class="fas fa-edit modify"></i>
           valider la modification
@@ -30,20 +50,23 @@
 
 <script>
 import UserClass from "@/classes/UserClass";
+import FilePreview from "@/components/FilePreview";
+
 export default {
   name: "PostCard",
+  components: { FilePreview },
 
   data() {
     return {
       user: UserClass.user,
       post: "",
       id: this.$route.params.id,
+      image: null,
     };
   },
 
   beforeMount() {
     this.getPost();
-    console.log(this.post);
   },
 
   methods: {
@@ -54,6 +77,16 @@ export default {
         },
       });
       this.post = data;
+    },
+
+    // Récupération de l'image
+    setImage(payload) {
+      this.image = payload;
+    },
+
+    deleteImage() {
+      this.$refs.fileInput.value = null;
+      document.querySelector(".imagePreviewWrapper").style.display = "none";
     },
   },
 };
@@ -75,7 +108,7 @@ post-subtitle {
   width: 50px;
   height: 50px;
   clip-path: circle(50%);
-  margin-right: 15px;
+  margin: 0 15px 15px 0;
   object-fit: cover;
   object-position: top;
 }
@@ -83,6 +116,29 @@ post-subtitle {
   margin: 0 auto;
   width: 100%;
   height: 250px;
+  cursor: pointer;
+}
+#post-image-wrapper {
+  position: relative;
+  cursor: pointer;
+}
+#post-image-wrapper::after {
+  content: "\f2ed";
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Font Awesome 5 Free";
+  font-size: 3em;
+  color: rgb(204, 32, 32);
+  background: rgba(255, 255, 255, 0.6);
+}
+#post-image-wrapper:hover::after {
+  opacity: 1;
 }
 .button {
   width: fit-content;

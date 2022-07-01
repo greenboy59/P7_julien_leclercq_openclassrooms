@@ -75,6 +75,7 @@ export default {
       errors: [],
       email: "",
       password: "",
+      message: "",
     };
   },
 
@@ -109,10 +110,13 @@ export default {
         const { data } = await this.axios.post("/auth/login", {
           email: this.email,
           password: this.password,
-        });
+        })
+        //   TODO capter messages d'erreurs du back afin de les afficher
+        //   .then(response => {
+        //   this.message = response.data.error
+        // })
         // Récupération des infos du user afin de les envoyer dans le local storage
-        this.axios.defaults.headers.common["Authorization"] =
-          "Bearer" + data.token;
+        this.axios.defaults.headers.common["Authorization"] = "Bearer" + data.token;
         UserClass.setUser(data);
         // Dès que les data ont bien été envoyées a l'API, on envoi l'utilisateur vers la page des posts
         await this.$router.replace("/all-posts");
