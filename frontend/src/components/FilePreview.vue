@@ -1,5 +1,10 @@
 <template>
   <div class="form-row">
+     <div
+      class="imagePreviewWrapper"
+      :style="{ 'background-image': `url(${previewImage})` }"
+      @click="selectImage"
+    ></div>
     <input
       class="form-row__input"
       ref="fileInput"
@@ -10,11 +15,6 @@
     <button class="delete-image" @click="deleteImage()">
       <i class="fa-solid fa-trash-can"></i>
     </button>
-    <div
-      class="imagePreviewWrapper"
-      :style="{ 'background-image': `url(${previewImage})` }"
-      @click="selectImage"
-    ></div>
   </div>
 </template>
 
@@ -100,6 +100,6 @@ export default {
   display: block;
   position: relative;
   width: 100%;
-  margin-bottom: 15px;
+  margin: 15px 0;
 }
 </style>

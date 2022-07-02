@@ -1,6 +1,10 @@
 <template>
   <div class="card">
-    <form action="" method="put">
+    <form action=""
+     method="put" 
+     enctype="multipart/form-data"
+      @submit.prevent="onSubmit"
+    >
       <div class="post-header">
         <img
           :src="post.userImage"
@@ -22,13 +26,12 @@
         maxlength="1500"
       >
       </textarea>
-      <div id="post-image-wrapper">
+      <div  v-if="post.image || image" id="post-image-wrapper"  @click="deleteImage(post._id)">
         <img
-          v-if="!this.image"
+         v-if="!image"
           :src="post.image"
           :alt="post.image"
           class="post-picture"
-          @click="deleteImage"
         />
       </div>
 
@@ -37,7 +40,7 @@
       <div v-if="user.userId === post.userId" class="posts-options">
         <button class="button" @click="modifyPost(post._id)">
           <i class="fas fa-edit modify"></i>
-          valider la modification
+          valider
         </button>
         <button class="button" @click="deletePost(post._id)">
           <i class="fas fa-trash-alt delete"></i>
@@ -61,7 +64,7 @@ export default {
       user: UserClass.user,
       post: "",
       id: this.$route.params.id,
-      image: null,
+      image: "",
     };
   },
 
@@ -84,11 +87,46 @@ export default {
       this.image = payload;
     },
 
-    deleteImage() {
-      this.$refs.fileInput.value = null;
-      document.querySelector(".imagePreviewWrapper").style.display = "none";
+     async deletePost(id) {
+       const axiosConfig = { headers: { Authorization: `Bearer ${this.user.token}` } };
+      try {
+        await this.axios.delete("/posts/" + id, axiosConfig,);
+        await this.$router.replace("/all-posts");
+      } catch (err) {
+        console.log(err);
+      }
     },
-  },
+
+    async deleteImage(id) {
+      const axiosConfig = { headers: { Authorization: `Bearer ${this.user.token}` } };
+      const image = "";
+      try {
+        await this.axios.put("/posts/" + id, image, axiosConfig, {
+        })
+        await this.$router.go("/");
+      }catch (err) {
+        console.log(err);
+      }
+    },
+
+    async modifyPost(id) {
+      const formData = new FormData()
+      formData.append("image", this.image)
+      formData.append("description", this.post.description)
+      formData.append("post.image", this.post.image)
+      try {
+        await this.axios.put("/posts/" + id, formData, {
+           headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${this.user.token}`,
+          },
+        })
+        await this.$router.replace("/all-posts");
+      }catch (err) {
+        console.log(err);
+      }
+    },
+  }
 };
 </script>
 
@@ -96,6 +134,7 @@ export default {
 .post-header {
   display: flex;
   align-items: center;
+  margin-bottom: 15px;
 }
 .post-date {
   color: #aaa;
@@ -108,7 +147,7 @@ post-subtitle {
   width: 50px;
   height: 50px;
   clip-path: circle(50%);
-  margin: 0 15px 15px 0;
+  margin-right: 15px;
   object-fit: cover;
   object-position: top;
 }
@@ -145,5 +184,8 @@ post-subtitle {
   height: 50px;
   font-size: 12px;
   margin: 5px 5px 0 0;
+}
+.form-row__input {
+  margin-bottom: 15px;
 }
 </style>

@@ -25,7 +25,7 @@
         </div>
       </div>
       <p>{{ post.description }}</p>
-      <img :src="post.image" :alt="post.image" class="post-picture" />
+      <img v-if="post.image" :src="post.image" :alt="post.image" class="post-picture" />
       <div class="posts-options">
         <div class="like-dislike-buttons">
             <button
@@ -103,7 +103,7 @@ export default {
         headers: { Authorization: `Bearer ${this.user.token}` },
       };
       try {
-        await this.axios.delete("/posts/" + id, axiosConfig, {});
+        await this.axios.delete("/posts/" + id, axiosConfig,);
         await this.$router.go("/");
       } catch (err) {
         console.log(err);
@@ -124,7 +124,6 @@ export default {
           .post(`/posts/${id}/like`, this.data, axiosConfig, {})
           .then((response) => {
             this.message = response.data.message;
-            console.log(this.message);
           });
       } catch (err) {
         console.log(err);

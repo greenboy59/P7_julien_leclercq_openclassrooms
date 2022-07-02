@@ -87,7 +87,7 @@ export default {
     },
     hideCreatePost() {
       this.containerElement.style.transform = "translateY(100%)";
-      this.containerElement.style.transition = "all .8s ease";
+      this.containerElement.style.transition = "all .6s ease";
     },
 
     // Récupération de l'image

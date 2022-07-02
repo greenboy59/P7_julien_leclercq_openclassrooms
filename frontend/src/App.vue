@@ -145,7 +145,6 @@ button:disabled:hover {
 textarea {
   width: 100%;
   max-height: 100px;
-  margin-bottom: 15px;
   resize: none;
 }
 textarea:focus,
