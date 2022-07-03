@@ -54,8 +54,11 @@ exports.createPost = (req, res, next) => {
         minute: "numeric",
       }),
     });
-    post.save()
-    .then((post) => res.status(201).json({post, message: "Post enregistré !" }))
+    post
+      .save()
+      .then((post)=> {
+        res.status(201).json(post)
+      })
       .catch((error) => res.status(400).json({ error }));
   } catch {
     error => res.status(500).json(error);
@@ -65,8 +68,8 @@ exports.createPost = (req, res, next) => {
 // Modifie un post
 exports.modifyPost = (req, res, next) => {
   
-  if (req.post.image) { // <- si post.file n'est pas null on supprime le fichier existant
-    fs.unlink(`images/${req.post.image}`, (error) => {
+  if (req.body.oldImage) { // <- si post.file n'est pas null on supprime le fichier existant
+    fs.unlink(`images/${req.body.oldImage}`, (error) => {
       if (error) throw err
     })
   }
@@ -103,26 +106,6 @@ exports.deletePost = (req, res, next) => {
     .catch((error) => res.status(500).json({ error }));
 }
 
-// Supprime un post
-exports.deletePost = (req, res, next) => {
-  Post.findOne({ _id: req.params.id })
-    .then((post) => {
-      if (req.body.file) {
-        const filename = post.image.split("/images/")[1];
-        fs.unlink(`images/${filename}`, () => {
-          Post.deleteOne({ _id: req.params.id })
-            .then(() => res.status(200).json({ message: "Post supprimé !" }))
-            .catch((error) => res.status(400).json({ error }));
-        });
-      } else {
-        Post.deleteOne({ _id: req.params.id })
-        .then(() => res.status(200).json({ message: "Post supprimé !" }))
-        .catch((error) => res.status(400).json({ error }));
-      }
-    })
-    .catch((error) => res.status(500).json({ error }));
-};
-
 // Like ou dislike un post
   exports.likeOrDislikePost = (req, res, next) => {
     let postId = req.params.id;
@@ -145,7 +128,7 @@ exports.deletePost = (req, res, next) => {
               $push: { usersLiked: userId },
             },
           )
-            .then(() => res.status(200).json({ message: "Like ajouté !" }))
+            .then((usersLiked) => res.status(200).json({ usersLiked, message: "Like ajouté !" }))
             .catch((error) => res.status(400).json({ error }));
         }
 
@@ -158,7 +141,7 @@ exports.deletePost = (req, res, next) => {
               $pull: { usersLiked: userId },
             },
           )
-            .then(() => res.status(201).json({ message: "Like annulé !" }))
+            .then((usersDisliked) => res.status(201).json({ usersDisliked, message: "Like annulé !" }))
             .catch((error) => res.status(400).json({ error }));
         }
 

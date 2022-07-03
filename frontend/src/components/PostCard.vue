@@ -113,7 +113,6 @@ export default {
       const formData = new FormData()
       formData.append("image", this.image)
       formData.append("description", this.post.description)
-      formData.append("post.image", this.post.image)
       try {
         await this.axios.put("/posts/" + id, formData, {
            headers: {

@@ -81,7 +81,6 @@ export default {
 
   methods: {
     onClickCardAction() {
-      this.$emit("action-text-click");
       this.$router.replace("/signup");
     },
 

@@ -110,7 +110,6 @@ export default {
   },
   methods: {
     onClickCardAction() {
-      this.$emit("action-text-click");
       this.$router.replace("/login");
     },
     // Check du formulaire avec la méthode checkForm de Vue
@@ -150,8 +149,7 @@ export default {
     },
 
     setImage(payload) {
-      const image = payload;
-      this.image = image;
+      this.image = payload;
     },
 
     // fonction asynchrone afin d'envoyer les données au backend et rediriger vers page de login

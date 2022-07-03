@@ -12,7 +12,7 @@
       type="file"
       @input="pickFile"
     />
-    <button class="delete-image" @click="deleteImage()">
+    <button v-if="previewImage" class="delete-image" @click="deleteImage()">
       <i class="fa-solid fa-trash-can"></i>
     </button>
   </div>

@@ -21,6 +21,7 @@
           <i class="fa-solid fa-circle-xmark"></i>
         </button>
         <form
+          id="Form"
           method="post"
           enctype="multipart/form-data"
           @submit.prevent="onSubmit"
@@ -111,13 +112,15 @@ export default {
       formData.append("userId", userId);
       formData.append("userImage", userImage);
       try {
-        await this.axios.post("/posts", formData, {
+       const {data} = await this.axios.post("/posts", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${this.user.token}`,
           },
         });
-        await this.$router.go("/");
+        await this.$emit("post-created", data)
+        await document.getElementById('Form')
+        await this.hideCreatePost()
       } catch (err) {
         console.log(err);
       }

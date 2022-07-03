@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <h1 class="card__title">Mon profil</h1>
-    <img :src="user.image" />
+    <img :src="user.image" alt="profile-image" />
     <h3 class="card__subtitle">{{ user.firstname }} {{ user.lastname }}</h3>
     <div class="form-row">
       <button class="button" @click="logout()">Déconnexion</button>
@@ -23,8 +23,8 @@ export default {
   methods: {
     // Au clic sur logout, le localstorage est vidé
     logout() {
-      localStorage.clear();
-      this.$router.go("/login");
+      localStorage.removeItem("user");
+      this.$router.replace("/login");
     },
   },
 };
