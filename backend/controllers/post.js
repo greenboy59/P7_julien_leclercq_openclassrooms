@@ -128,12 +128,12 @@ exports.deletePost = (req, res, next) => {
               $push: { usersLiked: userId },
             },
           )
-            .then((usersLiked) => res.status(200).json({ usersLiked, message: "Like ajouté !" }))
+            .then(() => res.status(200).json({ message: "Like ajouté !" }))
             .catch((error) => res.status(400).json({ error }));
         }
 
         // Enlève un like
-        else if (like === 1 && post.usersLiked.includes(userId)) {
+        else if (like === 1? post.usersLiked.includes(userId) : like === -1 && post.usersLiked.includes(userId)) {
           Post.updateOne(
             { _id: postId },
             {
@@ -141,7 +141,7 @@ exports.deletePost = (req, res, next) => {
               $pull: { usersLiked: userId },
             },
           )
-            .then((usersDisliked) => res.status(201).json({ usersDisliked, message: "Like annulé !" }))
+            .then(() => res.status(201).json({ message: "Like annulé !" }))
             .catch((error) => res.status(400).json({ error }));
         }
 
@@ -163,7 +163,7 @@ exports.deletePost = (req, res, next) => {
         }
 
         // Enlève un dislike
-        else if (like === -1 && post.usersDisliked.includes(userId)) {
+        else if (like === -1? post.usersDisliked.includes(userId) : like === 1 && post.usersDisliked.includes(userId)) {
           Post.updateOne(
             { _id: postId },
             {

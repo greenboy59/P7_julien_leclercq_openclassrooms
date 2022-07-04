@@ -35,14 +35,14 @@
         <div class="like-dislike-buttons">
           <button
             v-show="!post.usersLiked.includes(user.userId)"
-            @click="addLike(post._id, post.usersLiked)"
+            @click="addLike(post._id)"
             class="button like"
           >
             <i class="fa-regular fa-thumbs-up"></i>
           </button>
           <button
             v-show="post.usersLiked.includes(user.userId)"
-            @click="addLike(post._id, post.usersLiked)"
+            @click="addLike(post._id)"
             class="button like liked"
           >
             <i class="fa-regular fa-thumbs-up"></i>&nbsp;
@@ -50,14 +50,14 @@
           </button>
           <button
             v-show="!post.usersDisliked.includes(user.userId)"
-            @click="addDislike(post._id, post.usersDisliked)"
+            @click="addDislike(post._id)"
             class="button dislike"
           >
             <i class="fa-regular fa-thumbs-down"></i>
           </button>
           <button
             v-show="post.usersDisliked.includes(user.userId)"
-            @click="addDislike(post._id, post.usersDisliked)"
+            @click="addDislike(post._id)"
             class="button dislike disliked"
           >
             <i class="fa-regular fa-thumbs-down"></i>&nbsp;
@@ -88,8 +88,8 @@ export default {
   props: {
     posts: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
 
   data() {
@@ -117,29 +117,29 @@ export default {
     },
 
     async deletePost(id) {
-      const axiosConfig = { headers: { Authorization: `Bearer ${this.user.token}` } };
+      const axiosConfig = {
+        headers: { Authorization: `Bearer ${this.user.token}` },
+      };
       try {
         await this.axios.delete("/posts/" + id, axiosConfig);
-        await this.$emit("post-deleted", id);
-      }
-      catch (err) {
+        this.$emit("post-deleted", id);
+      } catch (err) {
         console.log(err);
       }
     },
 
     async addLike(id) {
-      const axiosConfig = {
-        headers: { Authorization: `Bearer ${this.user.token}` },
-      };
+      const axiosConfig = { headers: { Authorization: `Bearer ${this.user.token}` } };
       this.data = { userId: this.user.userId, like: 1 };
 
       try {
-        await this.axios
-          .post(`/posts/${id}/like`, this.data, axiosConfig, {})
-          .then((response) => {
-            this.message = response.data.message
-            // this.posts.usersLiked.replace(this.posts.usersLiked, response.data.usersLiked)
-          });
+        await this.axios.post(`/posts/${id}/like`, this.data, axiosConfig);
+        const userLiked = {
+          userId: this.user.userId,
+          postId: id
+        }
+        this.$emit("post-liked", userLiked)
+        this.$router.go()
       } catch (err) {
         console.log(err);
       }
@@ -151,11 +151,7 @@ export default {
       };
       const data = { userId: this.user.userId, like: -1 };
       try {
-        await this.axios
-          .post(`/posts/${id}/like`, data, axiosConfig, {})
-          .then((response) => {
-            this.message = response.data.message;
-          });
+        await this.axios.post(`/posts/${id}/like`, data, axiosConfig, {})
         this.$router.go();
       } catch (err) {
         console.log(err);
@@ -262,6 +258,16 @@ input {
   color: white;
   -webkit-box-shadow: inset -150px 0px 0px 0px #fd2d01;
   box-shadow: inset -150px 0px 0px 0px #fd2d01;
+}
+.like::before, .dislike::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: #fd2d01;
 }
 .fa-trash-alt,
 .fa-edit {
