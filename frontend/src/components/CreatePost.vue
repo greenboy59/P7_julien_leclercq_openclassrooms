@@ -22,6 +22,7 @@
         </button>
         <form
           id="Form"
+          value="Reset form"
           method="post"
           enctype="multipart/form-data"
           @submit.prevent="onSubmit"
@@ -118,9 +119,10 @@ export default {
             Authorization: `Bearer ${this.user.token}`,
           },
         });
-        await this.$emit("post-created", data)
-        await document.getElementById('Form')
-        await this.hideCreatePost()
+        this.$emit("post-created", data)
+        await document.getElementById('Form').reset()
+        this.hideCreatePost()
+        document.querySelector(".imagePreviewWrapper").style.display="none"
       } catch (err) {
         console.log(err);
       }

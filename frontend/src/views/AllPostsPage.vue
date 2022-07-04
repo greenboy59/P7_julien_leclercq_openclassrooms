@@ -2,7 +2,7 @@
   <div>
     <MainNav />
     <CreatePost @post-created="onCreated" />
-    <AllPostsList :posts="posts" />
+    <AllPostsList @post-deleted="onDeleted" :posts="posts" />
   </div>
 </template>
 
@@ -31,6 +31,10 @@ export default {
   methods: {
     onCreated(post) {
       this.posts.push(post)
+    },
+    onDeleted(id) {
+      const postToDeleteIndex = this.posts.findIndex(post => post._id === id);
+      this.posts.splice(postToDeleteIndex, 1);
     }
   }
 };

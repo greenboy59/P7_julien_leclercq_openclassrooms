@@ -112,22 +112,19 @@ export default {
   },
 
   methods: {
+    async modifyPost(id) {
+      this.$router.push(`/post/${id}`);
+    },
 
-     async deletePost(id) {
-      const axiosConfig = {
-        headers: { Authorization: `Bearer ${this.user.token}` },
-      };
+    async deletePost(id) {
+      const axiosConfig = { headers: { Authorization: `Bearer ${this.user.token}` } };
       try {
-        await this.axios.delete("/posts/" + id, axiosConfig,);
-        this.$router.go()
+        await this.axios.delete("/posts/" + id, axiosConfig);
+        await this.$emit("post-deleted", id);
       }
       catch (err) {
         console.log(err);
       }
-    },
-
-    async modifyPost(id) {
-      this.$router.push(`/post/${id}`);
     },
 
     async addLike(id) {
