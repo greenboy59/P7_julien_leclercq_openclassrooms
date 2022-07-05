@@ -2,8 +2,7 @@
   <div>
     <MainNav />
     <CreatePost @post-created="onCreated" />
-    <!-- //TODO ajouter un refresh selon les like avec  @post-liked="onLiked" -->
-    <AllPostsList @post-deleted="onDeleted" :posts="posts" />  
+    <AllPostsList :posts="posts" @post-deleted="onDeleted" @post-liked="onLiked" />  
   </div>
 </template>
 
@@ -37,12 +36,12 @@ export default {
       const postToDeleteIndex = this.posts.findIndex(post => post._id === id);
       this.posts.splice(postToDeleteIndex, 1);
     },
-    // onLiked(userLiked) {
-    //   const postToLikedIndex = this.posts.findIndex(post => post._id === userLiked.postId)
-    //   const userId = userLiked.userId
-    //   // On ajoute le user id dans le usersLiked correspondant au post liké
-    //   this.posts[postToLikedIndex].usersLiked.push(userId)
-    // }
+    onLiked(userLiked) {
+      const postToLikedIndex = this.posts.findIndex(post => post._id === userLiked.postId)
+      const userId = userLiked.userId
+      // On ajoute le user id dans le usersLiked correspondant au post liké
+      this.posts[postToLikedIndex].usersLiked.push(userId)
+    }
   }
 };
 </script>

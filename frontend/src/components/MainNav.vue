@@ -1,7 +1,7 @@
 <template>
   <div>
     <transition name="modal">
-      <ModalWindow v-if="showModal" @close="showModal = false" @logOut="logOut">
+      <ModalWindow v-if="showModal" @close="showModal = false" @logout="logout">
       </ModalWindow>
     </transition>
     <nav id="nav-bar-container">
@@ -49,7 +49,7 @@ export default {
       this.$router.push("/profile");
     },
     // Au clic sur logout, le localstorage est vidé
-    logOut() {
+    logout() {
       localStorage.clear();
       this.$router.go("/login");
     },

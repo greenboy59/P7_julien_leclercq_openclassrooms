@@ -6,11 +6,11 @@
           <div class="modal-wrapper">
             <div class="card">
               <div class="modal-text">
-                Souhaitez-vous vraiment vous déconnecter ?
+                <slot name="title">Souhaitez-vous vraiment vous déconnecter ?</slot>
               </div>
               <footer>
-                <button class="button" @click="$emit('logOut')">Se déconnecter</button>
-                <button class="button" @click="$emit('close')">Annuler</button>
+                <slot name="validate"><button class="button" @click="$emit('logout')">Se déconnecter</button></slot>
+                <slot name="cancel"><button class="button" @click="$emit('close')">Annuler</button></slot>
               </footer>
             </div>
           </div>

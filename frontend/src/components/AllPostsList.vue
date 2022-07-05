@@ -12,7 +12,7 @@
     <div class="error-message" v-if="inputFilter && !filteredPosts.length">
       <p>Aucun résultat trouvé !</p>
     </div>
-    <div :key="post.id" v-for="post in filteredPosts.reverse()" class="card">
+    <div :key="post._id" v-for="post in filteredPosts.reverse()" class="card">
       <div class="post-header">
         <img
           :src="post.userImage"
@@ -69,10 +69,17 @@
             <i class="fas fa-edit modify"></i>
             <b>modifier</b>
           </button>
-          <button class="button delete-button" @click="deletePost(post._id)">
+          <button
+            class="button delete-button"
+            @click="() => { showModal = true; postToDelete = post._id }">
             <i class="fas fa-trash-alt delete"></i>
-            <b>supprimer</b>
+            <b>Supprimer</b>
           </button>
+           <ModalWindow v-show="showModal" @close="showModal = false">
+            <template v-slot:title>Voulez-vous vraiment supprimer ce post ?</template>
+            <template v-slot:validate><button class="button modal-button-validate"  @click= "deletePost()">Valider</button></template>
+            <template  v-slot:cancel><button class="button modal-button-cancel" @click="showModal = false">Annuler</button></template>
+          </ModalWindow>
         </div>
       </div>
     </div>
@@ -82,9 +89,12 @@
 
 <script>
 import UserClass from "@/classes/UserClass";
+import ModalWindow from "@/components/ModalWindow";
 
 export default {
   name: "AllPostsList",
+  components: { ModalWindow },
+
   props: {
     posts: {
       type: Array,
@@ -98,6 +108,8 @@ export default {
       inputFilter: "",
       data: null,
       message: "",
+      showModal: false,
+      postToDelete: null,
     };
   },
 
@@ -116,30 +128,32 @@ export default {
       this.$router.push(`/post/${id}`);
     },
 
-    async deletePost(id) {
+    async deletePost() {
       const axiosConfig = {
         headers: { Authorization: `Bearer ${this.user.token}` },
       };
       try {
-        await this.axios.delete("/posts/" + id, axiosConfig);
-        this.$emit("post-deleted", id);
+        await this.axios.delete("/posts/" + this.postToDelete, axiosConfig);
+        this.$emit("post-deleted", this.postToDelete);
+        this.showModal = false;
       } catch (err) {
         console.log(err);
       }
     },
 
     async addLike(id) {
-      const axiosConfig = { headers: { Authorization: `Bearer ${this.user.token}` } };
+      const axiosConfig = {
+        headers: { Authorization: `Bearer ${this.user.token}` },
+      };
       this.data = { userId: this.user.userId, like: 1 };
 
       try {
         await this.axios.post(`/posts/${id}/like`, this.data, axiosConfig);
         const userLiked = {
           userId: this.user.userId,
-          postId: id
-        }
-        this.$emit("post-liked", userLiked)
-        this.$router.go()
+          postId: id,
+        };
+        this.$emit("post-liked", userLiked);
       } catch (err) {
         console.log(err);
       }
@@ -151,7 +165,7 @@ export default {
       };
       const data = { userId: this.user.userId, like: -1 };
       try {
-        await this.axios.post(`/posts/${id}/like`, data, axiosConfig, {})
+        await this.axios.post(`/posts/${id}/like`, data, axiosConfig, {});
         this.$router.go();
       } catch (err) {
         console.log(err);
@@ -232,6 +246,7 @@ input {
 .modify-button,
 .delete-button {
   width: fit-content;
+  max-height: 100%;
 }
 .like,
 .dislike {
@@ -259,7 +274,8 @@ input {
   -webkit-box-shadow: inset -150px 0px 0px 0px #fd2d01;
   box-shadow: inset -150px 0px 0px 0px #fd2d01;
 }
-.like::before, .dislike::before {
+.like::before,
+.dislike::before {
   position: absolute;
   top: 0;
   left: 0;
@@ -272,6 +288,13 @@ input {
 .fa-trash-alt,
 .fa-edit {
   margin-right: 5px;
+}
+.modal-button-validate {
+  margin-right: 10px;
+}
+.modal-button-validate,
+.modal-button-cancel {
+  width: auto;
 }
 @media (max-width: 540px) {
   .profile-picture {

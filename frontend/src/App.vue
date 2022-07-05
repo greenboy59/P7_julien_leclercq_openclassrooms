@@ -110,7 +110,7 @@ a {
   color: white;
   border-radius: 8px;
   font-weight: 800;
-  font-size: 15px;
+  font-size:0.9em;
   width: 100%;
   padding: 16px;
   transition: 0.4s all ease-in-out;
