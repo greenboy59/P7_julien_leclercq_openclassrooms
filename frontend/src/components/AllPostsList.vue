@@ -12,7 +12,7 @@
     <div class="error-message" v-if="inputFilter && !filteredPosts.length">
       <p>Aucun résultat trouvé !</p>
     </div>
-    <div :key="post._id" v-for="post in filteredPosts.reverse()" class="card">
+    <div :key="post._id" v-for="post in filteredPosts" class="card">
       <div class="post-header">
         <img
           :src="post.userImage"
@@ -32,49 +32,38 @@
         class="post-picture"
       />
       <div class="posts-options">
+
         <div class="like-dislike-buttons">
           <button
-            v-show="!post.usersLiked.includes(user.userId)"
-            @click="addLike(post._id)"
-            class="button like"
+          :class="['button', 'like', post.usersLiked.includes(user.userId) ? 'liked' : '']"
+            @click="onClickLike(post._id)"
           >
             <i class="fa-regular fa-thumbs-up"></i>
+            <template v-if="post.usersLiked.includes(user.userId)"><b>Liké !</b> </template>
           </button>
+
           <button
-            v-show="post.usersLiked.includes(user.userId)"
-            @click="addLike(post._id)"
-            class="button like liked"
-          >
-            <i class="fa-regular fa-thumbs-up"></i>&nbsp;
-            <b>Liké !</b>
-          </button>
-          <button
-            v-show="!post.usersDisliked.includes(user.userId)"
-            @click="addDislike(post._id)"
-            class="button dislike"
+            :class="['button', 'dislike', post.usersDisliked.includes(user.userId) ? 'disliked' : '']"
+            @click="onClickDislike(post._id)"
           >
             <i class="fa-regular fa-thumbs-down"></i>
-          </button>
-          <button
-            v-show="post.usersDisliked.includes(user.userId)"
-            @click="addDislike(post._id)"
-            class="button dislike disliked"
-          >
-            <i class="fa-regular fa-thumbs-down"></i>&nbsp;
-            <b>Disliké !</b>
+             <template v-if="post.usersDisliked.includes(user.userId)"><b>Disliké !</b> </template>
           </button>
         </div>
+
         <div v-if="user.userId === post.userId" class="modify-delete-buttons">
           <button class="button modify-button" @click="modifyPost(post._id)">
             <i class="fas fa-edit modify"></i>
             <b>modifier</b>
           </button>
+
           <button
             class="button delete-button"
             @click="() => { showModal = true; postToDelete = post._id }">
             <i class="fas fa-trash-alt delete"></i>
             <b>Supprimer</b>
           </button>
+
            <ModalWindow v-show="showModal" @close="showModal = false">
             <template v-slot:title>Voulez-vous vraiment supprimer ce post ?</template>
             <template v-slot:validate><button class="button modal-button-validate"  @click= "deletePost()">Valider</button></template>
@@ -141,32 +130,35 @@ export default {
       }
     },
 
-    async addLike(id) {
-      const axiosConfig = {
-        headers: { Authorization: `Bearer ${this.user.token}` },
-      };
-      this.data = { userId: this.user.userId, like: 1 };
+    async onClickLike(id) {
+      const axiosConfig = { headers: { Authorization: `Bearer ${this.user.token}` } };
+      this.data = { userId: this.user.userId };
 
       try {
-        await this.axios.post(`/posts/${id}/like`, this.data, axiosConfig);
+        const { data } = await this.axios.post(`/posts/${id}/like`, this.data, axiosConfig);
+        console.log(data)
         const userLiked = {
           userId: this.user.userId,
-          postId: id,
-        };
-        this.$emit("post-liked", userLiked);
-      } catch (err) {
+          postId: id
+        }
+        this.$emit("post-liked", userLiked)
+      }
+      catch (err) {
         console.log(err);
       }
     },
 
-    async addDislike(id) {
-      const axiosConfig = {
-        headers: { Authorization: `Bearer ${this.user.token}` },
-      };
-      const data = { userId: this.user.userId, like: -1 };
+     async onClickDislike(id) {
+      const axiosConfig = { headers: { Authorization: `Bearer ${this.user.token}` } };
+      this.data = { userId: this.user.userId };
+
       try {
-        await this.axios.post(`/posts/${id}/like`, data, axiosConfig, {});
-        this.$router.go();
+        await this.axios.post(`/posts/${id}/dislike`, this.data, axiosConfig);
+        const userDisliked = {
+          userId: this.user.userId,
+          postId: id
+        }
+        this.$emit("post-liked", userDisliked)
       } catch (err) {
         console.log(err);
       }
@@ -216,6 +208,9 @@ h4 {
 }
 h3 {
   margin-top: 15px;
+}
+b {
+  margin-left: 5px;
 }
 .search-bar {
   transform: translateY(10px);

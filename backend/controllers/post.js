@@ -5,7 +5,7 @@ const fs = require("fs");
 exports.getAllPosts = (req, res, next) => {
   Post.find()
     .then((posts) => {
-      res.status(200).json(posts);
+      res.status(200).json(posts.reverse());
     })
     .catch((error) => {
       res.status(400).json({ error: error });
@@ -107,73 +107,58 @@ exports.deletePost = (req, res, next) => {
 }
 
 // Like ou dislike un post
-  exports.likeOrDislikePost = (req, res, next) => {
-    let postId = req.params.id;
-    let userId = req.body.userId;
-    let like = req.body.like;
-    // Récupération de l'id du post séléctionné
-    Post.findOne({ _id: postId })
-      .then((post) => {
-        // Ajoute un like
-        if (
-          like === 1 &&
-          !post.usersLiked.includes(userId) &&
-          !post.usersDisliked.includes(userId)
-        ) {
-          Post.updateOne(
-            { _id: postId },
-            {
-              // Incrémentation des likes et push dans tableau des usersLiked via opérateur mongoose $inc et $push
-              $inc: { likes: like++ },
-              $push: { usersLiked: userId },
-            },
-          )
-            .then(() => res.status(200).json({ message: "Like ajouté !" }))
-            .catch((error) => res.status(400).json({ error }));
-        }
+exports.likePost = async (req, res, next) => {
+  const postId = req.params?.id
+  const userId = req.body?.userId
+  if (postId && userId) {
+    try {
+      const post = await Post.findOne({ _id: postId })
+      const existingId = post.usersLiked.find(id => id === userId)
+      if (existingId) {
+        const updatedPost = await Post.updateOne(
+          { _id: postId },
+          { $pull: { usersLiked: userId } }
+        )
+        return res.status(201).json(updatedPost)
+      }
+      // TODO checker les dislike et si c'est le cas l'enlever
+      const updatedPost = await Post.updateOne(
+        { _id: postId },
+        { $push: { usersLiked: userId } }
+      )
+      return res.status(201).json(updatedPost)
+    } catch (err) {
+      console.log(err)
+      return res.status(err.statusCode).json(err)
+    }
+  }
+  return res.status(400).json({ error: 'missing required parameters'})
+}
 
-        // Enlève un like
-        else if (like === 1? post.usersLiked.includes(userId) : like === -1 && post.usersLiked.includes(userId)) {
-          Post.updateOne(
-            { _id: postId },
-            {
-              $inc: { likes: -1 },
-              $pull: { usersLiked: userId },
-            },
-          )
-            .then(() => res.status(201).json({ message: "Like annulé !" }))
-            .catch((error) => res.status(400).json({ error }));
-        }
-
-        // Ajoute un dislike
-        if (
-          like === -1 &&
-          !post.usersDisliked.includes(userId) &&
-          !post.usersLiked.includes(userId)
-        ) {
-          Post.updateOne(
-            { _id: postId },
-            {
-              $inc: { dislikes: like * -1 },
-              $push: { usersDisliked: userId },
-            },
-          )
-            .then(() => res.status(200).json({ message: "Dislike ajouté !" }))
-            .catch((error) => res.status(400).json({ error }));
-        }
-
-        // Enlève un dislike
-        else if (like === -1? post.usersDisliked.includes(userId) : like === 1 && post.usersDisliked.includes(userId)) {
-          Post.updateOne(
-            { _id: postId },
-            {
-              $inc: { dislikes: -1 },
-              $pull: { usersDisliked: userId },
-            },
-          )
-            .then(() => res.status(201).json({ message: "Dislike annulé !" }))
-            .catch((error) => res.status(400).json({ error }))
-        }
-      })
-      .catch((error) => res.status(400).json({ error }))
-  };
+exports.dislikePost = async (req, res, next) => {
+  const postId = req.params.id
+  const userId = req.body.userId
+  if (postId && userId) {
+    try {
+      const post = await Post.findOne({ _id: postId })
+      const existingId = post.usersDisliked.find(id => id === userId)
+      if (existingId) {
+        const updatedPost = await Post.updateOne(
+          { _id: postId },
+          { $pull: { usersDisliked: userId } }
+        )
+        return res.status(201).json(updatedPost)
+      }
+      // TODO checker les like et si c'est le cas l'enlever
+      const updatedPost = await Post.updateOne(
+        { _id: postId },
+        { $push: { usersDisliked: userId }}
+      )
+      return res.status(201).json(updatedPost)
+    } catch (err) {
+      console.log(err)
+      return res.status(err.statusCode).json(err)
+    }
+  }
+  return res.status(400).json({ error: 'missing required parameters'})
+}

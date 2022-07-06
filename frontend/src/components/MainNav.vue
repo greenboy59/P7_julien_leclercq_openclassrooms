@@ -45,13 +45,10 @@ export default {
     goToProfile() {
       this.$router.push("/profile");
     },
-    onClickLogOut() {
-      this.$router.push("/profile");
-    },
     // Au clic sur logout, le localstorage est vidé
     logout() {
-      localStorage.clear();
-      this.$router.go("/login");
+      localStorage.removeItem('user');
+      this.$router.push("/login");
     },
   },
 };
