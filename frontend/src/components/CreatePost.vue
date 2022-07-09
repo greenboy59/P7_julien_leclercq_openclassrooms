@@ -1,75 +1,70 @@
 <template>
-  <div>
+  <div id="create-post-container">
     <div class="user-title">
       <h1>
         Bonjour,<br />
         <strong>{{ user.firstname }} {{ user.lastname }}</strong>
       </h1>
-      <img :src="user.image" :alt="user.image" class="profile-picture" @click="goToProfile" />
+      <img
+        :src="user.image"
+        :alt="user.image"
+        class="profile-picture"
+        @click="goToProfile"
+      />
     </div>
-    <div id="display-create-post">
       <input
         readonly="readonly"
         class="form-row__input input-appear"
-        @focus="displayCreatePost"
+        @focus="showModal = true"
         placeholder="De quoi voulez-vous parler ?"
       />
-    </div>
-    <div id="container">
-      <div class="card card-appear">
-        <button @click="hideCreatePost">
+
+    <ModalWindow v-show="showModal" @close="showModal = false">
+      <template v-slot:validate>
+        <button type="submit" class="button" @click="publish()">Publier</button>
+      </template>
+      <template v-slot:cancel>
+        <button @click="showModal = false">
           <i class="fa-solid fa-circle-xmark"></i>
         </button>
-        <form
-          id="Form"
-          value="Reset form"
-          method="post"
-          enctype="multipart/form-data"
-          @submit.prevent="onSubmit"
+      </template>
+      <template v-slot:title><h2>Quelque chose a dire?</h2></template>
+      <template v-slot:subtitle><b>(max 1500 caractères)</b></template>
+      <template v-slot:text-area>
+        <textarea
+          v-model="textarea"
+          class="form-row__input"
+          name="post-text"
+          cols="30"
+          rows="10"
+          minlength="1"
+          maxlength="1500"
+          placeholder="Ecrivez quelque chose..."
         >
-          <div class="form-row">
-            <label for="post-text">
-              Quelque chose a dire?<br />
-              <b>(max 1500 caractères)</b>
-            </label>
-            <button type="submit" class="button" @click="publish()">
-              Publier
-              <!--TO DO insérer un texte durant le loading-->
-              <!-- <span v-if="status == 'loading'">Création en cours...</span>
-          <span v-else>Créer mon compte</span> -->
-            </button>
-          </div>
-          <textarea
-            v-model="textarea"
-            class="form-row__input"
-            name="post-text"
-            cols="30"
-            rows="10"
-            minlength="1"
-            maxlength="1500"
-            placeholder="Ecrivez quelque chose..."
-          >
-          </textarea>
-          <div>
-            <h2 for="postPic">
-              Mettez en avant votre post avec une image ou un gif ! <br />
-              <b>(max 5mo)</b>
-            </h2>
-            <FilePreview @upload="setImage" />
-          </div>
-        </form>
-      </div>
-    </div>
+        </textarea>
+      </template>
+      <template v-slot:secondary-title>
+        <h2 for="postPic">
+          Mettez en avant votre post avec une image ou un gif !
+        </h2>
+      </template>
+      <template v-slot:secondary-subtitle><b>(max 5mo)</b></template>
+      <template v-slot:upload-input>
+        <FilePreview @upload="setImage" />
+      </template>
+    </ModalWindow>
+
   </div>
 </template>
 
 <script>
 import FilePreview from "@/components/FilePreview";
 import UserClass from "@/classes/UserClass";
+import ModalWindow from "@/components/ModalWindow";
 
 export default {
   name: "CreatePost",
-  components: { FilePreview },
+  components: { FilePreview, ModalWindow },
 
   data() {
     return {
@@ -78,26 +73,17 @@ export default {
       image: "",
       textarea: "",
       containerElement: null,
+      showModal: false,
     };
   },
 
   methods: {
-    displayCreatePost() {
-      this.containerElement = document.getElementById("container");
-      this.containerElement.style.transform = "translateY(0%)";
-      this.containerElement.style.display = "flex";
-    },
-    hideCreatePost() {
-      this.containerElement.style.transform = "translateY(100%)";
-      this.containerElement.style.transition = "all .6s ease";
-    },
-
     // Récupération de l'image
     setImage(payload) {
       this.image = payload;
     },
 
-     goToProfile() {
+    goToProfile() {
       this.$router.push("/profile");
     },
 
@@ -113,38 +99,36 @@ export default {
       formData.append("userId", userId);
       formData.append("userImage", userImage);
       try {
-       const {data} = await this.axios.post("/posts", formData, {
+        const { data } = await this.axios.post("/posts", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${this.user.token}`,
           },
         });
-        this.$emit("post-created", data)
-        await document.getElementById('Form').reset()
-        this.hideCreatePost()
-        document.querySelector(".imagePreviewWrapper").style.display="none"
+        this.$emit("post-created", data);
+        this.resetForm();
       } catch (err) {
         console.log(err);
       }
     },
+
+    resetForm () { 
+       document.querySelector(".imagePreviewWrapper").style.display = "none";
+        document.getElementById("input").value = "";
+        this.textarea = "";
+        this.showModal = false;
+    }
   },
 };
 </script>
 
 <style scoped>
-#display-create-post {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 16px 16px 0 0;
-}
-#display-create-post > input {
-  transform: translateY(-1000%);
-  opacity: 0;
-  width: 100%;
-  height: 80px;
-  background: white;
+.fa-circle-xmark {
+  position: absolute;
+  top: -7px;
+  left: -7px;
+  font-size: 2.5em;
+  color: red;
 }
 .input-appear {
   animation: input-appear 1s 0.5s ease forwards;
@@ -158,44 +142,6 @@ export default {
     opacity: 1;
   }
 }
-#container {
-  display: none;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  z-index: 3;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-}
-@-moz-document url-prefix() {
-  #container {
-    background-color: rgba(255, 215, 215, 0.8);
-    height: 100%;
-    width: 100%;
-  }
-}
-.fa-circle-xmark {
-  position: absolute;
-  top: -7px;
-  right: -7px;
-  font-size: 2.5em;
-  color: red;
-}
-.card-appear {
-  animation: card-appear 0.8s ease;
-}
-@keyframes card-appear {
-  from {
-    transform: translateY(100%);
-  }
-  to {
-    transform: translateY(0%);
-  }
-}
 .user-title {
   display: flex;
   justify-content: space-between;
@@ -203,8 +149,8 @@ export default {
   margin-bottom: 15px;
 }
 .profile-picture {
-  width: 70px;
-  height: 70px;
+  width: 90px;
+  height: 90px;
   clip-path: circle(50%);
   object-fit: cover;
   cursor: pointer;
@@ -224,34 +170,47 @@ label {
 }
 b {
   color: #aaa;
-  font-size: 0.6em;
+  font-size: 0.8em;
 }
-.card {
-  margin-top: 25px;
-  position: relative;
-  box-shadow: 1px 1px 5px #aaa;
+h2,
+b {
+  text-align: left;
+  display: block;
+  margin: 10px 0;
 }
 .button {
   width: fit-content;
+  display: block;
+  position: absolute;
+  top: 35px;
+  right: 25px;
 }
 .form-row {
   display: flex;
   justify-content: space-between;
+  margin: unset;
 }
 input {
+  transform: translateY(-1000%);
+  opacity: 0;
+  width: 100%;
+  height: 35px;
+  background: white;
   padding: 6px;
   border: none;
-  border-radius: 16px;
+  border-radius: 25px;
   border-left-style: none;
 }
 span {
   padding: 6px;
 }
 @media (max-width: 540px) {
+  #create-post-container {
+    padding: 0 25px;
+  }
   .user-title {
     flex-direction: column-reverse;
     align-items: baseline;
-    padding: 0 25px;
     margin-top: 70px;
   }
   .card {
@@ -262,8 +221,9 @@ span {
     padding: 0 25px;
   }
   .fa-circle-xmark {
-    top: -7px;
-    right: 30px;
+  left: 25px;
+  top: -20px;
+  font-size: 3em;
   }
 }
 </style>

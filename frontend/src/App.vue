@@ -3,7 +3,6 @@
 </template>
 
 <script>
-// On injecte les composants dans la div #app
 export default {
   name: "App",
   components: {},
@@ -11,6 +10,7 @@ export default {
 </script>
 
 <style>
+/* General CSS rules */
 @import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap");
 * {
   font-family: "Lato", sans-serif;
@@ -57,13 +57,14 @@ li {
 a {
   text-decoration: none;
 }
+
+/* Forms */
 .form-row {
   display: flex;
   margin: 16px 0px;
   gap: 16px;
   flex-wrap: wrap;
 }
-
 .form-row__input {
   padding: 8px;
   border: none;
@@ -75,10 +76,21 @@ a {
   min-width: 100px;
   color: black;
 }
-
 .form-row__input::placeholder {
   color: #aaaaaa;
 }
+textarea {
+  width: 100%;
+  max-height: 100px;
+  resize: none;
+}
+textarea:focus,
+input:focus {
+  outline: #ffd7d7 solid 2px;
+  box-shadow: 1px 1px 5px #fd2d01;
+}
+
+/* cards */
 .card {
   max-width: 100%;
   width: 540px;
@@ -101,16 +113,25 @@ a {
   justify-content: center;
   gap: 10px;
 }
+.card__action {
+  color: #fd2d01;
+  text-decoration: underline;
+}
+.card__action:hover {
+  cursor: pointer;
+}
+
 .posts-options {
   margin-top: 15px;
   display: flex;
 }
+
+/* buttons */
 .button {
   background: #fd2d01;
   color: white;
   border-radius: 8px;
   font-weight: 800;
-  font-size:0.9em;
   width: 100%;
   padding: 16px;
   transition: 0.4s all ease-in-out;
@@ -135,31 +156,11 @@ button:disabled:hover {
   background-color: gainsboro;
   cursor: not-allowed;
 }
-.card__action {
-  color: #fd2d01;
-  text-decoration: underline;
-}
-.card__action:hover {
-  cursor: pointer;
-}
-textarea {
-  width: 100%;
-  max-height: 100px;
-  resize: none;
-}
-textarea:focus,
-input:focus {
-  outline-color: #ffd7d7;
-  box-shadow: 1px 1px 5px #fd2d01;
-}
-.error-message {
-  font-weight: bold;
-}
-.message {
-  bottom: 5px;
-  color: green;
-  font-size: 0.8em;
-}
+.modal-button-validate, .modal-button-cancel {
+  width: calc(50% - 5px);  
+  width: auto;
+} 
+/* Media Queries */
 @media (max-width: 540px) {
   body {
     padding: 0;

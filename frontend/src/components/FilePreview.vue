@@ -4,15 +4,17 @@
       class="imagePreviewWrapper"
       :style="{ 'background-image': `url(${previewImage})` }"
       @click="selectImage"
-    ></div>
+    >
+    </div>
     <input
+      id="input"
       class="form-row__input"
       ref="fileInput"
       name="postPic"
       type="file"
       @input="pickFile"
     />
-    <button v-if="previewImage" class="delete-image" @click="deleteImage()">
+     <button class="delete-image" @click="deleteImage()">
       <i class="fa-solid fa-trash-can"></i>
     </button>
   </div>
@@ -45,8 +47,7 @@ export default {
         let reader = new FileReader();
         reader.onload = (e) => {
           this.previewImage = e.target.result;
-          document.querySelector(".imagePreviewWrapper").style.display =
-            "block";
+          document.querySelector(".imagePreviewWrapper").style.display = "block";
         };
         reader.readAsDataURL(file[0]);
         this.$emit("upload", file[0]);
@@ -74,7 +75,6 @@ export default {
   margin: 0 auto;
   transform: translateY(70%);
   opacity: 0;
-  width: fit-content;
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
   font-size: 5em;
@@ -85,9 +85,6 @@ export default {
   opacity: 1;
 }
 .delete-image {
-  position: absolute;
-  top: 7px;
-  right: 10px;
   cursor: pointer;
   font-size: 1.4em;
   border: none;
@@ -97,9 +94,7 @@ export default {
 }
 .form-row,
 .form-row__input {
-  display: block;
   position: relative;
   width: 100%;
-  margin: 15px 0;
 }
 </style>

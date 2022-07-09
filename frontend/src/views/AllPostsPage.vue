@@ -31,8 +31,8 @@ export default {
   },
 
   async beforeMount() {
-      const axiosConfig = { headers: { Authorization: `Bearer ${this.user.token}` }};
-      const { data } = await this.axios.get("/posts", axiosConfig,);
+    const axiosConfig = { headers: { Authorization: `Bearer ${this.user.token}` } };
+    const { data } = await this.axios.get("/posts", axiosConfig,);
     this.posts = data;
     this.isAuthenticated = { Authorization: `Bearer ${this.user.token}` };
   },
@@ -51,6 +51,7 @@ export default {
     updatePostLikes(updatedPost) {
     const postToUpdate = this.posts.find(post => post._id === updatedPost._id)
       postToUpdate.usersLiked = updatedPost.usersLiked
+      postToUpdate.usersDisliked = updatedPost.usersDisliked
     },
 
     reconnection () {

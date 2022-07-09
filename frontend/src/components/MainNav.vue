@@ -48,7 +48,7 @@ export default {
     // Au clic sur logout, le localstorage est vidé
     logout() {
       localStorage.removeItem('user');
-      this.$router.push("/login");
+      this.$router.go();
     },
   },
 };
@@ -99,9 +99,9 @@ export default {
   width: 15em;
 }
 @media (max-width: 540px) {
-  .nav-container {
-    height: 0;
-  }
+  .logo {
+    margin-left: 10px;
+   }
   .nav-bar-buttons {
     height: 60px;
     z-index: 2;

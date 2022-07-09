@@ -21,7 +21,11 @@
         />
         <div class="post-subtitle">
           <h4>{{ post.userName }}</h4>
-          <div class="post-date">posté le {{ post.date }}</div>
+          <div class="post-date">le {{ post.date }}</div>
+            <span class="total-likes-dislikes">
+            <i class="fa-regular fa-thumbs-up">&nbsp;<span>{{ post.usersLiked.length }}</span></i>
+            <i class="fa-regular fa-thumbs-down">&nbsp;<span>{{ post.usersDisliked.length }}</span></i>
+          </span>
         </div>
       </div>
       <p>{{ post.description }}</p>
@@ -32,26 +36,43 @@
         class="post-picture"
       />
       <div class="posts-options">
-
         <div class="like-dislike-buttons">
           <button
-          :class="['button', 'like', post.usersLiked.includes(user.userId) ? 'liked' : '']"
+            :class="[
+              'button',
+              'like',
+              post.usersLiked.includes(user.userId) ? 'liked' : '',
+            ]"
             @click="onClickLike(post._id)"
           >
             <i class="fa-regular fa-thumbs-up"></i>
-            <template v-if="post.usersLiked.includes(user.userId)"><b>Liké !</b> </template>
+            <template v-if="post.usersLiked.includes(user.userId)"
+              ><b>Liké !</b></template
+            >
           </button>
 
           <button
-            :class="['button', 'dislike', post.usersDisliked.includes(user.userId) ? 'disliked' : '']"
+            :class="[
+              'button',
+              'dislike',
+              post.usersDisliked.includes(user.userId) ? 'disliked' : '',
+            ]"
             @click="onClickDislike(post._id)"
           >
             <i class="fa-regular fa-thumbs-down"></i>
-             <template v-if="post.usersDisliked.includes(user.userId)"><b>Disliké !</b> </template>
+            <template v-if="post.usersDisliked.includes(user.userId)"
+              ><b>Disliké !</b>
+            </template>
           </button>
         </div>
-
-        <div v-if="user.userId === post.userId" class="modify-delete-buttons">
+        <!-- TODO Trouver un meilleur moyen de laisser l'accès de modification des posts par l'admin car peut être facilement contourné -->
+        <div
+          v-if="
+            user.userId === post.userId ||
+            user.userId === '62b84907b1b86ea7c0067b44'
+          "
+          class="modify-delete-buttons"
+        >
           <button class="button modify-button" @click="modifyPost(post._id)">
             <i class="fas fa-edit modify"></i>
             <b>modifier</b>
@@ -59,15 +80,37 @@
 
           <button
             class="button delete-button"
-            @click="() => { showModal = true; postToDelete = post._id }">
+            @click="
+              () => {
+                showModal = true;
+                postToDelete = post._id;
+              }
+            "
+          >
             <i class="fas fa-trash-alt delete"></i>
             <b>Supprimer</b>
           </button>
 
-           <ModalWindow v-show="showModal" @close="showModal = false">
-            <template v-slot:title>Voulez-vous vraiment supprimer ce post ?</template>
-            <template v-slot:validate><button class="button modal-button-validate"  @click= "deletePost()">Valider</button></template>
-            <template  v-slot:cancel><button class="button modal-button-cancel" @click="showModal = false">Annuler</button></template>
+          <ModalWindow v-show="showModal" @close="showModal = false">
+            <template v-slot:title
+              ><span>Voulez-vous vraiment supprimer ce post ?</span></template
+            >
+            <template v-slot:validate
+              ><button
+                class="button modal-button-validate"
+                @click="deletePost()"
+              >
+                Valider
+              </button></template
+            >
+            <template v-slot:cancel
+              ><button
+                class="button modal-button-cancel"
+                @click="showModal = false"
+              >
+                Annuler
+              </button></template
+            >
           </ModalWindow>
         </div>
       </div>
@@ -131,34 +174,28 @@ export default {
     },
 
     async onClickLike(id) {
-      const axiosConfig = { headers: { Authorization: `Bearer ${this.user.token}` } };
+      const axiosConfig = {
+        headers: { Authorization: `Bearer ${this.user.token}` },
+      };
       this.data = { userId: this.user.userId };
 
       try {
         const { data } = await this.axios.post(`/posts/${id}/like`, this.data, axiosConfig);
-        console.log(data)
-        const userLiked = {
-          userId: this.user.userId,
-          postId: id
-        }
-        this.$emit("post-liked", userLiked)
-      }
-      catch (err) {
+        this.$emit("post-liked", data);
+      } catch (err) {
         console.log(err);
       }
     },
 
-     async onClickDislike(id) {
-      const axiosConfig = { headers: { Authorization: `Bearer ${this.user.token}` } };
+    async onClickDislike(id) {
+      const axiosConfig = {
+        headers: { Authorization: `Bearer ${this.user.token}` },
+      };
       this.data = { userId: this.user.userId };
 
       try {
-        await this.axios.post(`/posts/${id}/dislike`, this.data, axiosConfig);
-        const userDisliked = {
-          userId: this.user.userId,
-          postId: id
-        }
-        this.$emit("post-liked", userDisliked)
+        const {  data } = await this.axios.post(`/posts/${id}/dislike`, this.data, axiosConfig);
+        this.$emit("post-liked", data);
       } catch (err) {
         console.log(err);
       }
@@ -181,13 +218,24 @@ export default {
 .post-date {
   color: #aaa;
 }
+.total-likes-dislikes {
+  display: flex;
+  font-size: 0.9em;
+  padding: 3px 0 0 2px;
+  gap: 10px;
+}
+.total-likes-dislikes > .fa-thumbs-up {
+  color: #22780f;
+}
+.total-likes-dislikes > .fa-thumbs-down {
+  color: firebrick;
+}
 .post-subtitle {
   padding-left: 15px;
-  width: 80%;
 }
 .profile-picture {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   clip-path: circle(50%);
   object-fit: cover;
   object-position: top;
@@ -221,7 +269,7 @@ b {
   margin-right: 5px;
 }
 input:focus {
-  outline-color: #ffd7d7;
+  outline: #ffd7d7 solid 4px;
   box-shadow: 1px 1px 5px #fd2d01;
 }
 input {
@@ -246,6 +294,7 @@ input {
 .like,
 .dislike {
   width: 46%;
+  font-size: 0.9em;
 }
 .like,
 .dislike,
@@ -269,34 +318,14 @@ input {
   -webkit-box-shadow: inset -150px 0px 0px 0px #fd2d01;
   box-shadow: inset -150px 0px 0px 0px #fd2d01;
 }
-.like::before,
-.dislike::before {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  background: #fd2d01;
-}
 .fa-trash-alt,
 .fa-edit {
   margin-right: 5px;
 }
-.modal-button-validate {
-  margin-right: 10px;
-}
-.modal-button-validate,
-.modal-button-cancel {
-  width: auto;
-}
 @media (max-width: 540px) {
   .profile-picture {
-    -webkit-clip-path: circle(50%);
-    clip-path: circle(45%);
-    width: 20%;
-    height: 100%;
+    width: 65px;
+    height: 65px;
   }
   h2 {
     padding: 0 25px;
