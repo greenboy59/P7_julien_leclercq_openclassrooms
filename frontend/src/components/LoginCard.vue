@@ -52,7 +52,7 @@
         // <span v-else>Connexion</span> -->
         </div>
       </form>
-      <div class="errorMessage" v-if="errors.length">
+      <div class="errors-messages" v-if="errors.length">
         <b>⚠️ Veuillez corriger les erreurs suivantes ⚠️</b>
         <ul>
           <li v-for="error in errors" :key="error.message">{{ error }}</li>

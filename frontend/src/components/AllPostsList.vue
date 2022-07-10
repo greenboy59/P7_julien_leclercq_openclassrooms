@@ -190,7 +190,7 @@ export default {
     async onClickDislike(id) {
       const axiosConfig = {
         headers: { Authorization: `Bearer ${this.user.token}` },
-      };
+      }
       this.data = { userId: this.user.userId };
 
       try {
@@ -280,7 +280,6 @@ input {
 }
 .modify-delete-buttons,
 .like-dislike-buttons {
-  height: 50px;
   width: 50%;
   display: flex;
   align-items: center;
@@ -289,19 +288,16 @@ input {
 .modify-button,
 .delete-button {
   width: fit-content;
-  max-height: 100%;
 }
 .like,
 .dislike {
   width: 46%;
-  font-size: 0.9em;
 }
 .like,
 .dislike,
 .modify-button,
 .delete-button {
   background: none;
-  position: relative;
   border: 1px solid #fd2d01;
   color: #fd2d01;
 }
@@ -317,6 +313,7 @@ input {
   color: white;
   -webkit-box-shadow: inset -150px 0px 0px 0px #fd2d01;
   box-shadow: inset -150px 0px 0px 0px #fd2d01;
+  transform: none;
 }
 .fa-trash-alt,
 .fa-edit {

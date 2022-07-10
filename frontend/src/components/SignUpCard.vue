@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="container">
     <img
       id="logo"
       alt="Groupomania logo"
@@ -78,7 +78,7 @@
           </button>
         </div>
       </form>
-      <div class="errorMessage" v-if="errors.length">
+      <div class="errors-messages" v-if="errors.length">
         <b>⚠️ Veuillez corriger les erreurs suivantes ⚠️</b>
         <ul>
           <li v-for="error in errors" :key="error.message">{{ error }}</li>
@@ -176,6 +176,7 @@ export default {
         await this.$router.replace("/all-posts");
       } catch (err) {
         console.log(err);
+         this.errors.push(err.response.data.error.message)
       }
     },
   },
@@ -183,6 +184,13 @@ export default {
 </script>
 
 <style scoped>
+#container {
+  height: 100vh;
+  margin-bottom: 45px;
+}
+#logo {
+  position: relative;
+}
 .file-preview {
   margin-top: 15px;
 }
@@ -200,6 +208,9 @@ b {
   color: green;
   font-size: 18px;
   margin-top: -15px;
+}
+.errors-messages > b {
+  font-size: 1em;
 }
 label {
   width: 100%;

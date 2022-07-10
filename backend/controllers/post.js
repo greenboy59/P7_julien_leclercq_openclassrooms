@@ -28,9 +28,7 @@ exports.getOnePost = (req, res, next) => {
 // Créer un nouveau post
 exports.createPost = (req, res, next) => {
   if (req.file) {
-    req.body.file = `${req.protocol}://${req.get("host")}/images/${
-      req.file.filename
-    }`;
+    req.body.file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
   } else {
     req.body.file = null;
   }
@@ -98,17 +96,20 @@ exports.modifyPost = (req, res, next) => {
 exports.deletePost = (req, res, next) => {
   Post.findOne({ _id: req.params.id })
     .then((post) => {
-      const filename = post.image.split("/images/")[1];
-      fs.unlink(`images/${filename}`, () => {
+      if (post.image) {
+        const filename = post.image.split("/images/")[1];
+        fs.unlink(`images/${filename}`, (error) => {
+          if (error) throw err;
+        })
+       }
         Post.deleteOne({ _id: req.params.id })
           .then(() => res.status(200).json({ message: "Post supprimé !" }))
           .catch((error) => res.status(400).json({ error }));
-      });
-    })
+      })
     .catch((error) => res.status(500).json({ error }));
 };
 
-// Like ou dislike un post
+// Ajoute ou retire un like 
 exports.likePost = async (req, res, next) => {
   const postId = req.params?.id;
   const userId = req.body?.userId;
@@ -116,7 +117,7 @@ exports.likePost = async (req, res, next) => {
     try {
       const post = await Post.findOne({ _id: postId });
       const existingId = post.usersLiked.find((id) => id === userId);
-      // Checker si user a déjà liké, si c'est le cas enlever le like
+      // 1. Checker si ce user a déjà liké, si c'est le cas enlever le like
       if (existingId) {
         await Post.updateOne(
           { _id: postId },
@@ -125,7 +126,7 @@ exports.likePost = async (req, res, next) => {
         const postUpdated = await Post.findOne({ _id: postId });
         return res.status(201).json(postUpdated)
       }        
-      // Checker les dislikes et si user a disliké, enlever le dislike et ajouter le like
+      // 2. Checker les dislikes et si ce user a disliké, enlever le dislike et ajouter le like
       const userExistingInDislikes = post.usersDisliked.find((id) => id === userId);
       if (userExistingInDislikes) {
         await Post.updateOne(
@@ -135,7 +136,7 @@ exports.likePost = async (req, res, next) => {
         const postUpdated = await Post.findOne({ _id: postId });
         return res.status(201).json(postUpdated)
       }
-      // Si aucun des cas plus haut n'est rencontré, ajouter le like
+      // 3. Si aucun des cas plus haut n'est rencontré, ajouter le like
       await Post.updateOne(
         { _id: postId },
         { $push: { usersLiked: userId } },
@@ -151,6 +152,7 @@ exports.likePost = async (req, res, next) => {
   return res.status(400).json({ error: "missing required parameters" });
 };
 
+// Ajoute ou retire un dislike
 exports.dislikePost = async (req, res, next) => {
   const postId = req.params?.id;
   const userId = req.body?.userId;
@@ -158,7 +160,7 @@ exports.dislikePost = async (req, res, next) => {
     try {
       const post = await Post.findOne({ _id: postId });
       const existingId = post.usersDisliked.find((id) => id === userId);
-      // Checker les dislikes et si user a déjà disliké, enlever le dislike
+      // 1. Checker les dislikes et si user a déjà disliké, enlever le dislike
       if (existingId) {
         await Post.updateOne(
           { _id: postId },
@@ -167,7 +169,7 @@ exports.dislikePost = async (req, res, next) => {
         const postUpdated = await Post.findOne({ _id: postId });
         return res.status(201).json(postUpdated)
       }
-      // Checker si user a liké, si c'est le cas enlever le like puis ajouter dislike
+      // 2. Checker si user a liké, si c'est le cas enlever le like puis ajouter dislike
       const userExistingInLikes = post.usersLiked.find((id) => id === userId);
       if (userExistingInLikes) {
         await Post.updateOne(
@@ -177,7 +179,7 @@ exports.dislikePost = async (req, res, next) => {
         const postUpdated = await Post.findOne({ _id: postId });
         return res.status(201).json(postUpdated)
       }
-      // Si aucun des cas plus haut n'est rencontré, ajouter le dislike
+      // 3. Si aucun des cas plus haut n'est rencontré, ajouter le dislike
       await Post.updateOne(
         { _id: postId },
         { $push: { usersDisliked: userId } },

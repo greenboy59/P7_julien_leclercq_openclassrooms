@@ -42,10 +42,6 @@ img {
   max-width: 100%;
   max-height: 100%;
 }
-.errorMessage {
-  font-weight: bold;
-  text-align: center;
-}
 ul {
   margin-top: 15px;
   text-align: left;
@@ -93,7 +89,6 @@ input:focus {
 /* cards */
 .card {
   max-width: 100%;
-  width: 540px;
   height: fit-content;
   background: white;
   border-radius: 16px;
@@ -160,6 +155,11 @@ button:disabled:hover {
   width: calc(50% - 5px);  
   width: auto;
 } 
+/* Autres */
+.errors-messages {
+  font-weight: bold;
+  text-align: center;
+}
 /* Media Queries */
 @media (max-width: 540px) {
   body {

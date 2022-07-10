@@ -8,6 +8,13 @@ const regExModule = require("../utils/regex");
 
 // Création d'un compte utilisateur avec mot de passe fort + vérif des infos envoyées par le frontend
 exports.signup = (req, res, next) => {
+   // Test si une image est présente, on la traite sinon on envoi le reste
+   if (req.file) {
+    req.body.file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
+  } else {
+    req.body.file = `${req.protocol}://${req.get("host")}/images/defaultProfilePic.png`;
+   }
+  
   if (
     regExModule.regExpStrongPassword.test(req.body.password) &&
     regExModule.regExpEmail.test(req.body.email) &&
@@ -15,24 +22,29 @@ exports.signup = (req, res, next) => {
     regExModule.regName.test(req.body.firstname)
   ) {
     // Hashage du mot de passe + salage (10 caractères)
-    bcrypt.hash(req.body.password, 10)
-      .then(hash => {
+    bcrypt
+      .hash(req.body.password, 10)
+      .then((hash) => {
         const user = new User({
-          image: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+          image: req.body.file,
           lastname: req.body.lastname,
           firstname: req.body.firstname,
           email: req.body.email,
           password: hash,
-        })
-        user.save()
+        });
+        user
+          .save()
           .then(() => res.status(201).json({ message: "Utilisateur créé !" }))
-          .catch((error) => res.status(400).json({ error }));
+          .catch((error) => res.status(400).json({ error, message: "Demande erronée" }));
       })
-      .catch((error) => res.status(500).json({ error }));
+      .catch((error) => res.status(500).json({ error, message:"Utilisateur déjà éxistant" }));
   } else {
-    res.status(400).json(
-      { message: "Mot de passe trop faible, minimum 8 caractères, dont 1 majuscule, 1 minuscule, 1 nombre et 1 caractère spécial" }
-      );
+    res
+      .status(400)
+      .json({
+        message:
+          "Mot de passe trop faible, minimum 8 caractères, dont 1 majuscule, 1 minuscule, 1 nombre et 1 caractère spécial",
+      });
   }
 };
 
