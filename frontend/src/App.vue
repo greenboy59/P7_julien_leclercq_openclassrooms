@@ -10,6 +10,7 @@ export default {
 </script>
 
 <style>
+
 /* General CSS rules */
 @import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap");
 * {
@@ -155,11 +156,13 @@ button:disabled:hover {
   width: calc(50% - 5px);  
   width: auto;
 } 
+
 /* Autres */
 .errors-messages {
   font-weight: bold;
   text-align: center;
 }
+
 /* Media Queries */
 @media (max-width: 540px) {
   body {

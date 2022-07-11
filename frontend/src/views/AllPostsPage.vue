@@ -50,8 +50,8 @@ export default {
 
     updatePostLikes(updatedPost) {
     const postToUpdate = this.posts.find(post => post._id === updatedPost._id)
-      postToUpdate.usersLiked = updatedPost.usersLiked
-      postToUpdate.usersDisliked = updatedPost.usersDisliked
+      postToUpdate.usersWhoLiked = updatedPost.usersWhoLiked
+      postToUpdate.usersWhoDisliked = updatedPost.usersWhoDisliked
     },
 
     reconnection () {

@@ -23,8 +23,8 @@
           <h4>{{ post.userName }}</h4>
           <div class="post-date">le {{ post.date }}</div>
             <span class="total-likes-dislikes">
-            <i class="fa-regular fa-thumbs-up">&nbsp;<span>{{ post.usersLiked.length }}</span></i>
-            <i class="fa-regular fa-thumbs-down">&nbsp;<span>{{ post.usersDisliked.length }}</span></i>
+            <i class="fa-regular fa-thumbs-up">&nbsp;<span>{{ post.usersWhoLiked.length }}</span></i>
+            <i class="fa-regular fa-thumbs-down">&nbsp;<span>{{ post.usersWhoDisliked.length }}</span></i>
           </span>
         </div>
       </div>
@@ -41,12 +41,12 @@
             :class="[
               'button',
               'like',
-              post.usersLiked.includes(user.userId) ? 'liked' : '',
+              post.usersWhoLiked.includes(user.userId) ? 'liked' : '',
             ]"
             @click="onClickLike(post._id)"
           >
             <i class="fa-regular fa-thumbs-up"></i>
-            <template v-if="post.usersLiked.includes(user.userId)"
+            <template v-if="post.usersWhoLiked.includes(user.userId)"
               ><b>Liké !</b></template
             >
           </button>
@@ -55,12 +55,12 @@
             :class="[
               'button',
               'dislike',
-              post.usersDisliked.includes(user.userId) ? 'disliked' : '',
+              post.usersWhoDisliked.includes(user.userId) ? 'disliked' : '',
             ]"
             @click="onClickDislike(post._id)"
           >
             <i class="fa-regular fa-thumbs-down"></i>
-            <template v-if="post.usersDisliked.includes(user.userId)"
+            <template v-if="post.usersWhoDisliked.includes(user.userId)"
               ><b>Disliké !</b>
             </template>
           </button>
@@ -289,6 +289,9 @@ input {
 .delete-button {
   width: fit-content;
 }
+.modify-button > b, .delete-button > b {
+   margin-left: 5px;
+}
 .like,
 .dislike {
   width: 46%;
@@ -314,10 +317,6 @@ input {
   -webkit-box-shadow: inset -150px 0px 0px 0px #fd2d01;
   box-shadow: inset -150px 0px 0px 0px #fd2d01;
   transform: none;
-}
-.fa-trash-alt,
-.fa-edit {
-  margin-right: 5px;
 }
 @media (max-width: 540px) {
   .profile-picture {

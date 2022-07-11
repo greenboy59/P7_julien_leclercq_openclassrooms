@@ -28,7 +28,9 @@ exports.getOnePost = (req, res, next) => {
 // Créer un nouveau post
 exports.createPost = (req, res, next) => {
   if (req.file) {
-    req.body.file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
+    req.body.file = `${req.protocol}://${req.get("host")}/images/${
+      req.file.filename
+    }`;
   } else {
     req.body.file = null;
   }
@@ -41,8 +43,9 @@ exports.createPost = (req, res, next) => {
       description: req.body.description,
       userId: req.body.userId,
       userName: req.body.userName,
-      usersLiked: [],
-      usersDisliked: [],
+      usersWhoLiked: [],
+      usersWhoDisliked: [],
+      comments: [],
       date: date.toLocaleString("fr-FR", {
         weekday: "long",
         year: "numeric",
@@ -75,9 +78,7 @@ exports.modifyPost = (req, res, next) => {
   const postObject = req.file
     ? {
         ...req.body,
-        image: `${req.protocol}://${req.get("host")}/images/${
-          req.file.filename
-        }`,
+        image: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
       }
     : {
         ...req.body,
@@ -100,51 +101,55 @@ exports.deletePost = (req, res, next) => {
         const filename = post.image.split("/images/")[1];
         fs.unlink(`images/${filename}`, (error) => {
           if (error) throw err;
-        })
-       }
-        Post.deleteOne({ _id: req.params.id })
-          .then(() => res.status(200).json({ message: "Post supprimé !" }))
-          .catch((error) => res.status(400).json({ error }));
-      })
+        });
+      }
+      Post.deleteOne({ _id: req.params.id })
+        .then(() => res.status(200).json({ message: "Post supprimé !" }))
+        .catch((error) => res.status(400).json({ error }));
+    })
     .catch((error) => res.status(500).json({ error }));
 };
 
-// Ajoute ou retire un like 
+// Ajoute ou retire un like
 exports.likePost = async (req, res, next) => {
   const postId = req.params?.id;
   const userId = req.body?.userId;
   if (postId && userId) {
     try {
       const post = await Post.findOne({ _id: postId });
-      const existingId = post.usersLiked.find((id) => id === userId);
+      const existingId = post.usersWhoLiked.find((id) => id === userId);
       // 1. Checker si ce user a déjà liké, si c'est le cas enlever le like
       if (existingId) {
         await Post.updateOne(
           { _id: postId },
-          { $pull: { usersLiked: userId } },
-        )
+          { $pull: { usersWhoLiked: userId } },
+        );
         const postUpdated = await Post.findOne({ _id: postId });
-        return res.status(201).json(postUpdated)
-      }        
+        return res.status(201).json(postUpdated);
+      }
       // 2. Checker les dislikes et si ce user a disliké, enlever le dislike et ajouter le like
-      const userExistingInDislikes = post.usersDisliked.find((id) => id === userId);
+      const userExistingInDislikes = post.usersWhoDisliked.find(
+        (id) => id === userId,
+      );
       if (userExistingInDislikes) {
         await Post.updateOne(
           { _id: postId },
-          { $pull: { usersDisliked: userId }, $push: { usersLiked: userId } },
-        )
+          {
+            $pull: { usersWhoDisliked: userId },
+            $push: { usersWhoLiked: userId },
+          },
+        );
         const postUpdated = await Post.findOne({ _id: postId });
-        return res.status(201).json(postUpdated)
+        return res.status(201).json(postUpdated);
       }
       // 3. Si aucun des cas plus haut n'est rencontré, ajouter le like
       await Post.updateOne(
         { _id: postId },
-        { $push: { usersLiked: userId } },
-      )
+        { $push: { usersWhoLiked: userId } },
+      );
       const postUpdated = await Post.findOne({ _id: postId });
-      return res.status(201).json(postUpdated)
-    }
-    catch (err) {
+      return res.status(201).json(postUpdated);
+    } catch (err) {
       console.log(err);
       return res.status(err.statusCode).json(err);
     }
@@ -159,33 +164,38 @@ exports.dislikePost = async (req, res, next) => {
   if (postId && userId) {
     try {
       const post = await Post.findOne({ _id: postId });
-      const existingId = post.usersDisliked.find((id) => id === userId);
+      const existingId = post.usersWhoDisliked.find((id) => id === userId);
       // 1. Checker les dislikes et si user a déjà disliké, enlever le dislike
       if (existingId) {
         await Post.updateOne(
           { _id: postId },
-          { $pull: { usersDisliked: userId } },
+          { $pull: { usersWhoDisliked: userId } },
         );
         const postUpdated = await Post.findOne({ _id: postId });
-        return res.status(201).json(postUpdated)
+        return res.status(201).json(postUpdated);
       }
       // 2. Checker si user a liké, si c'est le cas enlever le like puis ajouter dislike
-      const userExistingInLikes = post.usersLiked.find((id) => id === userId);
+      const userExistingInLikes = post.usersWhoLiked.find(
+        (id) => id === userId,
+      );
       if (userExistingInLikes) {
         await Post.updateOne(
           { _id: postId },
-          { $pull: { usersLiked: userId }, $push: { usersDisliked: userId } },
+          {
+            $pull: { usersWhoLiked: userId },
+            $push: { usersWhoDisliked: userId },
+          },
         );
         const postUpdated = await Post.findOne({ _id: postId });
-        return res.status(201).json(postUpdated)
+        return res.status(201).json(postUpdated);
       }
       // 3. Si aucun des cas plus haut n'est rencontré, ajouter le dislike
       await Post.updateOne(
         { _id: postId },
-        { $push: { usersDisliked: userId } },
+        { $push: { usersWhoDisliked: userId } },
       );
       const postUpdated = await Post.findOne({ _id: postId });
-      return res.status(201).json(postUpdated)
+      return res.status(201).json(postUpdated);
     } catch (err) {
       console.log(err);
       return res.status(err.statusCode).json(err);
@@ -193,3 +203,8 @@ exports.dislikePost = async (req, res, next) => {
   }
   return res.status(400).json({ error: "missing required parameters" });
 };
+
+// Créer un commentaire
+exports.createComment = async (req, res, next) => {};
+
+exports.modifyComment = async (req, res, next) => {};

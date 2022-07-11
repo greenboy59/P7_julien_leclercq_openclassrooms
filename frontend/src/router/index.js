@@ -26,7 +26,7 @@ const routes = [
     meta: { auth: false },
   },
   {
-    path: "/profile",
+    path: "/profile/:id",
     name: "ProfilePage",
     component: ProfilePage,
     meta: { auth: true },

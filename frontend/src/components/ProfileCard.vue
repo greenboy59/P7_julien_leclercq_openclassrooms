@@ -1,36 +1,70 @@
 <template>
   <div class="card">
     <h1 class="card__title">Mon profil</h1>
-    <img :src="user.image" alt="profile-image" />
+    <div v-if="user.image || image" id="post-image-wrapper"  @click="deleteImage(user.userId)">
+        <img
+         v-if="!image"
+          :src="user.image"
+          :alt="user.image"
+          class="profile-picture"
+        />
+      </div>
     <h3 class="card__subtitle">{{ user.firstname }} {{ user.lastname }}</h3>
-    <div class="form-row">
-      <button class="button" @click="logout()">Déconnexion</button>
-    </div>
+     <FilePreview @upload="setImage" />
+      <button class="button" @click="modifyUser(user.userId)">
+          <i class="fas fa-edit modify"></i>
+          Valider la modification
+        </button>
   </div>
 </template>
 
 <script>
 import UserClass from "@/classes/UserClass";
+import FilePreview from "@/components/FilePreview";
 
 export default {
   name: "ProfileCard",
+  components: { FilePreview },
 
   data() {
     return {
       user: UserClass.user,
+      id: this.$route.params.id,
+      image: "",
     };
   },
   methods: {
-    // Au clic sur logout, le localstorage est vidé
-    logout() {
-      localStorage.removeItem("user");
-      this.$router.replace("/login");
+
+      // Récupération de l'image
+    setImage(payload) {
+      this.image = payload;
+    },
+
+    async modifyUser(id) {
+      const formData = new FormData();
+      formData.append("image", this.image);
+
+      try {
+        await this.axios.put("/auth/" + id, formData,{
+          headers: {
+           "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${this.user.token}`,
+          },
+        })
+        await this.$router.replace("/all-posts");
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
 };
 </script>
 
 <style scoped>
+#post-image-wrapper {
+  position: relative;
+  cursor: pointer;
+}
 .card__title {
   margin-bottom: 15px;
 }

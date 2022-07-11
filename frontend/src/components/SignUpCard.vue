@@ -169,8 +169,7 @@ export default {
           password: this.password,
         });
         // Récupération des infos du user afin de les envoyer dans le local storage
-        this.axios.defaults.headers.common["Authorization"] =
-          "Bearer" + data.token;
+        this.axios.defaults.headers.common["Authorization"] = "Bearer" + data.token;
         UserClass.setUser(data);
         // Dès que les data ont bien été envoyées a l'API, on envoi l'utilisateur vers la page des posts
         await this.$router.replace("/all-posts");
@@ -185,11 +184,7 @@ export default {
 
 <style scoped>
 #container {
-  height: 100vh;
   margin-bottom: 45px;
-}
-#logo {
-  position: relative;
 }
 .file-preview {
   margin-top: 15px;

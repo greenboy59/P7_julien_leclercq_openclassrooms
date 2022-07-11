@@ -8,13 +8,17 @@ const regExModule = require("../utils/regex");
 
 // Création d'un compte utilisateur avec mot de passe fort + vérif des infos envoyées par le frontend
 exports.signup = (req, res, next) => {
-   // Test si une image est présente, on la traite sinon on envoi le reste
-   if (req.file) {
-    req.body.file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
+  // Test si une image est présente, on la traite sinon on envoi le reste
+  if (req.file) {
+    req.body.file = `${req.protocol}://${req.get("host")}/images/${
+      req.file.filename
+    }`;
   } else {
-    req.body.file = `${req.protocol}://${req.get("host")}/images/defaultProfilePic.png`;
-   }
-  
+    req.body.file = `${req.protocol}://${req.get(
+      "host",
+    )}/images/defaultProfilePic.png`;
+  }
+
   if (
     regExModule.regExpStrongPassword.test(req.body.password) &&
     regExModule.regExpEmail.test(req.body.email) &&
@@ -35,16 +39,18 @@ exports.signup = (req, res, next) => {
         user
           .save()
           .then(() => res.status(201).json({ message: "Utilisateur créé !" }))
-          .catch((error) => res.status(400).json({ error, message: "Demande erronée" }));
+          .catch((error) =>
+            res.status(400).json({ error, message: "Demande erronée" }),
+          );
       })
-      .catch((error) => res.status(500).json({ error, message:"Utilisateur déjà éxistant" }));
+      .catch((error) =>
+        res.status(500).json({ error, message: "Utilisateur déjà éxistant" }),
+      );
   } else {
-    res
-      .status(400)
-      .json({
-        message:
-          "Mot de passe trop faible, minimum 8 caractères, dont 1 majuscule, 1 minuscule, 1 nombre et 1 caractère spécial",
-      });
+    res.status(400).json({
+      message:
+        "Mot de passe trop faible, minimum 8 caractères, dont 1 majuscule, 1 minuscule, 1 nombre et 1 caractère spécial",
+    });
   }
 };
 
@@ -76,4 +82,30 @@ exports.login = (req, res, next) => {
         .catch((error) => res.status(500).json({ error }));
     })
     .catch((error) => res.status(500).json({ error }));
+};
+
+// Modifie un user
+exports.modifyUser = (req, res, next) => {
+  User.findOne({ userId: req.params.id })
+
+  if (req.body.oldImage) {
+    // <- si post.file n'est pas null on supprime le fichier existant
+    fs.unlink(`images/${req.body.oldImage}`, (error) => {
+      if (error) throw err;
+    });
+  }
+
+      const userObject = req.file
+      ? {
+          ...req.body,
+          image: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
+        }
+      : {
+          ...req.body,
+          image: req.body.file,
+        };
+
+      User.updateOne({ userId: req.params.id }, { ...userObject, userId: req.params.id })
+        .then(() => res.status(200).json({ message: "utilisateur modifié !" }))
+        .catch((error) => res.status(400).json({ error }));
 };

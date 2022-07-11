@@ -9,7 +9,7 @@
         :src="user.image"
         :alt="user.image"
         class="profile-picture"
-        @click="goToProfile"
+        @click="goToProfile(user.userId)"
       />
     </div>
       <input
@@ -83,11 +83,11 @@ export default {
       this.image = payload;
     },
 
-    goToProfile() {
-      this.$router.push("/profile");
+    goToProfile(id) {
+      this.$router.push(`/profile/${id}`);
     },
 
-    // fonction asynchrone afin d'envoyer les données au backend et rediriger vers page de login
+    // Publication d'un post
     async publish() {
       const userName = UserClass.user.firstname + " " + UserClass.user.lastname;
       const userId = UserClass.user.userId;
@@ -112,6 +112,7 @@ export default {
       }
     },
 
+    // TODO Attention lors d'un post avec image puis suppression de celui-ci, en créant un autre post dans la foulée cela laisse l'ancienne image par défaut
     resetForm () { 
        document.querySelector(".imagePreviewWrapper").style.display = "none";
         document.getElementById("input").value = "";
