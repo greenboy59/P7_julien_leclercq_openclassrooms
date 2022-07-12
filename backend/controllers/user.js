@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
 
 require("dotenv").config();
 
@@ -14,9 +15,7 @@ exports.signup = (req, res, next) => {
       req.file.filename
     }`;
   } else {
-    req.body.file = `${req.protocol}://${req.get(
-      "host",
-    )}/images/defaultProfilePic.png`;
+    req.body.file = `${req.protocol}://${req.get("host")}/images/defaultProfilePic.png`;
   }
 
   if (
@@ -84,28 +83,33 @@ exports.login = (req, res, next) => {
     .catch((error) => res.status(500).json({ error }));
 };
 
-// Modifie un user
+// Modifie la photo de profil
 exports.modifyUser = (req, res, next) => {
-  User.findOne({ userId: req.params.id })
-
-  if (req.body.oldImage) {
-    // <- si post.file n'est pas null on supprime le fichier existant
-    fs.unlink(`images/${req.body.oldImage}`, (error) => {
-      if (error) throw err;
-    });
-  }
-
+  User.findOne({ _id: req.params.id })
+    .then((user) => {
+      const defaultProfilePic = "defaultProfilePic.png"
+      if (user.image && req.file.filename !== defaultProfilePic) {
+        const url = "http://localhost:3000/"
+        const imageToDelete = user.image.split(url).join('');
+        fs.unlink(`${imageToDelete}`, (error) => {
+          if (error) throw error;
+        });
+      }
+ 
+      // Il faut mettre à jour le user avec la nouvelle image dans bdd
       const userObject = req.file
-      ? {
-          ...req.body,
+        ? {
           image: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
         }
-      : {
-          ...req.body,
+        : {
           image: req.body.file,
         };
-
-      User.updateOne({ userId: req.params.id }, { ...userObject, userId: req.params.id })
-        .then(() => res.status(200).json({ message: "utilisateur modifié !" }))
-        .catch((error) => res.status(400).json({ error }));
+      const updatedUser = User.findOneAndUpdate(
+        { _id: req.params.id },
+        { ...userObject, _id: req.params.id },
+        { new: true }
+      )
+        .then(( updatedUser) => res.status(200).json( updatedUser))
+        .catch((error) => res.status(400).json({ error }))
+    })
 };

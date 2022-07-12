@@ -45,13 +45,10 @@ export default {
       formData.append("image", this.image);
 
       try {
-        await this.axios.put("/auth/" + id, formData,{
-          headers: {
-           "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${this.user.token}`,
-          },
-        })
+        const axiosConfig = {headers: { Authorization: `Bearer ${this.user.token}` }}
+        const { data } = await this.axios.put("/auth/" + id, formData, axiosConfig)
         await this.$router.replace("/all-posts");
+        this.user.image = data.image
       } catch (err) {
         console.log(err);
       }

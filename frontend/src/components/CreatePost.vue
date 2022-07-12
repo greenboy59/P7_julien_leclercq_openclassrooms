@@ -7,7 +7,7 @@
       </h1>
       <img
         :src="user.image"
-        :alt="user.image"
+        alt="photo_de_profil"
         class="profile-picture"
         @click="goToProfile(user.userId)"
       />

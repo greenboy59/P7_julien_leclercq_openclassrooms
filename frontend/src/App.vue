@@ -90,6 +90,7 @@ input:focus {
 /* cards */
 .card {
   max-width: 100%;
+  width: 540px;
   height: fit-content;
   background: white;
   border-radius: 16px;

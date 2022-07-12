@@ -16,7 +16,7 @@
       <div class="post-header">
         <img
           :src="post.userImage"
-          :alt="post.userImage"
+          alt="photo_de_profil"
           class="profile-picture"
         />
         <div class="post-subtitle">
@@ -188,9 +188,7 @@ export default {
     },
 
     async onClickDislike(id) {
-      const axiosConfig = {
-        headers: { Authorization: `Bearer ${this.user.token}` },
-      }
+      const axiosConfig = { headers: { Authorization: `Bearer ${this.user.token}` } }
       this.data = { userId: this.user.userId };
 
       try {

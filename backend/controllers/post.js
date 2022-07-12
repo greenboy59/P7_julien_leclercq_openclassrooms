@@ -110,7 +110,7 @@ exports.deletePost = (req, res, next) => {
     .catch((error) => res.status(500).json({ error }));
 };
 
-// Ajoute ou retire un like
+// Ajoute ou retire un like. Méthode Axios findOneAndUpdate utilisée afin de récupérer le tableau des usersLiked et usersDisliked mis à jour
 exports.likePost = async (req, res, next) => {
   const postId = req.params?.id;
   const userId = req.body?.userId;
@@ -120,35 +120,35 @@ exports.likePost = async (req, res, next) => {
       const existingId = post.usersWhoLiked.find((id) => id === userId);
       // 1. Checker si ce user a déjà liké, si c'est le cas enlever le like
       if (existingId) {
-        await Post.updateOne(
+        const updatedPost = await Post.findOneAndUpdate(
           { _id: postId },
           { $pull: { usersWhoLiked: userId } },
+          { new: true }, // Permet de récupérer le tableau après mise à jour 
         );
-        const postUpdated = await Post.findOne({ _id: postId });
-        return res.status(201).json(postUpdated);
+        return res.status(201).json(updatedPost);
       }
       // 2. Checker les dislikes et si ce user a disliké, enlever le dislike et ajouter le like
       const userExistingInDislikes = post.usersWhoDisliked.find(
         (id) => id === userId,
       );
       if (userExistingInDislikes) {
-        await Post.updateOne(
+        const updatedPost = await Post.findOneAndUpdate(
           { _id: postId },
           {
             $pull: { usersWhoDisliked: userId },
             $push: { usersWhoLiked: userId },
           },
+          { new: true },  // Permet de récupérer le tableau après mise à jour 
         );
-        const postUpdated = await Post.findOne({ _id: postId });
-        return res.status(201).json(postUpdated);
+        return res.status(201).json(updatedPost);
       }
       // 3. Si aucun des cas plus haut n'est rencontré, ajouter le like
-      await Post.updateOne(
+      const updatedPost = await Post.findOneAndUpdate(
         { _id: postId },
         { $push: { usersWhoLiked: userId } },
+        { new: true },  // Permet de récupérer le tableau après mise à jour 
       );
-      const postUpdated = await Post.findOne({ _id: postId });
-      return res.status(201).json(postUpdated);
+      return res.status(201).json(updatedPost);
     } catch (err) {
       console.log(err);
       return res.status(err.statusCode).json(err);
@@ -157,8 +157,9 @@ exports.likePost = async (req, res, next) => {
   return res.status(400).json({ error: "missing required parameters" });
 };
 
-// Ajoute ou retire un dislike
+// Ajoute ou retire un dislike. Méthode Axios findOneAndUpdate utilisée afin de récupérer le tableau des usersLiked et usersDisliked mis à jour
 exports.dislikePost = async (req, res, next) => {
+  // Chainage optionnel afin de vérifier si req.params.id et req.body.userId ne sont pas null ou undefined
   const postId = req.params?.id;
   const userId = req.body?.userId;
   if (postId && userId) {
@@ -167,35 +168,35 @@ exports.dislikePost = async (req, res, next) => {
       const existingId = post.usersWhoDisliked.find((id) => id === userId);
       // 1. Checker les dislikes et si user a déjà disliké, enlever le dislike
       if (existingId) {
-        await Post.updateOne(
+        const updatedPost = await Post.findOneAndUpdate(
           { _id: postId },
           { $pull: { usersWhoDisliked: userId } },
+          { new: true },  // Permet de récupérer le tableau après mise à jour 
         );
-        const postUpdated = await Post.findOne({ _id: postId });
-        return res.status(201).json(postUpdated);
+        return res.status(201).json(updatedPost);
       }
       // 2. Checker si user a liké, si c'est le cas enlever le like puis ajouter dislike
       const userExistingInLikes = post.usersWhoLiked.find(
         (id) => id === userId,
       );
       if (userExistingInLikes) {
-        await Post.updateOne(
+        const updatedPost = await Post.findOneAndUpdate(
           { _id: postId },
           {
             $pull: { usersWhoLiked: userId },
             $push: { usersWhoDisliked: userId },
           },
+          { new: true },  // Permet de récupérer le tableau après mise à jour 
         );
-        const postUpdated = await Post.findOne({ _id: postId });
-        return res.status(201).json(postUpdated);
+        return res.status(201).json(updatedPost);
       }
       // 3. Si aucun des cas plus haut n'est rencontré, ajouter le dislike
-      await Post.updateOne(
+      const updatedPost = await Post.findOneAndUpdate(
         { _id: postId },
         { $push: { usersWhoDisliked: userId } },
+        { new: true },  // Permet de récupérer le tableau après mise à jour 
       );
-      const postUpdated = await Post.findOne({ _id: postId });
-      return res.status(201).json(postUpdated);
+      return res.status(201).json(updatedPost);
     } catch (err) {
       console.log(err);
       return res.status(err.statusCode).json(err);
