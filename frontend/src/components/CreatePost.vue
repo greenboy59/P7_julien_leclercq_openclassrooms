@@ -50,7 +50,7 @@
       </template>
       <template v-slot:secondary-subtitle><b>(max 5mo)</b></template>
       <template v-slot:upload-input>
-        <FilePreview @upload="setImage" />
+        <FilePreview @upload="setImage" :opacity='uploadInputOpacity'/>
       </template>
     </ModalWindow>
 
@@ -74,9 +74,10 @@ export default {
       textarea: "",
       containerElement: null,
       showModal: false,
+      uploadInputOpacity: 1
     };
   },
-
+  
   methods: {
     // Récupération de l'image
     setImage(payload) {
@@ -124,6 +125,26 @@ export default {
 </script>
 
 <style scoped>
+.label-file {
+  width: 100%;
+  height: 210px;
+  color: #fd2d01;
+  border-radius: 16px;
+  background-color: unset;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s all;
+  opacity: 0;
+}
+.label-file:hover {
+  box-shadow: 0.5px 0.5px 5px #fd2d01;
+  transition: 0.3s all;
+  opacity: 1;
+  cursor: pointer;
+}
 .fa-circle-xmark {
   position: absolute;
   top: -7px;
@@ -212,7 +233,7 @@ span {
   .user-title {
     flex-direction: column-reverse;
     align-items: baseline;
-    margin-top: 70px;
+    margin-top: 50px;
   }
   .card {
     width: 100%;

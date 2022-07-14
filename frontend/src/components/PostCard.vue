@@ -26,25 +26,23 @@
         maxlength="1500"
       >
       </textarea>
-      <div  v-if="post.image || image" id="post-image-wrapper"  @click="deleteImage(post._id)">
+      <div v-if="post.image" id="post-image-wrapper"  @click="modifyImage(post._id)">
         <img
          v-if="!image"
           :src="post.image"
           :alt="post.image"
           class="post-picture"
         />
+         <FilePreview @upload="setImage" @reload-image="reloadImage" />
       </div>
-
-      <FilePreview @upload="setImage" />
-
       <div v-if="user.userId === post.userId" class="posts-options">
-        <button class="button" @click="modifyPost(post._id)">
+        <button :disabled="!image" class="button modify-button" @click="modifyPost(post._id)">
           <i class="fas fa-edit modify"></i>
-          valider
+          valider les modifications
         </button>
-        <button class="button" @click="deletePost(post._id)">
+        <button class="button delete-button" @click="deletePost(post._id)">
           <i class="fas fa-trash-alt delete"></i>
-          supprimer
+          supprimer le post
         </button>
       </div>
     </form>
@@ -87,24 +85,16 @@ export default {
       this.image = payload;
     },
 
+     reloadImage() {
+      this.image = "";
+    },
+
      async deletePost(id) {
        const axiosConfig = { headers: { Authorization: `Bearer ${this.user.token}` } };
       try {
         await this.axios.delete("/posts/" + id, axiosConfig,);
         await this.$router.replace("/all-posts");
       } catch (err) {
-        console.log(err);
-      }
-    },
-
-    async deleteImage(id) {
-      const axiosConfig = { headers: { Authorization: `Bearer ${this.user.token}` } };
-      const image = "";
-      try {
-        await this.axios.put("/posts/" + id, image, axiosConfig, {
-        })
-        await this.$router.go("/");
-      }catch (err) {
         console.log(err);
       }
     },
@@ -130,6 +120,11 @@ export default {
 </script>
 
 <style scoped>
+.modify-button, .delete-button {
+  width: 50%;
+  font-size: 12px;
+  margin: 0 5px;
+}
 .post-header {
   display: flex;
   align-items: center;
@@ -157,32 +152,8 @@ post-subtitle {
   cursor: pointer;
 }
 #post-image-wrapper {
-  position: relative;
   cursor: pointer;
-}
-#post-image-wrapper::after {
-  content: "\f2ed";
-  opacity: 0;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: "Font Awesome 5 Free";
-  font-size: 3em;
-  color: rgb(204, 32, 32);
-  background: rgba(255, 255, 255, 0.6);
-}
-#post-image-wrapper:hover::after {
-  opacity: 1;
-}
-.button {
-  width: fit-content;
-  height: 50px;
-  font-size: 12px;
-  margin: 5px 5px 0 0;
+  position: relative;
 }
 .form-row__input {
   margin-bottom: 15px;

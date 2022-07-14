@@ -31,13 +31,6 @@ body {
   align-items: center;
   padding: 32px;
 }
-#logo {
-  position: absolute;
-  top: 15px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 300px;
-}
 img {
   object-fit: contain;
   max-width: 100%;
@@ -130,6 +123,7 @@ input:focus {
   border-radius: 8px;
   font-weight: 800;
   width: 100%;
+  height: 50px;
   padding: 16px;
   transition: 0.4s all ease-in-out;
 }

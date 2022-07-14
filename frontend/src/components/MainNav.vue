@@ -96,13 +96,16 @@ export default {
 }
 .logo {
   position: absolute;
-  top: 10px;
+  top: 15px;
   left: 15px;
   width: 15em;
 }
 @media (max-width: 540px) {
   .logo {
-    margin-left: 10px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
    }
   .nav-bar-buttons {
     height: 60px;
