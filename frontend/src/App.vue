@@ -47,6 +47,13 @@ li {
 a {
   text-decoration: none;
 }
+#logo {
+  position: absolute;
+  width: 300px;
+  top: 100px;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
 
 /* Forms */
 .form-row {

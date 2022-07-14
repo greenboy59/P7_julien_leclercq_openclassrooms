@@ -9,55 +9,52 @@
         accept="image/png, image/jpeg, image/gif" @input="pickFile" />
     </div>
     <button :disabled="isDisabled" class="button delete-image" @click="deleteImage()">
-      <i class="fa-solid fa-trash-can"></i>
+      <i class="fa-solid fa-circle-arrow-left"></i>
             Annuler
     </button>
   </div>
 </template>
 
 <script>
+
 export default {
   name: "FilePreview",
-
-  data() {
-    return {
-      previewImage: null,
-      isDisabled: true,
-    }
-  },
-
-  props: {
-    opacity: Number,
-  },
-
-  methods: {
-    selectImage() {
-      this.$refs.fileInput.click();
-    },
-
-    deleteImage() {
-      this.$refs.fileInput.value = null;
-      this.previewImage = null;
-      document.querySelector(".image-preview-wrapper").style.display = "none";
-      this.$emit("reload-image");
-      this.isDisabled = true;
-    },
-
-    pickFile() {
-      this.isDisabled = false;
-      let input = this.$refs.fileInput;
-      let file = input.files;
-      if (file && file[0]) {
-        let reader = new FileReader();
-        reader.onload = (e) => {
-          this.previewImage = e.target.result;
-          document.querySelector(".image-preview-wrapper").style.display = "block";
+    
+    data() {
+        return {
+            previewImage: null,
+            isDisabled: true,
         };
-        reader.readAsDataURL(file[0]);
-        this.$emit("upload", file[0]);
-      }
     },
-  },
+    props: {
+      opacity: Number,
+    },
+    methods: {
+        selectImage() {
+            this.$refs.fileInput.click();
+        },
+        deleteImage() {
+            this.$refs.fileInput.value = null;
+            this.previewImage = null;
+            document.querySelector(".image-preview-wrapper").style.display = "none";
+            this.$emit("reload-image");
+            this.isDisabled = true;
+        },
+        pickFile() {
+            this.isDisabled = false;
+            let input = this.$refs.fileInput;
+            let file = input.files;
+            if (file && file[0]) {
+                let reader = new FileReader();
+                reader.onload = (e) => {
+                    this.previewImage = e.target.result;
+                    document.querySelector(".image-preview-wrapper").style.display = "block";
+                };
+                reader.readAsDataURL(file[0]);
+                this.$emit("upload", file[0]);
+            }
+        },
+    },
 };
 </script>
 
@@ -78,7 +75,6 @@ position: relative;
   background-repeat: no-repeat;
   background-position: center center;
 }
-
 .image-preview-wrapper:before {
   display: block;
   margin: 0 auto;
@@ -90,11 +86,10 @@ position: relative;
   color: rgba(253, 45, 1, 0.6);
   content: "\f07b";
 }
-
 .image-preview-wrapper:hover:before {
   opacity: 1;
 }
-.fa-trash-can {
+.fa-circle-arrow-left {
   font-size: 1.2em;
 }
 .label-file {
@@ -130,7 +125,6 @@ position: relative;
 .fa-folder-plus {
   font-size: 5em;
 }
-
 button:disabled,
 button:disabled:hover {
   background-color: unset;

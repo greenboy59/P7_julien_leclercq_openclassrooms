@@ -5,53 +5,48 @@
         Bonjour,<br />
         <strong>{{ user.firstname }} {{ user.lastname }}</strong>
       </h1>
-      <img
-        :src="user.image"
-        alt="photo_de_profil"
-        class="profile-picture"
-        @click="goToProfile(user.userId)"
-      />
+      <img :src="user.image" alt="photo_de_profil" class="profile-picture" @click="goToProfile(user.userId)" />
     </div>
-      <input
-        readonly="readonly"
-        class="form-row__input input-appear"
-        @focus="showModal = true"
-        placeholder="De quoi voulez-vous parler ?"
-      />
+    <input readonly="readonly" class="form-row__input input-appear" @focus="showModal = true"
+      placeholder="De quoi voulez-vous parler ?" />
 
     <ModalWindow v-show="showModal" @close="showModal = false">
-      <template v-slot:validate>
-        <button type="submit" class="button" @click="publish()">Publier</button>
+
+      <template #title>
+        <h2>Quelque chose a dire?</h2>
+        <b>(max 1500 caractères)</b>
       </template>
-      <template v-slot:cancel>
+      <template #content>
+        <textarea 
+        v-model="textarea" 
+        class="form-row__input" 
+        name="post-text" 
+        cols="30" 
+        rows="10" 
+        minlength="1"
+        maxlength="1500" 
+        placeholder="Ecrivez quelque chose..." 
+      />
+        <h2 for="postPic">
+          Mettez en avant votre post avec une image ou un gif !
+        </h2>
+        <b>(max 5mo)</b>
+
+        <FilePreview 
+        :opacity='uploadInputOpacity'
+        :background-image='image'
+        @upload="setImage" 
+        @reload-image="reloadImage" 
+        />
+
+      </template>
+      <template #actions>
+        <button type="submit" class="button" @click="publish()">Publier</button>
         <button @click="showModal = false">
           <i class="fa-solid fa-circle-xmark"></i>
         </button>
       </template>
-      <template v-slot:title><h2>Quelque chose a dire?</h2></template>
-      <template v-slot:subtitle><b>(max 1500 caractères)</b></template>
-      <template v-slot:text-area>
-        <textarea
-          v-model="textarea"
-          class="form-row__input"
-          name="post-text"
-          cols="30"
-          rows="10"
-          minlength="1"
-          maxlength="1500"
-          placeholder="Ecrivez quelque chose..."
-        >
-        </textarea>
-      </template>
-      <template v-slot:secondary-title>
-        <h2 for="postPic">
-          Mettez en avant votre post avec une image ou un gif !
-        </h2>
-      </template>
-      <template v-slot:secondary-subtitle><b>(max 5mo)</b></template>
-      <template v-slot:upload-input>
-        <FilePreview @upload="setImage" :opacity='uploadInputOpacity'/>
-      </template>
+
     </ModalWindow>
 
   </div>
@@ -72,16 +67,19 @@ export default {
       errors: [],
       image: "",
       textarea: "",
-      containerElement: null,
       showModal: false,
       uploadInputOpacity: 1
     };
   },
-  
+
   methods: {
     // Récupération de l'image
     setImage(payload) {
-      this.image = payload;
+       this.image = payload;
+    },
+
+    reloadImage() {
+      this.image = "";
     },
 
     goToProfile(id) {
@@ -113,12 +111,10 @@ export default {
       }
     },
 
-    // TODO Attention lors d'un post avec image puis suppression de celui-ci, en créant un autre post dans la foulée cela laisse l'ancienne image par défaut
-    resetForm () { 
-       document.querySelector(".imagePreviewWrapper").style.display = "none";
-        document.getElementById("input").value = "";
-        this.textarea = "";
-        this.showModal = false;
+    resetForm() {
+      this.textarea = "";
+      this.reloadImage;
+      this.showModal = false;
     }
   },
 };
@@ -139,12 +135,14 @@ export default {
   transition: 0.3s all;
   opacity: 0;
 }
+
 .label-file:hover {
   box-shadow: 0.5px 0.5px 5px #fd2d01;
   transition: 0.3s all;
   opacity: 1;
   cursor: pointer;
 }
+
 .fa-circle-xmark {
   position: absolute;
   top: -7px;
@@ -152,24 +150,29 @@ export default {
   font-size: 2.5em;
   color: red;
 }
+
 .input-appear {
   animation: input-appear 1s 0.5s ease forwards;
 }
+
 @keyframes input-appear {
   from {
     transform: translateY(-1000%);
   }
+
   to {
     transform: translateY(0%);
     opacity: 1;
   }
 }
+
 .user-title {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 15px;
 }
+
 .profile-picture {
   width: 90px;
   height: 90px;
@@ -177,29 +180,35 @@ export default {
   object-fit: cover;
   cursor: pointer;
 }
+
 h1 {
   color: rgba(255, 255, 255, 0.6);
 }
+
 strong {
   color: white;
   font-weight: bold;
   font-size: 1.2em;
 }
+
 h2,
 label {
   font-size: 1.2em;
   font-weight: 400;
 }
+
 b {
   color: #aaa;
   font-size: 0.8em;
 }
+
 h2,
 b {
   text-align: left;
   display: block;
   margin: 10px 0;
 }
+
 .button {
   width: fit-content;
   display: block;
@@ -207,11 +216,13 @@ b {
   top: 35px;
   right: 25px;
 }
+
 .form-row {
   display: flex;
   justify-content: space-between;
   margin: unset;
 }
+
 input {
   transform: translateY(-1000%);
   opacity: 0;
@@ -223,29 +234,35 @@ input {
   border-radius: 25px;
   border-left-style: none;
 }
+
 span {
   padding: 6px;
 }
+
 @media (max-width: 540px) {
   #create-post-container {
     padding: 0 25px;
   }
+
   .user-title {
     flex-direction: column-reverse;
     align-items: baseline;
     margin-top: 50px;
   }
+
   .card {
     width: 100%;
     border-radius: 0;
   }
+
   #display-create-post {
     padding: 0 25px;
   }
+
   .fa-circle-xmark {
-  left: 25px;
-  top: -20px;
-  font-size: 3em;
+    left: 25px;
+    top: -20px;
+    font-size: 3em;
   }
 }
 </style>

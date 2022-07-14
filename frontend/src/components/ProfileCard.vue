@@ -2,21 +2,26 @@
   <div class="card">
     <h1 class="card__title">Mon profil</h1>
     <h3 class="card__subtitle">
-      {{ user.firstname }} 
+      {{ user.firstname }}
       {{ user.lastname }}
-      <span> <br> Cliquez sur l'image pour la modifier</span>
-      </h3>
-      <div v-if="!image" id="image-wrapper">
-      <img
-      :src="user.image" 
-      alt="photo de profil"
-      class="profile-picture" 
-      />
+      <span>
+        <br />
+        Cliquez sur l'image pour la modifier</span
+      >
+    </h3>
+    <div v-if="!image" id="image-wrapper">
+      <img :src="user.image" alt="photo de profil" class="profile-picture" />
     </div>
-    <FilePreview class="file-preview" @upload="setImage" @reload-image="reloadImage" />
-    <button :disabled="!image" 
-    class="button validate-button" 
-    @click="modifyUser(user.userId)">
+    <FilePreview
+      class="file-preview"
+      @upload="setImage"
+      @reload-image="reloadImage"
+    />
+    <button
+      :disabled="!image"
+      class="button validate-button"
+      @click="modifyUser(user.userId)"
+    >
       <i class="fas fa-edit modify"></i>
       Valider la modification
     </button>
@@ -39,7 +44,6 @@ export default {
     };
   },
   methods: {
-
     // Récupération de l'image
     setImage(payload) {
       this.image = payload;
@@ -54,10 +58,16 @@ export default {
       formData.append("image", this.image);
 
       try {
-        const axiosConfig = { headers: { Authorization: `Bearer ${this.user.token}` } }
-        const { data } = await this.axios.put("/auth/" + id, formData, axiosConfig)
+        const axiosConfig = {
+          headers: { Authorization: `Bearer ${this.user.token}` },
+        };
+        const { data } = await this.axios.put(
+          "/auth/" + id,
+          formData,
+          axiosConfig,
+        );
         await this.$router.replace("/all-posts");
-        this.user.image = data.image
+        this.user.image = data.image;
       } catch (err) {
         console.log(err);
       }
