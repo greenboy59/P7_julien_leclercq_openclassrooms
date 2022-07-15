@@ -3,59 +3,85 @@
     <h2>Posts</h2>
     <span class="search-bar">
       <i class="fas fa-search"></i>
-      <input type="text" placeholder="Rechercher par nom" v-model="inputFilter" />
+      <input
+        type="text"
+        placeholder="Rechercher par nom"
+        v-model="inputFilter"
+      />
     </span>
     <div class="error-message" v-if="inputFilter && !filteredPosts.length">
       <p>Aucun résultat trouvé !</p>
     </div>
     <div :key="post._id" v-for="post in filteredPosts" class="card">
       <div class="post-header">
-        <img :src="post.userImage" alt="photo_de_profil" class="profile-picture" />
+        <img
+          :src="post.userImage"
+          alt="photo_de_profil"
+          class="profile-picture"
+        />
         <div class="post-subtitle">
           <h4>{{ post.userName }}</h4>
           <div class="post-date">le {{ post.date }}</div>
           <span class="total-likes-dislikes">
-            <i class="fa-regular fa-thumbs-up">&nbsp;<span>{{ post.usersWhoLiked.length }}</span></i>
-            <i class="fa-regular fa-thumbs-down">&nbsp;<span>{{ post.usersWhoDisliked.length }}</span></i>
+            <i class="fa-regular fa-thumbs-up"
+              >&nbsp;<span>{{ post.usersWhoLiked.length }}</span></i
+            >
+            <i class="fa-regular fa-thumbs-down"
+              >&nbsp;<span>{{ post.usersWhoDisliked.length }}</span></i
+            >
           </span>
         </div>
       </div>
       <p>{{ post.description }}</p>
-      <img v-if="post.image" :src="post.image" :alt="post.image" class="post-picture" />
+      <img
+        v-if="post.image"
+        :src="post.image"
+        :alt="post.image"
+        class="post-picture"
+      />
       <div class="posts-options">
         <div class="like-dislike-buttons">
-          <button :class="[
-            'button',
-            'like',
-            post.usersWhoLiked.includes(user.userId) ? 'liked' : '',
-          ]" @click="onClickLike(post._id)">
+          <button
+            :class="[
+              'button',
+              'like',
+              post.usersWhoLiked.includes(user.userId) ? 'liked' : '',
+            ]"
+            @click="onClickLike(post._id)"
+          >
             <i class="fa-regular fa-thumbs-up"></i>
-            <template v-if="post.usersWhoLiked.includes(user.userId)"><b>Liké !</b></template>
+            <template v-if="post.usersWhoLiked.includes(user.userId)"
+              ><b>Liké !</b></template
+            >
           </button>
 
-          <button :class="[
-            'button',
-            'dislike',
-            post.usersWhoDisliked.includes(user.userId) ? 'disliked' : '',
-          ]" @click="onClickDislike(post._id)">
+          <button
+            :class="[
+              'button',
+              'dislike',
+              post.usersWhoDisliked.includes(user.userId) ? 'disliked' : '',
+            ]"
+            @click="onClickDislike(post._id)"
+          >
             <i class="fa-regular fa-thumbs-down"></i>
-            <template v-if="post.usersWhoDisliked.includes(user.userId)"><b>Disliké !</b>
+            <template v-if="post.usersWhoDisliked.includes(user.userId)"
+              ><b>Disliké !</b>
             </template>
           </button>
         </div>
         <!-- TODO Trouver un meilleur moyen de laisser l'accès de modification des posts par l'admin car peut être facilement contourné -->
-        <div v-if="
-          user.userId === post.userId ||
-          user.userId === '62b84907b1b86ea7c0067b44'
-         " class="modify-delete-buttons">
+        <div
+          v-if="user.userId === post.userId"
+          class="modify-delete-buttons"
+        >
           <button class="button modify-button" @click="modifyPost(post._id)">
             <i class="fas fa-edit modify"></i>
             <b>modifier</b>
           </button>
 
-          <button 
-          class="button delete-button" 
-          @click="showModalDeletePost(post._id)"
+          <button
+            class="button delete-button"
+            @click="showModalDeletePost(post._id)"
           >
             <i class="fas fa-trash-alt delete"></i>
             <b>Supprimer</b>
@@ -64,21 +90,23 @@
           <ModalWindow v-show="showModal" @close="showModal = false">
             <template #title>
               <h3>Voulez-vous vraiment supprimer ce post ?</h3>
-              </template>
+            </template>
             <template #actions>
               <div class="modal-actions-buttons">
-              <button 
-              class="button modal-button-validate" 
-              @click="deletePost(post._id)">
-                Valider
-              </button>
-              <button 
-              class="button modal-button-cancel" 
-              @click="showModal = false">
-                Annuler
-              </button>
+                <button
+                  class="button modal-button-validate"
+                  @click="deletePost(post._id)"
+                >
+                  Valider
+                </button>
+                <button
+                  class="button modal-button-cancel"
+                  @click="showModal = false"
+                >
+                  Annuler
+                </button>
               </div>
-              </template>
+            </template>
           </ModalWindow>
         </div>
       </div>
@@ -92,7 +120,7 @@ import UserClass from "@/classes/UserClass";
 import ModalWindow from "@/components/ModalWindow";
 
 export default {
-  name: "AllPostsList",
+  name: "PostsList",
   components: { ModalWindow },
 
   props: {
@@ -129,8 +157,7 @@ export default {
     },
 
     showModalDeletePost(postId) {
-      this.postToDelete = postId,
-      this.showModal = true
+      (this.postToDelete = postId), (this.showModal = true);
     },
 
     async deletePost() {
@@ -153,7 +180,11 @@ export default {
       this.data = { userId: this.user.userId };
 
       try {
-        const { data } = await this.axios.post(`/posts/${id}/like`, this.data, axiosConfig);
+        const { data } = await this.axios.post(
+          `/posts/${id}/like`,
+          this.data,
+          axiosConfig,
+        );
         this.$emit("post-liked", data);
       } catch (err) {
         console.log(err);
@@ -161,11 +192,17 @@ export default {
     },
 
     async onClickDislike(id) {
-      const axiosConfig = { headers: { Authorization: `Bearer ${this.user.token}` } }
+      const axiosConfig = {
+        headers: { Authorization: `Bearer ${this.user.token}` },
+      };
       this.data = { userId: this.user.userId };
 
       try {
-        const { data } = await this.axios.post(`/posts/${id}/dislike`, this.data, axiosConfig);
+        const { data } = await this.axios.post(
+          `/posts/${id}/dislike`,
+          this.data,
+          axiosConfig,
+        );
         this.$emit("post-liked", data);
       } catch (err) {
         console.log(err);
@@ -199,11 +236,11 @@ export default {
   gap: 10px;
 }
 
-.total-likes-dislikes>.fa-thumbs-up {
+.total-likes-dislikes > .fa-thumbs-up {
   color: #22780f;
 }
 
-.total-likes-dislikes>.fa-thumbs-down {
+.total-likes-dislikes > .fa-thumbs-down {
   color: firebrick;
 }
 
@@ -313,13 +350,17 @@ input {
   box-shadow: inset -150px 0px 0px 0px #fd2d01;
   transform: none;
 }
+
 .modal-actions-buttons {
   display: flex;
 }
-.modal-button-cancel, .modal-button-validate {
+
+.modal-button-cancel,
+.modal-button-validate {
   margin: 30px 15px 0 15px;
   width: 50%;
 }
+
 @media (max-width: 540px) {
   .profile-picture {
     width: 65px;
@@ -335,13 +376,13 @@ input {
     width: 100%;
   }
 
-  .modify-button>b,
-  .delete-button>b {
+  .modify-button > b,
+  .delete-button > b {
     display: none;
   }
 
-  .liked>b,
-  .disliked>b {
+  .liked > b,
+  .disliked > b {
     display: none;
   }
 

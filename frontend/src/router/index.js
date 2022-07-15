@@ -2,7 +2,7 @@ import { createWebHistory, createRouter } from "vue-router";
 import Login from "@/views/LoginPage.vue";
 import SignUp from "@/views/SignUpPage.vue";
 import ProfilePage from "@/views/ProfilePage.vue";
-import AllPostsPage from "@/views/AllPostsPage.vue";
+import PostsPage from "@/views/PostsPage";
 import PostPage from "@/views/PostPage.vue";
 import UserClass from "@/classes/UserClass";
 
@@ -34,7 +34,7 @@ const routes = [
   {
     path: "/all-posts",
     name: "posts",
-    component: AllPostsPage,
+    component: PostsPage,
     meta: { auth: true },
   },
   {

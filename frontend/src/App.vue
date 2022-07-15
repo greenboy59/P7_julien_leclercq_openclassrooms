@@ -1,16 +1,20 @@
 <template>
-  <router-view></router-view>
+  <div>
+    <TokenValidity />
+    <router-view />
+  </div>
 </template>
 
 <script>
+import TokenValidity from "@/components/TokenValidity";
+
 export default {
   name: "App",
-  components: {},
+  components: { TokenValidity },
 };
 </script>
 
 <style>
-
 /* General CSS rules */
 @import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap");
 * {
@@ -52,7 +56,7 @@ a {
   width: 300px;
   top: 100px;
   left: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
 }
 
 /* Forms */
@@ -154,10 +158,11 @@ button:disabled:hover {
   background-color: gainsboro;
   cursor: not-allowed;
 }
-.modal-button-validate, .modal-button-cancel {
-  width: calc(50% - 5px);  
+.modal-button-validate,
+.modal-button-cancel {
+  width: calc(50% - 5px);
   width: auto;
-} 
+}
 
 /* Autres */
 .errors-messages {
@@ -171,7 +176,7 @@ button:disabled:hover {
     padding: 0;
     justify-content: unset;
   }
-   .card {
+  .card {
     border-radius: 0;
   }
 }

@@ -34,6 +34,7 @@ exports.signup = (req, res, next) => {
           firstname: req.body.firstname,
           email: req.body.email,
           password: hash,
+          role: role || "basic" 
         });
         user
           .save()
@@ -76,6 +77,7 @@ exports.login = (req, res, next) => {
               process.env.RANDOM_TOKEN_SECRET,
               { expiresIn: "6h" },
             ),
+            admin: { admin: user._id = '62b84907b1b86ea7c0067b44' }
           });
         })
         .catch((error) => res.status(500).json({ error }));
