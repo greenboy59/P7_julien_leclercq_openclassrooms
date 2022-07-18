@@ -15,7 +15,9 @@ exports.signup = (req, res, next) => {
       req.file.filename
     }`;
   } else {
-    req.body.file = `${req.protocol}://${req.get("host")}/images/defaultProfilePic.png`;
+    req.body.file = `${req.protocol}://${req.get(
+      "host",
+    )}/images/defaultProfilePic.png`;
   }
 
   if (
@@ -34,7 +36,6 @@ exports.signup = (req, res, next) => {
           firstname: req.body.firstname,
           email: req.body.email,
           password: hash,
-          role: role || "basic" 
         });
         user
           .save()
@@ -67,18 +68,35 @@ exports.login = (req, res, next) => {
           if (!valid) {
             return res.status(401).json({ error: "Mot de passe incorrect !" });
           }
-          res.status(200).json({
-            userId: user._id,
-            image: user.image,
-            firstname: user.firstname,
-            lastname: user.lastname,
-            token: jwt.sign(
-              { userId: user._id },
-              process.env.RANDOM_TOKEN_SECRET,
-              { expiresIn: "6h" },
-            ),
-            admin: { admin: user._id = '62b84907b1b86ea7c0067b44' }
-          });
+          // Définition de l'admin en ajoutant admin:true dans le token
+          if (req.body.email === "admin@groupomania.com") {
+            res.status(200).json({
+              userId: user._id,
+              image: user.image,
+              firstname: user.firstname,
+              lastname: user.lastname,
+              token: jwt.sign(
+                {
+                  userId: user._id,
+                  admin: true,
+                },
+                process.env.RANDOM_TOKEN_SECRET,
+                { expiresIn: "6h" },
+              ),
+            });
+          } else {
+            res.status(200).json({
+              userId: user._id,
+              image: user.image,
+              firstname: user.firstname,
+              lastname: user.lastname,
+              token: jwt.sign(
+                { userId: user._id },
+                process.env.RANDOM_TOKEN_SECRET,
+                { expiresIn: "6h" },
+              ),
+            });
+          }
         })
         .catch((error) => res.status(500).json({ error }));
     })
@@ -87,31 +105,32 @@ exports.login = (req, res, next) => {
 
 // Modifie la photo de profil
 exports.modifyUser = (req, res, next) => {
-  User.findOne({ _id: req.params.id })
-    .then((user) => {
-      const defaultProfilePic = "defaultProfilePic.png"
-      if (user.image && req.file.filename !== defaultProfilePic) {
-        const url = "http://localhost:3000/"
-        const imageToDelete = user.image.split(url).join('');
-        fs.unlink(`${imageToDelete}`, (error) => {
-          if (error) throw error;
-        });
-      }
- 
-      // Il faut mettre à jour le user avec la nouvelle image dans bdd
-      const userObject = req.file
-        ? {
-          image: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
+  User.findOne({ _id: req.params.id }).then((user) => {
+    const defaultProfilePic = "defaultProfilePic.png";
+    if (user.image && req.file.filename !== defaultProfilePic) {
+      const url = "http://localhost:3000/";
+      const imageToDelete = user.image.split(url).join("");
+      fs.unlink(`${imageToDelete}`, (error) => {
+        if (error) throw error;
+      });
+    }
+
+    // Il faut mettre à jour le user avec la nouvelle image dans bdd
+    const userObject = req.file
+      ? {
+          image: `${req.protocol}://${req.get("host")}/images/${
+            req.file.filename
+          }`,
         }
-        : {
+      : {
           image: req.body.file,
         };
-      const updatedUser = User.findOneAndUpdate(
-        { _id: req.params.id },
-        { ...userObject, _id: req.params.id },
-        { new: true }
-      )
-        .then(( updatedUser) => res.status(200).json( updatedUser))
-        .catch((error) => res.status(400).json({ error }))
-    })
+    const updatedUser = User.findOneAndUpdate(
+      { _id: req.params.id },
+      { ...userObject, _id: req.params.id },
+      { new: true },
+    )
+      .then((updatedUser) => res.status(200).json(updatedUser))
+      .catch((error) => res.status(400).json({ error }));
+  });
 };

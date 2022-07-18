@@ -68,29 +68,40 @@ exports.createPost = (req, res, next) => {
 
 // Modifie un post
 exports.modifyPost = (req, res, next) => {
-  if (req.body.oldImage) {
-    // <- si post.file n'est pas null on supprime le fichier existant
-    fs.unlink(`images/${req.body.oldImage}`, (error) => {
-      if (error) throw err;
-    });
-  }
-
-  const postObject = req.file
-    ? {
-        ...req.body,
-        image: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`,
+  Post.findOne({ _id: req.params.id })
+    .then((post) => {
+      if (post.image) {
+        const filename = post.image.split("/images/")[1];
+        fs.unlink(`images/${filename}`, (error) => {
+          if (error) throw err;
+        });
       }
-    : {
-        ...req.body,
-        image: req.body.file,
-      };
 
-  // Modification du post si vérif de l'id est ok,sinon envoi d'une erreur code 403
-  Post.updateOne({ _id: req.params.id }, { ...postObject, _id: req.params.id })
-    .then(() => res.status(200).json({ message: "Post modifié !" }))
-    .catch((error) =>
-      res.status(403).json({ error: error, message: "Requête non autorisée" }),
-    );
+      const postObject = req.file
+        ? {
+            ...req.body,
+            image: `${req.protocol}://${req.get("host")}/images/${
+              req.file.filename
+            }`,
+          }
+        : {
+            ...req.body,
+            image: req.body.file,
+          };
+
+      // Modification du post si vérif de l'id est ok,sinon envoi d'une erreur code 403
+      Post.updateOne(
+        { _id: req.params.id },
+        { ...postObject, _id: req.params.id },
+      )
+        .then(() => res.status(200).json({ message: "Post modifié !" }))
+        .catch((error) =>
+          res
+            .status(403)
+            .json({ error: error, message: "Requête non autorisée" }),
+        );
+    })
+    .catch((error) => res.status(500).json({ error }));
 };
 
 // Supprime un post
@@ -123,7 +134,7 @@ exports.likePost = async (req, res, next) => {
         const updatedPost = await Post.findOneAndUpdate(
           { _id: postId },
           { $pull: { usersWhoLiked: userId } },
-          { new: true }, // Permet de récupérer le tableau après mise à jour 
+          { new: true }, // Permet de récupérer le tableau après mise à jour
         );
         return res.status(201).json(updatedPost);
       }
@@ -138,7 +149,7 @@ exports.likePost = async (req, res, next) => {
             $pull: { usersWhoDisliked: userId },
             $push: { usersWhoLiked: userId },
           },
-          { new: true },  // Permet de récupérer le tableau après mise à jour 
+          { new: true }, // Permet de récupérer le tableau après mise à jour
         );
         return res.status(201).json(updatedPost);
       }
@@ -146,7 +157,7 @@ exports.likePost = async (req, res, next) => {
       const updatedPost = await Post.findOneAndUpdate(
         { _id: postId },
         { $push: { usersWhoLiked: userId } },
-        { new: true },  // Permet de récupérer le tableau après mise à jour 
+        { new: true }, // Permet de récupérer le tableau après mise à jour
       );
       return res.status(201).json(updatedPost);
     } catch (err) {
@@ -171,7 +182,7 @@ exports.dislikePost = async (req, res, next) => {
         const updatedPost = await Post.findOneAndUpdate(
           { _id: postId },
           { $pull: { usersWhoDisliked: userId } },
-          { new: true },  // Permet de récupérer le tableau après mise à jour 
+          { new: true }, // Permet de récupérer le tableau après mise à jour
         );
         return res.status(201).json(updatedPost);
       }
@@ -186,7 +197,7 @@ exports.dislikePost = async (req, res, next) => {
             $pull: { usersWhoLiked: userId },
             $push: { usersWhoDisliked: userId },
           },
-          { new: true },  // Permet de récupérer le tableau après mise à jour 
+          { new: true }, // Permet de récupérer le tableau après mise à jour
         );
         return res.status(201).json(updatedPost);
       }
@@ -194,7 +205,7 @@ exports.dislikePost = async (req, res, next) => {
       const updatedPost = await Post.findOneAndUpdate(
         { _id: postId },
         { $push: { usersWhoDisliked: userId } },
-        { new: true },  // Permet de récupérer le tableau après mise à jour 
+        { new: true }, // Permet de récupérer le tableau après mise à jour
       );
       return res.status(201).json(updatedPost);
     } catch (err) {

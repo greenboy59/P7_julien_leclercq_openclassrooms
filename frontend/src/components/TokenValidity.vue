@@ -12,40 +12,40 @@
 </template>
 
 <script>
-import ModalWindow from '@/components/ModalWindow'
-import { checkTokenValidity } from '@/helpers/utils'
-import UserClass from '@/classes/UserClass'
+import ModalWindow from "@/components/ModalWindow";
+import { checkTokenValidity } from "@/helpers/utils";
+import UserClass from "@/classes/UserClass";
 
 export default {
-  name: 'TokenValidity',
+  name: "TokenValidity",
   components: { ModalWindow },
 
-  async beforeMount () {
+  async beforeMount() {
     if (UserClass.isAuthenticated) {
-      const isTokenValid = checkTokenValidity()
+      const isTokenValid = checkTokenValidity();
       if (!isTokenValid) {
-        return this.logoutAndShowModal()
+        return this.logoutAndShowModal();
       }
     }
   },
 
-  data () {
+  data() {
     return {
-      showModal: false
-    }
+      showModal: false,
+    };
   },
 
   methods: {
-    logoutAndShowModal () {
-      localStorage.removeItem('user')
-      this.showModal = true
+    logoutAndShowModal() {
+      localStorage.removeItem("user");
+      this.showModal = true;
     },
 
-    redirectToLogin () {
-      this.$router.go(0)
-    }
-  }
-}
+    redirectToLogin() {
+      this.$router.go(0);
+    },
+  },
+};
 </script>
 
 <style scoped>

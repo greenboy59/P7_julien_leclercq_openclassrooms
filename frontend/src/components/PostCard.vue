@@ -41,7 +41,7 @@
 
         <FilePreview @upload="setImage" @reload-image="reloadImage" />
       </div>
-      <div v-if="user.userId === post.userId" class="post-options">
+      <div v-if="user.userId === post.userId || isAdmin === true" class="post-options">
         <button class="button modify-button" @click="modifyPost(post._id)">
           <i class="fas fa-edit modify"></i>
           valider les modifications
@@ -66,6 +66,7 @@ export default {
   data() {
     return {
       user: UserClass.user,
+      isAdmin: UserClass.isAdmin,
       post: "",
       id: this.$route.params.id,
       image: "",

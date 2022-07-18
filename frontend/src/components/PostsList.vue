@@ -69,9 +69,8 @@
             </template>
           </button>
         </div>
-        <!-- TODO Trouver un meilleur moyen de laisser l'accès de modification des posts par l'admin car peut être facilement contourné -->
         <div
-          v-if="user.userId === post.userId"
+          v-if="user.userId === post.userId || isAdmin === true"
           class="modify-delete-buttons"
         >
           <button class="button modify-button" @click="modifyPost(post._id)">
@@ -138,6 +137,7 @@ export default {
       message: "",
       showModal: false,
       postToDelete: null,
+      isAdmin: UserClass.isAdmin,
     };
   },
 

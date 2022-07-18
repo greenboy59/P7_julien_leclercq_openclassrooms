@@ -47,9 +47,6 @@
           >
             Se connecter
           </button>
-          <!-- TO DO loading text in button -->
-          <!-- <span v-if="status == 'loading'">Connexion en cours...</span>
-        // <span v-else>Connexion</span> -->
         </div>
       </form>
       <div class="errors-messages" v-if="errors.length">
@@ -120,6 +117,7 @@ export default {
         this.errors.push(err.response.data.error)
       }
     },
+
   },
 };
 </script>
