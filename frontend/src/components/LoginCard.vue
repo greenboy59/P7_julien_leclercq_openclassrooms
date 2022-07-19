@@ -94,9 +94,7 @@ export default {
       if (!this.password) {
         this.errors.push("Un mot de passe est requis.");
       } else if (!regExpStrongPassword.test(this.password)) {
-        this.errors.push(
-          "Votre mot de passe est invalid (minimum 8 caractères dont: 1 caractère spécial, 1 chiffre, 1 majuscule et 1 minuscule).",
-        );
+        this.errors.push("Votre mot de passe est invalid (minimum 8 caractères dont: 1 caractère spécial, 1 chiffre, 1 majuscule et 1 minuscule).");
       }
     },
 
@@ -106,27 +104,27 @@ export default {
         const { data } = await this.axios.post("/auth/login", {
           email: this.email,
           password: this.password,
-        })
+        });
         // Récupération des infos du user afin de les envoyer dans le local storage
         this.axios.defaults.headers.common["Authorization"] = "Bearer" + data.token;
         UserClass.setUser(data);
         // Dès que les data ont bien été envoyées a l'API, on envoi l'utilisateur vers la page des posts
         await this.$router.replace("/all-posts");
       } catch (err) {
-        console.log(err)
-        this.errors.push(err.response.data.error)
+        console.log(err);
+        this.errors.push(err.response.data.error);
       }
     },
-
   },
 };
 </script>
 
 <style scoped>
 @media (max-width: 540px) {
-  .card {
-    border-radius: 0;
-    width: 100%;
+  .card__subtitle {
+    margin-top: 20px;
+    flex-direction: column;
+    text-align: center;
   }
 }
 </style>

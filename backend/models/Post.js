@@ -6,12 +6,12 @@ const postSchema = mongoose.Schema({
   userName: { type: String, required: true },
   description: { type: String, required: true },
   image: { type: String, required: false },
-  userImage: { type: String, quired: true},
-  date: {type: String, required: true},
+  userImage: { type: String, quired: true },
+  date: { type: String, required: true },
   usersWhoLiked: { type: [String], required: true },
   usersWhoDisliked: { type: [String], required: true },
-  comments: {type: [String], required: false}
+  comments: { type: [String], required: false }
 });
 
-// Export du schéma en tant que modèle mongoose appelé "Post"
+// Export du modèle mongoose
 module.exports = mongoose.model('Post', postSchema);

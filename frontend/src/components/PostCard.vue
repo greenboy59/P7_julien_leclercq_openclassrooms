@@ -96,7 +96,7 @@ export default {
       post: "",
       id: this.$route.params.id,
       image: "",
-       showModal: false,
+      showModal: false,
       postToDelete: null,
     };
   },
@@ -166,28 +166,34 @@ span {
   display: block;
   color: #fd2d01;
 }
+
 .post-options {
   display: flex;
   justify-content: space-between;
   gap: 15px;
   margin-top: 10px;
 }
+
 .modify-button,
 .delete-button {
   width: 50%;
   font-size: 12px;
 }
+
 .post-header {
   display: flex;
   align-items: center;
   margin-bottom: 15px;
 }
+
 .post-date {
   color: #aaa;
 }
+
 post-subtitle {
   flex-direction: column;
 }
+
 .profile-picture {
   display: inline-block;
   width: 50px;
@@ -197,6 +203,7 @@ post-subtitle {
   object-fit: cover;
   object-position: top;
 }
+
 .post-picture {
   position: absolute;
   margin: 0 auto;
@@ -204,16 +211,20 @@ post-subtitle {
   height: 210px;
   cursor: pointer;
 }
+
 #post-image-wrapper {
   cursor: pointer;
   position: relative;
 }
+
 .form-row__input {
   margin-bottom: 15px;
 }
+
 .modal-actions-buttons {
   display: flex;
 }
+
 .modal-button-cancel,
 .modal-button-validate {
   margin: 30px 15px 0 15px;

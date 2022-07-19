@@ -2,11 +2,7 @@
   <div>
     <MainNav />
     <CreatePost @post-created="onCreated" />
-    <PostsList
-      :posts="posts"
-      @post-deleted="onDeleted"
-      @post-liked="updatePostLikes"
-    />
+    <PostsList :posts="posts" @post-deleted="onDeleted" @post-liked="updatePostLikes" />
   </div>
 </template>
 
@@ -28,9 +24,7 @@ export default {
   },
 
   async beforeMount() {
-    const axiosConfig = {
-      headers: { Authorization: `Bearer ${this.user.token}` },
-    };
+    const axiosConfig = { headers: { Authorization: `Bearer ${this.user.token}` } };
     const { data } = await this.axios.get("/posts", axiosConfig);
     this.posts = data;
   },

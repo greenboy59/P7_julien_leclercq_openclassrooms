@@ -1,5 +1,5 @@
 <template>
-    <SignUpCard />
+  <SignUpCard />
 </template>
 
 <script>

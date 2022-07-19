@@ -1,7 +1,7 @@
 const Post = require("../models/Post");
 const fs = require("fs");
 
-// Récupère l'intégralité des posts
+// Récupèration de l'intégralité des posts
 exports.getAllPosts = (req, res, next) => {
   Post.find()
     .then((posts) => {
@@ -12,7 +12,7 @@ exports.getAllPosts = (req, res, next) => {
     });
 };
 
-// Récupère un post
+// Récupèration d'un post
 exports.getOnePost = (req, res, next) => {
   Post.findOne({ _id: req.params.id })
     .then((post) => {
@@ -25,12 +25,11 @@ exports.getOnePost = (req, res, next) => {
     });
 };
 
-// Créer un nouveau post
+// Création d'un nouveau post
 exports.createPost = (req, res, next) => {
   if (req.file) {
-    req.body.file = `${req.protocol}://${req.get("host")}/images/${
-      req.file.filename
-    }`;
+    req.body.file = `${req.protocol}://${req.get("host")}/images/${req.file.filename
+      }`;
   } else {
     req.body.file = null;
   }
@@ -66,7 +65,7 @@ exports.createPost = (req, res, next) => {
   }
 };
 
-// Modifie un post
+// Modification d'un post
 exports.modifyPost = (req, res, next) => {
   Post.findOne({ _id: req.params.id })
     .then((post) => {
@@ -79,15 +78,14 @@ exports.modifyPost = (req, res, next) => {
 
       const postObject = req.file
         ? {
-            ...req.body,
-            image: `${req.protocol}://${req.get("host")}/images/${
-              req.file.filename
+          ...req.body,
+          image: `${req.protocol}://${req.get("host")}/images/${req.file.filename
             }`,
-          }
+        }
         : {
-            ...req.body,
-            image: req.body.file,
-          };
+          ...req.body,
+          image: req.body.file,
+        };
 
       // Modification du post si vérif de l'id est ok,sinon envoi d'une erreur code 403
       Post.updateOne(
@@ -104,7 +102,7 @@ exports.modifyPost = (req, res, next) => {
     .catch((error) => res.status(500).json({ error }));
 };
 
-// Supprime un post
+// Suppression d'un post
 exports.deletePost = (req, res, next) => {
   Post.findOne({ _id: req.params.id })
     .then((post) => {
@@ -149,7 +147,7 @@ exports.likePost = async (req, res, next) => {
             $pull: { usersWhoDisliked: userId },
             $push: { usersWhoLiked: userId },
           },
-          { new: true }, // Permet de récupérer le tableau après mise à jour
+          { new: true }, 
         );
         return res.status(201).json(updatedPost);
       }
@@ -157,7 +155,7 @@ exports.likePost = async (req, res, next) => {
       const updatedPost = await Post.findOneAndUpdate(
         { _id: postId },
         { $push: { usersWhoLiked: userId } },
-        { new: true }, // Permet de récupérer le tableau après mise à jour
+        { new: true }, 
       );
       return res.status(201).json(updatedPost);
     } catch (err) {
@@ -182,7 +180,7 @@ exports.dislikePost = async (req, res, next) => {
         const updatedPost = await Post.findOneAndUpdate(
           { _id: postId },
           { $pull: { usersWhoDisliked: userId } },
-          { new: true }, // Permet de récupérer le tableau après mise à jour
+          { new: true },
         );
         return res.status(201).json(updatedPost);
       }
@@ -197,7 +195,7 @@ exports.dislikePost = async (req, res, next) => {
             $pull: { usersWhoLiked: userId },
             $push: { usersWhoDisliked: userId },
           },
-          { new: true }, // Permet de récupérer le tableau après mise à jour
+          { new: true }, 
         );
         return res.status(201).json(updatedPost);
       }
@@ -205,7 +203,7 @@ exports.dislikePost = async (req, res, next) => {
       const updatedPost = await Post.findOneAndUpdate(
         { _id: postId },
         { $push: { usersWhoDisliked: userId } },
-        { new: true }, // Permet de récupérer le tableau après mise à jour
+        { new: true }, 
       );
       return res.status(201).json(updatedPost);
     } catch (err) {
@@ -215,8 +213,3 @@ exports.dislikePost = async (req, res, next) => {
   }
   return res.status(400).json({ error: "missing required parameters" });
 };
-
-// Créer un commentaire
-exports.createComment = async (req, res, next) => {};
-
-exports.modifyComment = async (req, res, next) => {};

@@ -5,40 +5,47 @@
         Bonjour,<br />
         <strong>{{ user.firstname }} {{ user.lastname }}</strong>
       </h1>
-      <img :src="user.image" alt="photo_de_profil" class="profile-picture" @click="goToProfile(user.userId)" />
+      <img
+        :src="user.image"
+        alt="photo_de_profil"
+        class="profile-picture"
+        @click="goToProfile(user.userId)"
+      />
     </div>
-    <input readonly="readonly" class="form-row__input input-appear" @focus="showModal = true"
-      placeholder="De quoi voulez-vous parler ?" />
+    <input
+      readonly="readonly"
+      class="form-row__input input-appear"
+      @focus="showModal = true"
+      placeholder="De quoi voulez-vous parler ?"
+    />
 
     <ModalWindow v-show="showModal" @close="showModal = false">
-
       <template #title>
         <h2>Quelque chose a dire?</h2>
         <b>(max 1500 caractères)</b>
       </template>
       <template #content>
-        <textarea 
-        v-model="textarea" 
-        class="form-row__input" 
-        name="post-text" 
-        cols="30" 
-        rows="10" 
-        minlength="1"
-        maxlength="1500" 
-        placeholder="Ecrivez quelque chose..." 
-      />
+        <textarea
+          v-model="textarea"
+          class="form-row__input"
+          name="post-text"
+          cols="30"
+          rows="10"
+          minlength="1"
+          maxlength="1500"
+          placeholder="Ecrivez quelque chose..."
+        />
         <h2 for="postPic">
           Mettez en avant votre post avec une image ou un gif !
         </h2>
         <b>(max 5mo)</b>
 
-        <FilePreview 
-        :opacity='uploadInputOpacity'
-        :background-image='image'
-        @upload="setImage" 
-        @reload-image="reloadImage" 
+        <FilePreview
+          :opacity="uploadInputOpacity"
+          :background-image="image"
+          @upload="setImage"
+          @reload-image="reloadImage"
         />
-
       </template>
       <template #actions>
         <button type="submit" class="button" @click="publish()">Publier</button>
@@ -46,9 +53,7 @@
           <i class="fa-solid fa-circle-xmark"></i>
         </button>
       </template>
-
     </ModalWindow>
-
   </div>
 </template>
 
@@ -68,14 +73,14 @@ export default {
       image: "",
       textarea: "",
       showModal: false,
-      uploadInputOpacity: 1
+      uploadInputOpacity: 1,
     };
   },
 
   methods: {
     // Récupération de l'image
     setImage(payload) {
-       this.image = payload;
+      this.image = payload;
     },
 
     reloadImage() {
@@ -115,7 +120,7 @@ export default {
       this.textarea = "";
       this.reloadImage;
       this.showModal = false;
-    }
+    },
   },
 };
 </script>

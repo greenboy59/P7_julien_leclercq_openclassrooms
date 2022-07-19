@@ -1,11 +1,11 @@
 import jwt_decode from 'jwt-decode';
 
 class User {
-  constructor () {
+  constructor() {
     this.user = JSON.parse(localStorage.getItem('user'))
   }
 
-  get isAuthenticated () {
+  get isAuthenticated() {
     return !!this.user
   }
 
@@ -19,7 +19,7 @@ class User {
     }
   }
 
-  setUser (user) {
+  setUser(user) {
     this.user = user
     localStorage.setItem('user', JSON.stringify(this.user))
   }

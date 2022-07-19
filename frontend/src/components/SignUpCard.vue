@@ -23,7 +23,7 @@
             Affichez vous ! insérer votre photo de profil ci-dessous <br />
             <b>(max 5mo)</b>
           </h2>
-          <FilePreview @upload="setImage"  :opacity='uploadInputOpacity'/>
+          <FilePreview @upload="setImage" :opacity="uploadInputOpacity" />
         </div>
         <div class="form-row">
           <label hidden for="lastname">Nom</label>
@@ -103,7 +103,7 @@ export default {
       lastname: "",
       firstname: "",
       image: "",
-      uploadInputOpacity: 1
+      uploadInputOpacity: 1,
     };
   },
   methods: {
@@ -167,13 +167,14 @@ export default {
           password: this.password,
         });
         // Récupération des infos du user afin de les envoyer dans le local storage
-        this.axios.defaults.headers.common["Authorization"] = "Bearer" + data.token;
+        this.axios.defaults.headers.common["Authorization"] =
+          "Bearer" + data.token;
         UserClass.setUser(data);
         // Dès que les data ont bien été envoyées a l'API, on envoi l'utilisateur vers la page des posts
         await this.$router.replace("/all-posts");
       } catch (err) {
         console.log(err);
-         this.errors.push(err.response.data.error.message)
+        this.errors.push(err.response.data.error.message);
       }
     },
   },
@@ -210,9 +211,14 @@ label {
   font: 18px;
   margin-bottom: -10px;
 }
-@media (max-width: 540px){
+@media (max-width: 540px) {
   .card {
     margin-top: 50px;
+  }
+  .card__subtitle {
+    margin-top: 20px;
+    flex-direction: column;
+    text-align: center;
   }
 }
 </style>

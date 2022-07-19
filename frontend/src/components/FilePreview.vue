@@ -1,67 +1,86 @@
 <template>
   <div id="preview-file-container">
     <div class="form-row">
-      <div class="image-preview-wrapper" :style="{ 'background-image': `url(${previewImage})` }" @click="selectImage">
-      </div>
-      <label v-show="!previewImage" for="input" class="label-file" :style="{ opacity: opacity }"><i class="fa-solid fa-folder-plus"></i>Choisir
-        une image</label>
-      <input id="input" class="form-row__input" ref="fileInput" name="postPic" type="file"
-        accept="image/png, image/jpeg, image/gif" @input="pickFile" />
+      <div
+        class="image-preview-wrapper"
+        :style="{ 'background-image': `url(${previewImage})` }"
+        @click="selectImage"
+      ></div>
+      <label
+        v-show="!previewImage"
+        for="input"
+        class="label-file"
+        :style="{ opacity: opacity }"
+        ><i class="fa-solid fa-folder-plus"></i>Choisir une image</label
+      >
+      <input
+        id="input"
+        class="form-row__input"
+        ref="fileInput"
+        name="postPic"
+        type="file"
+        accept="image/png, image/jpeg, image/gif"
+        @input="pickFile"
+      />
     </div>
-    <button :disabled="isDisabled" class="button delete-image" @click="deleteImage()">
+    <button
+      :disabled="isDisabled"
+      class="button delete-image"
+      @click="deleteImage()"
+    >
       <i class="fa-solid fa-circle-arrow-left"></i>
-            Annuler
+      Annuler
     </button>
   </div>
 </template>
 
 <script>
-
 export default {
   name: "FilePreview",
-    
-    data() {
-        return {
-            previewImage: null,
-            isDisabled: true,
+
+  data() {
+    return {
+      previewImage: null,
+      isDisabled: true,
+    };
+  },
+  props: {
+    opacity: Number,
+  },
+  methods: {
+    selectImage() {
+      this.$refs.fileInput.click();
+    },
+    deleteImage() {
+      this.$refs.fileInput.value = null;
+      this.previewImage = null;
+      document.querySelector(".image-preview-wrapper").style.display = "none";
+      this.$emit("reload-image");
+      this.isDisabled = true;
+    },
+    pickFile() {
+      this.isDisabled = false;
+      let input = this.$refs.fileInput;
+      let file = input.files;
+      if (file && file[0]) {
+        let reader = new FileReader();
+        reader.onload = (e) => {
+          this.previewImage = e.target.result;
+          document.querySelector(".image-preview-wrapper").style.display =
+            "block";
         };
+        reader.readAsDataURL(file[0]);
+        this.$emit("upload", file[0]);
+      }
     },
-    props: {
-      opacity: Number,
-    },
-    methods: {
-        selectImage() {
-            this.$refs.fileInput.click();
-        },
-        deleteImage() {
-            this.$refs.fileInput.value = null;
-            this.previewImage = null;
-            document.querySelector(".image-preview-wrapper").style.display = "none";
-            this.$emit("reload-image");
-            this.isDisabled = true;
-        },
-        pickFile() {
-            this.isDisabled = false;
-            let input = this.$refs.fileInput;
-            let file = input.files;
-            if (file && file[0]) {
-                let reader = new FileReader();
-                reader.onload = (e) => {
-                    this.previewImage = e.target.result;
-                    document.querySelector(".image-preview-wrapper").style.display = "block";
-                };
-                reader.readAsDataURL(file[0]);
-                this.$emit("upload", file[0]);
-            }
-        },
-    },
+  },
 };
 </script>
 
 <style scoped>
 #preview-file-container {
-z-index: 2;
-position: relative;
+  z-index: 2;
+  position: relative;
 }
 .image-preview-wrapper {
   display: none;

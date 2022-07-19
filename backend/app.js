@@ -23,8 +23,8 @@ mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTo
 
 // Middleware Helmet afin d'améliorer la sécurité. crossOriginResourcePolicy sur false afin d'autoriser l'affichage des images
 app.use(helmet({
-    crossOriginResourcePolicy: false,
-  })
+  crossOriginResourcePolicy: false,
+})
 );
 
 // Gestion des CORS pour les connexions entre le back et le front

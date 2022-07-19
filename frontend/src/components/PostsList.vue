@@ -157,8 +157,7 @@ export default {
     },
 
     showModalDeletePost(postId) {
-      this.postToDelete = postId,
-      this.showModal = true
+      (this.postToDelete = postId), (this.showModal = true);
     },
 
     async deletePost() {

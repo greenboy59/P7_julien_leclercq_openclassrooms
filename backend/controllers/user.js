@@ -9,16 +9,11 @@ const regExModule = require("../utils/regex");
 
 // Création d'un compte utilisateur avec mot de passe fort + vérif des infos envoyées par le frontend
 exports.signup = (req, res, next) => {
-  // Test si une image est présente, on la traite sinon on envoi le reste
-  if (req.file) {
-    req.body.file = `${req.protocol}://${req.get("host")}/images/${
-      req.file.filename
-    }`;
-  } else {
-    req.body.file = `${req.protocol}://${req.get(
-      "host",
-    )}/images/defaultProfilePic.png`;
-  }
+  // Test si une image est présente, on la traite sinon on applique l'image par défaut
+  req.file ?
+    req.body.file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+    :
+    req.body.file = `${req.protocol}://${req.get("host")}/images/defaultProfilePic.png`;
 
   if (
     regExModule.regExpStrongPassword.test(req.body.password) &&
@@ -70,47 +65,46 @@ exports.login = (req, res, next) => {
           }
 
           // Vérification si le mail du login correspond a celui de l'admin
-          req.body.email === "admin@groupomania.com" ?
-            
-            res.status(200).json({
-                userId: user._id,
-                image: user.image,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                token: jwt.sign(
-                  {
-                    userId: user._id,
-                    isAdmin: true,
-                  },
-                  process.env.RANDOM_TOKEN_SECRET,
-                  { expiresIn: "6h" },
-                ),
-              })
-            :
-            res.status(200).json({
-                userId: user._id,
-                image: user.image,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                token: jwt.sign(
-                  { userId: user._id },
-                  process.env.RANDOM_TOKEN_SECRET,
-                  { expiresIn: "6h" },
-                ),
-              });
+          req.body.email === "admin@groupomania.com"
+            ? res.status(200).json({
+              userId: user._id,
+              image: user.image,
+              firstname: user.firstname,
+              lastname: user.lastname,
+              token: jwt.sign(
+                {
+                  userId: user._id,
+                  isAdmin: true,
+                },
+                process.env.RANDOM_TOKEN_SECRET,
+                { expiresIn: "6h" },
+              ),
+            })
+            : res.status(200).json({
+              userId: user._id,
+              image: user.image,
+              firstname: user.firstname,
+              lastname: user.lastname,
+              token: jwt.sign(
+                { userId: user._id },
+                process.env.RANDOM_TOKEN_SECRET,
+                { expiresIn: "6h" },
+              ),
+            });
         })
         .catch((error) => res.status(500).json({ error }));
     })
     .catch((error) => res.status(500).json({ error }));
 };
 
-// Modifie la photo de profil
+// Modification de la photo de profil
 exports.modifyUser = (req, res, next) => {
-  User.findOne({ _id: req.params.id })
-    .then((user) => {
-      const defaultProfilePic = "http://localhost:3000/images/defaultProfilePic.png";
-      const url = "http://localhost:3000/";
-      
+  // On met en corrélation l'utilisateur envoyant la requête et celui de la bdd
+  User.findOne({ _id: req.params.id }).then((user) => {
+    const defaultProfilePic =
+      "http://localhost:3000/images/defaultProfilePic.png";
+    const url = "http://localhost:3000/";
+
     // Si l'ancienne image de profile n'est pas celle par défaut, alors on la supprime du dossier image
     if (user.image !== defaultProfilePic) {
       const imageToDelete = user.image.split(url).join("");
@@ -119,22 +113,24 @@ exports.modifyUser = (req, res, next) => {
       });
     }
 
-    // Mettre à jour le user avec la nouvelle image dans bdd
-    const userObject = req.file? {
-          image: `${req.protocol}://${req.get("host")}/images/${
-            req.file.filename
+    // On vérifie la présence de la nouvelle image dans la requête et on construit son URL
+    if (req.file) {
+      const userObject = {
+        image: `${req.protocol}://${req.get("host")}/images/${req.file.filename
           }`,
-        }
-      :
-      {
-          image: req.body.file,
-      }
-    const updatedUser = User.findOneAndUpdate(
-      { _id: req.params.id },
-      { ...userObject, _id: req.params.id },
-      { new: true },
-    )
-    .then((updatedUser) => res.status(200).json(updatedUser))
-    .catch((error) => res.status(400).json({ error }));
+      };
+
+      // On met à jour le user dans la bdd avec le nouveau fichier
+      User.findOneAndUpdate(
+        { _id: req.params.id },
+        { ...userObject, _id: req.params.id },
+        { new: true },
+      )
+        // On envoi la nouvelle image dans la réponse afin de s'en servir côté frontend
+        .then((response) => {
+          return res.status(200).json(response);
+        })
+        .catch((error) => res.status(400).json({ error }));
+    }
   });
 };

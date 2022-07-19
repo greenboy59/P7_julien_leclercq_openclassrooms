@@ -14,10 +14,10 @@ const storage = multer.diskStorage({
     callback(null, "images");
   },
   filename: (req, file, callback) => {
-    const fileWithoutExtension = file.originalname.split(".")[0]; // Récupération du fichier sans son extension d'origine
-    const name = fileWithoutExtension.split(" ").join("_").split("-").join("_"); // Construction du nouveau nommage pour le stockage
+    const fileWithoutExtension = file.originalname.split(".")[0]; 
+    const name = fileWithoutExtension.split(" ").join("_").split("-").join("_"); 
     const extension = MIME_TYPES[file.mimetype];
-    callback(null, Date.now() + ("_") + name + "." + extension); // Date.now nombre de millisecondes écoulées depuis le 1er Janvier 1970
+    callback(null, Date.now() + ("_") + name + "." + extension);
   }
 });
 
