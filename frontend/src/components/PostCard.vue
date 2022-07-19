@@ -27,10 +27,10 @@
         maxlength="1500"
       >
       </textarea>
-      <span>
+      <span v-show="post.image">
         <br />
-        Cliquez sur l'image pour la modifier</span
-      >
+        Cliquez sur l'image pour la modifier
+        </span>
       <div v-if="post.image" id="post-image-wrapper">
         <img
           v-if="!image"
@@ -38,9 +38,9 @@
           :alt="post.image"
           class="post-picture"
         />
-
-        <FilePreview @upload="setImage" @reload-image="reloadImage" />
+         <FilePreview @upload="setImage" @reload-image="reloadImage" />
       </div>
+       <FilePreview v-if="!post.image" @upload="setImage" @reload-image="reloadImage" :opacity="uploadInputOpacity"/>
       <div v-if="user.userId === post.userId || isAdmin" class="post-options">
         <button class="button modify-button" @click="modifyPost(post._id)">
           <i class="fas fa-edit modify"></i>
@@ -98,6 +98,7 @@ export default {
       image: "",
       showModal: false,
       postToDelete: null,
+      uploadInputOpacity: 1,
     };
   },
 

@@ -27,12 +27,10 @@ exports.getOnePost = (req, res, next) => {
 
 // Création d'un nouveau post
 exports.createPost = (req, res, next) => {
-  if (req.file) {
-    req.body.file = `${req.protocol}://${req.get("host")}/images/${req.file.filename
-      }`;
-  } else {
+  req.file?
+    req.body.file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+  :
     req.body.file = null;
-  }
 
   const date = new Date();
   try {
