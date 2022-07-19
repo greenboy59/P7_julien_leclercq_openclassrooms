@@ -41,15 +41,40 @@
 
         <FilePreview @upload="setImage" @reload-image="reloadImage" />
       </div>
-      <div v-if="user.userId === post.userId || isAdmin === true" class="post-options">
+      <div v-if="user.userId === post.userId || isAdmin" class="post-options">
         <button class="button modify-button" @click="modifyPost(post._id)">
           <i class="fas fa-edit modify"></i>
-          valider les modifications
+          valider
         </button>
-        <button class="button delete-button" @click="deletePost(post._id)">
+        <button
+          class="button delete-button"
+          @click="showModalDeletePost(post._id)"
+        >
           <i class="fas fa-trash-alt delete"></i>
           supprimer le post
         </button>
+
+        <ModalWindow v-show="showModal" @close="showModal = false">
+          <template #title>
+            <h3>Voulez-vous vraiment supprimer ce post ?</h3>
+          </template>
+          <template #actions>
+            <div class="modal-actions-buttons">
+              <button
+                class="button modal-button-validate"
+                @click="deletePost(post._id)"
+              >
+                Valider
+              </button>
+              <button
+                class="button modal-button-cancel"
+                @click="showModal = false"
+              >
+                Annuler
+              </button>
+            </div>
+          </template>
+        </ModalWindow>
       </div>
     </form>
   </div>
@@ -58,10 +83,11 @@
 <script>
 import UserClass from "@/classes/UserClass";
 import FilePreview from "@/components/FilePreview";
+import ModalWindow from "@/components/ModalWindow";
 
 export default {
   name: "PostCard",
-  components: { FilePreview },
+  components: { FilePreview, ModalWindow },
 
   data() {
     return {
@@ -70,6 +96,8 @@ export default {
       post: "",
       id: this.$route.params.id,
       image: "",
+       showModal: false,
+      postToDelete: null,
     };
   },
 
@@ -96,12 +124,16 @@ export default {
       this.image = "";
     },
 
-    async deletePost(id) {
+    showModalDeletePost(postId) {
+      (this.postToDelete = postId), (this.showModal = true);
+    },
+
+    async deletePost() {
       const axiosConfig = {
         headers: { Authorization: `Bearer ${this.user.token}` },
       };
       try {
-        await this.axios.delete("/posts/" + id, axiosConfig);
+        await this.axios.delete("/posts/" + this.postToDelete, axiosConfig);
         await this.$router.replace("/all-posts");
       } catch (err) {
         console.log(err);
@@ -178,5 +210,20 @@ post-subtitle {
 }
 .form-row__input {
   margin-bottom: 15px;
+}
+.modal-actions-buttons {
+  display: flex;
+}
+.modal-button-cancel,
+.modal-button-validate {
+  margin: 30px 15px 0 15px;
+  width: 50%;
+}
+
+@media (max-width: 540px) {
+  .card {
+    margin-top: 10%;
+    margin-bottom: 60px;
+  }
 }
 </style>

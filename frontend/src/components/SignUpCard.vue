@@ -23,7 +23,7 @@
             Affichez vous ! insérer votre photo de profil ci-dessous <br />
             <b>(max 5mo)</b>
           </h2>
-          <FilePreview @upload="setImage" />
+          <FilePreview @upload="setImage"  :opacity='uploadInputOpacity'/>
         </div>
         <div class="form-row">
           <label hidden for="lastname">Nom</label>
@@ -72,9 +72,6 @@
         <div class="form-row">
           <button type="submit" class="button" @click="checkForm()">
             S'inscrire
-            <!--TO DO insérer un texte durant le loading-->
-            <!-- <span v-if="status == 'loading'">Création en cours...</span>
-          <span v-else>Créer mon compte</span> -->
           </button>
         </div>
       </form>
@@ -106,6 +103,7 @@ export default {
       lastname: "",
       firstname: "",
       image: "",
+      uploadInputOpacity: 1
     };
   },
   methods: {
@@ -211,5 +209,10 @@ label {
   width: 100%;
   font: 18px;
   margin-bottom: -10px;
+}
+@media (max-width: 540px){
+  .card {
+    margin-top: 50px;
+  }
 }
 </style>

@@ -70,7 +70,7 @@
           </button>
         </div>
         <div
-          v-if="user.userId === post.userId || isAdmin === true"
+          v-if="user.userId === post.userId || isAdmin"
           class="modify-delete-buttons"
         >
           <button class="button modify-button" @click="modifyPost(post._id)">
@@ -157,7 +157,8 @@ export default {
     },
 
     showModalDeletePost(postId) {
-      (this.postToDelete = postId), (this.showModal = true);
+      this.postToDelete = postId,
+      this.showModal = true
     },
 
     async deletePost() {
@@ -354,7 +355,6 @@ input {
 .modal-actions-buttons {
   display: flex;
 }
-
 .modal-button-cancel,
 .modal-button-validate {
   margin: 30px 15px 0 15px;

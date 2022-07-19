@@ -12,7 +12,7 @@ class User {
   get isAdmin() {
     const token = this.user.token;
     const decodedToken = jwt_decode(token);
-    if (decodedToken.admin === true) {
+    if (decodedToken.isAdmin) {
       return true
     } else {
       return false

@@ -68,35 +68,36 @@ exports.login = (req, res, next) => {
           if (!valid) {
             return res.status(401).json({ error: "Mot de passe incorrect !" });
           }
-          // Définition de l'admin en ajoutant admin:true dans le token
-          if (req.body.email === "admin@groupomania.com") {
+
+          // Vérification si le mail du login correspond a celui de l'admin
+          req.body.email === "admin@groupomania.com" ?
+            
             res.status(200).json({
-              userId: user._id,
-              image: user.image,
-              firstname: user.firstname,
-              lastname: user.lastname,
-              token: jwt.sign(
-                {
-                  userId: user._id,
-                  admin: true,
-                },
-                process.env.RANDOM_TOKEN_SECRET,
-                { expiresIn: "6h" },
-              ),
-            });
-          } else {
+                userId: user._id,
+                image: user.image,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                token: jwt.sign(
+                  {
+                    userId: user._id,
+                    isAdmin: true,
+                  },
+                  process.env.RANDOM_TOKEN_SECRET,
+                  { expiresIn: "6h" },
+                ),
+              })
+            :
             res.status(200).json({
-              userId: user._id,
-              image: user.image,
-              firstname: user.firstname,
-              lastname: user.lastname,
-              token: jwt.sign(
-                { userId: user._id },
-                process.env.RANDOM_TOKEN_SECRET,
-                { expiresIn: "6h" },
-              ),
-            });
-          }
+                userId: user._id,
+                image: user.image,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                token: jwt.sign(
+                  { userId: user._id },
+                  process.env.RANDOM_TOKEN_SECRET,
+                  { expiresIn: "6h" },
+                ),
+              });
         })
         .catch((error) => res.status(500).json({ error }));
     })
@@ -105,32 +106,35 @@ exports.login = (req, res, next) => {
 
 // Modifie la photo de profil
 exports.modifyUser = (req, res, next) => {
-  User.findOne({ _id: req.params.id }).then((user) => {
-    const defaultProfilePic = "defaultProfilePic.png";
-    if (user.image && req.file.filename !== defaultProfilePic) {
+  User.findOne({ _id: req.params.id })
+    .then((user) => {
+      const defaultProfilePic = "http://localhost:3000/images/defaultProfilePic.png";
       const url = "http://localhost:3000/";
+      
+    // Si l'ancienne image de profile n'est pas celle par défaut, alors on la supprime du dossier image
+    if (user.image !== defaultProfilePic) {
       const imageToDelete = user.image.split(url).join("");
       fs.unlink(`${imageToDelete}`, (error) => {
         if (error) throw error;
       });
     }
 
-    // Il faut mettre à jour le user avec la nouvelle image dans bdd
-    const userObject = req.file
-      ? {
+    // Mettre à jour le user avec la nouvelle image dans bdd
+    const userObject = req.file? {
           image: `${req.protocol}://${req.get("host")}/images/${
             req.file.filename
           }`,
         }
-      : {
+      :
+      {
           image: req.body.file,
-        };
+      }
     const updatedUser = User.findOneAndUpdate(
       { _id: req.params.id },
       { ...userObject, _id: req.params.id },
       { new: true },
     )
-      .then((updatedUser) => res.status(200).json(updatedUser))
-      .catch((error) => res.status(400).json({ error }));
+    .then((updatedUser) => res.status(200).json(updatedUser))
+    .catch((error) => res.status(400).json({ error }));
   });
 };

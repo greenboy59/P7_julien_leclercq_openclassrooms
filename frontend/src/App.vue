@@ -54,7 +54,7 @@ a {
 #logo {
   position: absolute;
   width: 300px;
-  top: 100px;
+  top: 5%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
