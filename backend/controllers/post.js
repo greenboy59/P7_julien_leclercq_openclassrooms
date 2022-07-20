@@ -27,10 +27,9 @@ exports.getOnePost = (req, res, next) => {
 
 // Création d'un nouveau post
 exports.createPost = (req, res, next) => {
-  req.file?
-    req.body.file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
-  :
-    req.body.file = null;
+  req.file
+    ? req.body.file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+    : req.body.file = null;
 
   const date = new Date();
   try {
@@ -51,51 +50,35 @@ exports.createPost = (req, res, next) => {
         hour: "numeric",
         minute: "numeric",
       }),
-    });
-    post
-      .save()
-      .then((post) => {
-        res.status(201).json(post);
-      })
-      .catch((error) => res.status(400).json({ error }));
-  } catch {
-    (error) => res.status(500).json(error);
-  }
+    })
+    post.save()
+      .then((post) => { res.status(201).json(post) })
+      .catch((error) => res.status(400).json({ error }))
+  } catch { (error) => res.status(500).json(error) }
 };
 
 // Modification d'un post
 exports.modifyPost = (req, res, next) => {
   Post.findOne({ _id: req.params.id })
     .then((post) => {
-      if (post.image) {
-        const filename = post.image.split("/images/")[1];
-        fs.unlink(`images/${filename}`, (error) => {
-          if (error) throw err;
-        });
-      }
+      // Si il y a une image dans la requête et dans le dossier image, on supprime cette dernière
+      if (req.file && post.image) {
+        const postFileName = post.image.split("/images/")[1];
+        fs.unlink(`images/${postFileName}`,
+          (error) => { if (error) throw error; });
+      };
 
       const postObject = req.file
-        ? {
-          ...req.body,
-          image: `${req.protocol}://${req.get("host")}/images/${req.file.filename
-            }`,
-        }
-        : {
-          ...req.body,
-          image: req.body.file,
-        };
+        ? { ...req.body, image: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`, }
+        : { ...req.body, image: req.body.file, };
 
       // Modification du post si vérif de l'id est ok,sinon envoi d'une erreur code 403
-      Post.updateOne(
+      Post.findOneAndUpdate(
         { _id: req.params.id },
         { ...postObject, _id: req.params.id },
       )
         .then(() => res.status(200).json({ message: "Post modifié !" }))
-        .catch((error) =>
-          res
-            .status(403)
-            .json({ error: error, message: "Requête non autorisée" }),
-        );
+        .catch((error) => res.status(403).json({ error: error, message: "Requête non autorisée" }));
     })
     .catch((error) => res.status(500).json({ error }));
 };
@@ -135,9 +118,7 @@ exports.likePost = async (req, res, next) => {
         return res.status(201).json(updatedPost);
       }
       // 2. Checker les dislikes et si ce user a disliké, enlever le dislike et ajouter le like
-      const userExistingInDislikes = post.usersWhoDisliked.find(
-        (id) => id === userId,
-      );
+      const userExistingInDislikes = post.usersWhoDisliked.find((id) => id === userId);
       if (userExistingInDislikes) {
         const updatedPost = await Post.findOneAndUpdate(
           { _id: postId },
@@ -145,7 +126,7 @@ exports.likePost = async (req, res, next) => {
             $pull: { usersWhoDisliked: userId },
             $push: { usersWhoLiked: userId },
           },
-          { new: true }, 
+          { new: true },
         );
         return res.status(201).json(updatedPost);
       }
@@ -153,7 +134,7 @@ exports.likePost = async (req, res, next) => {
       const updatedPost = await Post.findOneAndUpdate(
         { _id: postId },
         { $push: { usersWhoLiked: userId } },
-        { new: true }, 
+        { new: true },
       );
       return res.status(201).json(updatedPost);
     } catch (err) {
@@ -161,7 +142,7 @@ exports.likePost = async (req, res, next) => {
       return res.status(err.statusCode).json(err);
     }
   }
-  return res.status(400).json({ error: "missing required parameters" });
+  return res.status(400).json({ error: "paramètres requis manquants" });
 };
 
 // Ajoute ou retire un dislike. Méthode Axios findOneAndUpdate utilisée afin de récupérer le tableau des usersLiked et usersDisliked mis à jour
@@ -193,7 +174,7 @@ exports.dislikePost = async (req, res, next) => {
             $pull: { usersWhoLiked: userId },
             $push: { usersWhoDisliked: userId },
           },
-          { new: true }, 
+          { new: true },
         );
         return res.status(201).json(updatedPost);
       }
@@ -201,7 +182,7 @@ exports.dislikePost = async (req, res, next) => {
       const updatedPost = await Post.findOneAndUpdate(
         { _id: postId },
         { $push: { usersWhoDisliked: userId } },
-        { new: true }, 
+        { new: true },
       );
       return res.status(201).json(updatedPost);
     } catch (err) {

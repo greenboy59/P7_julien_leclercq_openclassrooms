@@ -117,28 +117,28 @@ export default {
         this.errors.push("Votre Nom est requis.");
       } else if (!regName.test(this.lastname)) {
         this.errors.push(
-          "Votre Nom comporte une ou plusieurs erreurs (chiffres et caractères spéciaux non autorisés).",
+          "Votre Nom comporte une ou plusieurs erreurs (chiffres et caractères spéciaux non autorisés)."
         );
       }
       if (!this.firstname) {
         this.errors.push("Votre Prénom est requis.");
       } else if (!regName.test(this.firstname)) {
         this.errors.push(
-          "Votre Prénom comporte une ou plusieurs erreurs (chiffres et caractères spéciaux non autorisés).",
+          "Votre Prénom comporte une ou plusieurs erreurs (chiffres et caractères spéciaux non autorisés)."
         );
       }
       if (!this.email) {
         this.errors.push("Une adresse Email est requise.");
       } else if (!regExpEmail.test(this.email)) {
         this.errors.push(
-          "Votre adresse Email comporte une ou plusieurs erreurs.",
+          "Votre adresse Email comporte une ou plusieurs erreurs."
         );
       }
       if (!this.password) {
         this.errors.push("Un mot de passe est requis.");
       } else if (!regExpStrongPassword.test(this.password)) {
         this.errors.push(
-          "Votre mot de passe est invalid (minimum 8 caractères dont: 1 caractère spécial, 1 chiffre, 1 majuscule et 1 minuscule).",
+          "Votre mot de passe est invalid (minimum 8 caractères dont: 1 caractère spécial, 1 chiffre, 1 majuscule et 1 minuscule)."
         );
       }
       if (!this.errors.length) {

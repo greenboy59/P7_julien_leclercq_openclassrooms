@@ -88,13 +88,15 @@ export default {
         this.errors.push("Une adresse Email est requise.");
       } else if (!regExpEmail.test(this.email)) {
         this.errors.push(
-          "Votre adresse Email comporte une ou plusieurs erreurs.",
+          "Votre adresse Email comporte une ou plusieurs erreurs."
         );
       }
       if (!this.password) {
         this.errors.push("Un mot de passe est requis.");
       } else if (!regExpStrongPassword.test(this.password)) {
-        this.errors.push("Votre mot de passe est invalid (minimum 8 caractères dont: 1 caractère spécial, 1 chiffre, 1 majuscule et 1 minuscule).");
+        this.errors.push(
+          "Votre mot de passe est invalid (minimum 8 caractères dont: 1 caractère spécial, 1 chiffre, 1 majuscule et 1 minuscule)."
+        );
       }
     },
 
@@ -106,7 +108,8 @@ export default {
           password: this.password,
         });
         // Récupération des infos du user afin de les envoyer dans le local storage
-        this.axios.defaults.headers.common["Authorization"] = "Bearer" + data.token;
+        this.axios.defaults.headers.common["Authorization"] =
+          "Bearer" + data.token;
         UserClass.setUser(data);
         // Dès que les data ont bien été envoyées a l'API, on envoi l'utilisateur vers la page des posts
         await this.$router.replace("/all-posts");

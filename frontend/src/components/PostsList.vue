@@ -183,7 +183,7 @@ export default {
         const { data } = await this.axios.post(
           `/posts/${id}/like`,
           this.data,
-          axiosConfig,
+          axiosConfig
         );
         this.$emit("post-liked", data);
       } catch (err) {
@@ -201,7 +201,7 @@ export default {
         const { data } = await this.axios.post(
           `/posts/${id}/dislike`,
           this.data,
-          axiosConfig,
+          axiosConfig
         );
         this.$emit("post-liked", data);
       } catch (err) {

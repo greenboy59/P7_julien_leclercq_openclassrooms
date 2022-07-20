@@ -10,10 +10,9 @@ const regExModule = require("../utils/regex");
 // Création d'un compte utilisateur avec mot de passe fort + vérif des infos envoyées par le frontend
 exports.signup = (req, res, next) => {
   // Test si une image est présente, on la traite sinon on applique l'image par défaut
-  req.file ?
-    req.body.file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
-    :
-    req.body.file = `${req.protocol}://${req.get("host")}/images/defaultProfilePic.png`;
+  req.file
+    ? req.body.file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+    : req.body.file = `${req.protocol}://${req.get("host")}/images/defaultProfilePic.png`
 
   if (
     regExModule.regExpStrongPassword.test(req.body.password) &&
@@ -32,20 +31,17 @@ exports.signup = (req, res, next) => {
           email: req.body.email,
           password: hash,
         });
-        user
-          .save()
+        user.save()
           .then(() => res.status(201).json({ message: "Utilisateur créé !" }))
           .catch((error) =>
             res.status(400).json({ error, message: "Demande erronée" }),
           );
       })
-      .catch((error) =>
-        res.status(500).json({ error, message: "Utilisateur déjà éxistant" }),
+      .catch((error) => res.status(500).json({ error, message: "Utilisateur déjà éxistant" }),
       );
   } else {
     res.status(400).json({
-      message:
-        "Mot de passe trop faible, minimum 8 caractères, dont 1 majuscule, 1 minuscule, 1 nombre et 1 caractère spécial",
+      message: "Mot de passe trop faible, minimum 8 caractères, dont 1 majuscule, 1 minuscule, 1 nombre et 1 caractère spécial",
     });
   }
 };
@@ -63,10 +59,8 @@ exports.login = (req, res, next) => {
           if (!valid) {
             return res.status(401).json({ error: "Mot de passe incorrect !" });
           }
-
           // Vérification si le mail du login correspond a celui de l'admin
-          req.body.email === "admin@groupomania.com"
-            ? res.status(200).json({
+             res.status(200).json({
               userId: user._id,
               image: user.image,
               firstname: user.firstname,
@@ -74,23 +68,12 @@ exports.login = (req, res, next) => {
               token: jwt.sign(
                 {
                   userId: user._id,
-                  isAdmin: true,
+                  isAdmin: req.body.email === "admin@groupomania.com" || undefined,
                 },
                 process.env.RANDOM_TOKEN_SECRET,
                 { expiresIn: "6h" },
               ),
             })
-            : res.status(200).json({
-              userId: user._id,
-              image: user.image,
-              firstname: user.firstname,
-              lastname: user.lastname,
-              token: jwt.sign(
-                { userId: user._id },
-                process.env.RANDOM_TOKEN_SECRET,
-                { expiresIn: "6h" },
-              ),
-            });
         })
         .catch((error) => res.status(500).json({ error }));
     })
@@ -101,8 +84,7 @@ exports.login = (req, res, next) => {
 exports.modifyUser = (req, res, next) => {
   // On met en corrélation l'utilisateur envoyant la requête et celui de la bdd
   User.findOne({ _id: req.params.id }).then((user) => {
-    const defaultProfilePic =
-      "http://localhost:3000/images/defaultProfilePic.png";
+    const defaultProfilePic = "http://localhost:3000/images/defaultProfilePic.png";
     const url = "http://localhost:3000/";
 
     // Si l'ancienne image de profile n'est pas celle par défaut, alors on la supprime du dossier image
@@ -115,10 +97,7 @@ exports.modifyUser = (req, res, next) => {
 
     // On vérifie la présence de la nouvelle image dans la requête et on construit son URL
     if (req.file) {
-      const userObject = {
-        image: `${req.protocol}://${req.get("host")}/images/${req.file.filename
-          }`,
-      };
+      const userObject = { image: `${req.protocol}://${req.get("host")}/images/${req.file.filename }`};
 
       // On met à jour le user dans la bdd avec le nouveau fichier
       User.findOneAndUpdate(
@@ -127,9 +106,7 @@ exports.modifyUser = (req, res, next) => {
         { new: true },
       )
         // On envoi la nouvelle image dans la réponse afin de s'en servir côté frontend
-        .then((response) => {
-          return res.status(200).json(response);
-        })
+        .then((response) => { return res.status(200).json(response) })
         .catch((error) => res.status(400).json({ error }));
     }
   });

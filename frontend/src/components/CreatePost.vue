@@ -22,7 +22,7 @@
     <ModalWindow v-show="showModal" @close="showModal = false">
       <template #title>
         <h2>Quelque chose a dire?</h2>
-        <b>(max 1500 caractères)</b>
+        <b>(max 400 caractères)</b>
       </template>
       <template #content>
         <textarea
@@ -32,9 +32,10 @@
           cols="30"
           rows="10"
           minlength="1"
-          maxlength="1500"
+          maxlength="400"
           placeholder="Ecrivez quelque chose..."
-        />
+        >
+        </textarea>
         <h2 for="postPic">
           Mettez en avant votre post avec une image ou un gif !
         </h2>
