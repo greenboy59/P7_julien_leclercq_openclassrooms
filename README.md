@@ -14,8 +14,8 @@ Ce projet à été généré avec [Vue CLI](https://vuejs.org/) V3.2.13
 ## Cloner ce repository
 
 ## Lancement du front
-$ cd ./frontend 
-$ npm install    
+$ cd ./frontend  
+$ npm install  
 $ npm run serve  
 
 ## Lancement du serveur Node
