@@ -36,4 +36,4 @@ Packages: Multer, JsonWebTokens, Helmet, cors, nodemon, mongoose-unique-validato
 
 ## Aide supplémentaire
 
-Pour obtenir plus d'aide sur la CLI Vue, utilisez `ng help` ou consultez la page [https://vuejs.org/guide/introduction.html].
+Pour obtenir plus d'aide sur la CLI Vue, consultez la page [https://vuejs.org/guide/introduction.html].
