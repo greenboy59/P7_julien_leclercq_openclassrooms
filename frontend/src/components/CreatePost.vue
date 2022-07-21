@@ -39,7 +39,6 @@
         <h2 for="postPic">
           Mettez en avant votre post avec une image ou un gif !
         </h2>
-        <b>(max 5mo)</b>
 
         <FilePreview
           :opacity="uploadInputOpacity"

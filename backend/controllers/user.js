@@ -93,7 +93,7 @@ exports.modifyUser = (req, res, next) => {
       fs.unlink(`${imageToDelete}`, (error) => {
         if (error) throw error;
       });
-    }
+    }    
 
     // On vérifie la présence de la nouvelle image dans la requête et on construit son URL
     if (req.file) {

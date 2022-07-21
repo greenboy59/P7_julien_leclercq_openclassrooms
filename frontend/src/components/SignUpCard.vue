@@ -20,8 +20,7 @@
       >
         <div class="file-preview">
           <h2 for="postPic">
-            Affichez vous ! insérer votre photo de profil ci-dessous <br />
-            <b>(max 5mo)</b>
+            Affichez vous ! insérer votre photo de profil ci-dessous
           </h2>
           <FilePreview @upload="setImage" :opacity="uploadInputOpacity" />
         </div>
@@ -147,7 +146,7 @@ export default {
     },
 
     setImage(payload) {
-      this.image = payload;
+         this.image = payload;
     },
 
     // fonction asynchrone afin d'envoyer les données au backend et rediriger vers page de login
@@ -192,6 +191,7 @@ h2,
 label {
   font-size: 1.2em;
   font-weight: 400;
+  text-align: center;
 }
 b {
   color: #aaa;

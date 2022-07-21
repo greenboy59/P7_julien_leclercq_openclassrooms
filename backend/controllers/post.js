@@ -27,11 +27,17 @@ exports.getOnePost = (req, res, next) => {
 
 // Création d'un nouveau post
 exports.createPost = (req, res, next) => {
+  // Vérification du nombre de caractères dans la description du post
+  if (req.body.description.length > 400) {
+    return res.status(403).json({ error: "Trop de caractères dans la description du post !" });
+  }
+
   req.file
     ? req.body.file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
     : req.body.file = null;
 
   const date = new Date();
+
   try {
     const post = new Post({
       image: req.body.file,
@@ -59,6 +65,11 @@ exports.createPost = (req, res, next) => {
 
 // Modification d'un post
 exports.modifyPost = (req, res, next) => {
+  // Vérification du nombre de caractères dans la description du post
+  if (req.body.description.length > 400) {
+    return res.status(403).json({ error: "Trop de caractères dans la description du post !" });
+  } 
+  
   Post.findOne({ _id: req.params.id })
     .then((post) => {
       // Si il y a une image dans la requête et dans le dossier image, on supprime cette dernière
