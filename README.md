@@ -3,9 +3,7 @@
 ## Pitch du projet
 Le projet consiste à construire un réseau social interne pour les employés de Groupomania. Le but de cet outil est de faciliter les interactions entre collègues. Le département RH de Groupomania a imaginé plusieurs fonctionnalités pour favoriser les échanges entre collègues.
 
- <p align="center"><img width="276" alt="Capture d’écran 2022-06-02 à 15 16 12" src="https://user-images.githubusercontent.com/81871149/171637764-f5c2c0b1-dc8e-4d62-8aca-d9c137f649e1.png"></p>
- 
- <p align="center"><img width="553" alt="Capture d’écran 2022-06-02 à 15 18 44" src="https://user-images.githubusercontent.com/81871149/171638377-2bb47066-5225-435c-8ade-68581c99be83.png"></p>
+ <p align="center">![icon-left-font](https://user-images.githubusercontent.com/81871149/180220140-ebc60005-5a14-4281-9bb7-894e5fbe87be.svg)</p>
 
  <p align="center"><img width="540" alt="Capture d’écran 2022-06-02 à 15 19 03" src="https://user-images.githubusercontent.com/81871149/171638410-1b639e4f-68bf-435d-8dc0-bb604f0d2291.png"></p>
 
