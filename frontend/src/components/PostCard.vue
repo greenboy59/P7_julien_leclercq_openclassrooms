@@ -196,10 +196,6 @@ span {
   color: #aaa;
 }
 
-post-subtitle {
-  flex-direction: column;
-}
-
 .profile-picture {
   display: inline-block;
   width: 50px;

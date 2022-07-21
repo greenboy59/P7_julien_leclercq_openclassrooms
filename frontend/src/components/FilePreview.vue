@@ -5,7 +5,8 @@
         class="image-preview-wrapper"
         :style="{ 'background-image': `url(${previewImage})` }"
         @click="selectImage"
-      ></div>
+      >
+      </div>
       <label
         v-show="!previewImage"
         for="input"
@@ -144,6 +145,7 @@ export default {
 .fa-folder-plus {
   font-size: 5em;
 }
+
 button:disabled,
 button:disabled:hover {
   background-color: unset;

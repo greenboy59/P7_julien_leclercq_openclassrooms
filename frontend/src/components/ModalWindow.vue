@@ -17,11 +17,6 @@ export default {
 </script>
 
 <style scoped>
-span {
-  font-size: 1.1em;
-  font-weight: 400;
-}
-
 .modal-mask {
   position: fixed;
   z-index: 3;
@@ -45,10 +40,6 @@ span {
   vertical-align: middle;
 }
 
-.modal-text {
-  margin-bottom: 20px;
-}
-
 .card {
   position: relative;
   text-align: center;
@@ -69,17 +60,5 @@ span {
   100% {
     transform: translateY(0%);
   }
-}
-
-footer {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.button {
-  width: 50%;
-  margin-top: 10px;
-  font-size: 0.9em;
 }
 </style>

@@ -56,11 +56,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.modal-button-validate,
-.modal-button-cancel {
-  width: fit-content;
-  margin: 5px;
-}
-</style>

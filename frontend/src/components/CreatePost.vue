@@ -88,6 +88,12 @@ export default {
       this.image = "";
     },
 
+    resetForm() {
+      this.reloadImage();
+      this.textarea = "";
+      this.showModal = false;
+    },
+
     goToProfile(id) {
       this.$router.push(`/profile/${id}`);
     },
@@ -116,39 +122,11 @@ export default {
         console.log(err);
       }
     },
-
-    resetForm() {
-      this.textarea = "";
-      this.reloadImage;
-      this.showModal = false;
-    },
   },
 };
 </script>
 
 <style scoped>
-.label-file {
-  width: 100%;
-  height: 210px;
-  color: #fd2d01;
-  border-radius: 16px;
-  background-color: unset;
-  gap: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  transition: 0.3s all;
-  opacity: 0;
-}
-
-.label-file:hover {
-  box-shadow: 0.5px 0.5px 5px #fd2d01;
-  transition: 0.3s all;
-  opacity: 1;
-  cursor: pointer;
-}
-
 .fa-circle-xmark {
   position: absolute;
   top: -7px;
@@ -223,12 +201,6 @@ b {
   right: 25px;
 }
 
-.form-row {
-  display: flex;
-  justify-content: space-between;
-  margin: unset;
-}
-
 input {
   transform: translateY(-1000%);
   opacity: 0;
@@ -254,11 +226,6 @@ span {
     flex-direction: column-reverse;
     align-items: baseline;
     margin-top: 50px;
-  }
-
-  .card {
-    width: 100%;
-    border-radius: 0;
   }
 
   #display-create-post {

@@ -197,12 +197,6 @@ b {
   color: #aaa;
   font-size: 0.6em;
 }
-.message {
-  width: 100%;
-  color: green;
-  font-size: 18px;
-  margin-top: -15px;
-}
 .errors-messages > b {
   font-size: 1em;
 }
