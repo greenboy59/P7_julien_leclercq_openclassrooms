@@ -88,7 +88,7 @@ export default {
     },
 
     resetForm() {
-      this.reloadImage();
+      document.querySelector(".delete-image").click();
       this.textarea = "";
       this.showModal = false;
     },
