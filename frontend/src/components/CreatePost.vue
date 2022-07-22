@@ -48,7 +48,7 @@
         />
       </template>
       <template #actions>
-        <button type="submit" class="button" @click="publish()">Publier</button>
+        <button type="submit" class="button publish-button" @click="publish()">Publier</button>
         <button @click="showModal = false">
           <i class="fa-solid fa-circle-xmark"></i>
         </button>
@@ -119,7 +119,14 @@ export default {
         this.resetForm();
       } catch (err) {
         console.log(err);
+        document.querySelector('.publish-button').innerHTML = `<span class="error-message">${err.response.data.message}</span>`;
+        setTimeout(this.deleteErrorMessage, 3000)
       }
+    },
+
+     deleteErrorMessage() {
+       document.querySelector('.error-message').remove();
+       document.querySelector('.publish-button').textContent = "Publier";
     },
   },
 };
