@@ -66,8 +66,9 @@ export default {
           formData,
           axiosConfig
         );
-        await this.$router.replace("/all-posts");
         this.user.image = data.image;
+        UserClass.setUser(this.user);
+        await this.$router.replace("/all-posts");
       } catch (err) {
         console.log(err);
       }
