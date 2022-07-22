@@ -13,7 +13,7 @@
         <button
           class="profile-button"
           type="button"
-          @click="goToProfile(user.userId)"
+          @click="goToProfile($store.state.user.userId)"
         >
           <i class="fa-solid fa-user"></i>
           Profil
@@ -45,7 +45,6 @@
 
 <script>
 import ModalWindow from "./ModalWindow.vue";
-import UserClass from "@/classes/UserClass";
 
 export default {
   name: "MainNav",
@@ -53,19 +52,16 @@ export default {
 
   data() {
     return {
-      user: UserClass.user,
       showModal: false,
     };
   },
 
   methods: {
     async goToProfile(id) {
-      this.$router.push(`/profile/${id}`);
+      await this.$router.push(`/profile/${id}`);
     },
-    // Au clic sur logout, le localstorage est vidé
     logout() {
-      localStorage.removeItem("user");
-      this.$router.go();
+      this.$store.dispatch('logout')
     },
   },
 };

@@ -45,12 +45,12 @@
             :class="[
               'button',
               'like',
-              post.usersWhoLiked.includes(user.userId) ? 'liked' : '',
+              post.usersWhoLiked.includes($store.state.user.userId) ? 'liked' : '',
             ]"
             @click="onClickLike(post._id)"
           >
             <i class="fa-regular fa-thumbs-up"></i>
-            <template v-if="post.usersWhoLiked.includes(user.userId)"
+            <template v-if="post.usersWhoLiked.includes($store.state.user.userId)"
               ><b>Liké !</b></template
             >
           </button>
@@ -59,18 +59,18 @@
             :class="[
               'button',
               'dislike',
-              post.usersWhoDisliked.includes(user.userId) ? 'disliked' : '',
+              post.usersWhoDisliked.includes($store.state.user.userId) ? 'disliked' : '',
             ]"
             @click="onClickDislike(post._id)"
           >
             <i class="fa-regular fa-thumbs-down"></i>
-            <template v-if="post.usersWhoDisliked.includes(user.userId)"
+            <template v-if="post.usersWhoDisliked.includes($store.state.user.userId)"
               ><b>Disliké !</b>
             </template>
           </button>
         </div>
         <div
-          v-if="user.userId === post.userId || isAdmin"
+          v-if="$store.state.user.userId === post.userId || $store.getters.isAdmin"
           class="modify-delete-buttons"
         >
           <button class="button modify-button" @click="modifyPost(post._id)">
@@ -115,7 +115,6 @@
 </template>
 
 <script>
-import UserClass from "@/classes/UserClass";
 import ModalWindow from "@/components/ModalWindow";
 
 export default {
@@ -131,13 +130,11 @@ export default {
 
   data() {
     return {
-      user: UserClass.user,
       inputFilter: "",
       data: null,
       message: "",
       showModal: false,
       postToDelete: null,
-      isAdmin: UserClass.isAdmin,
     };
   },
 
@@ -157,15 +154,13 @@ export default {
     },
 
     showModalDeletePost(postId) {
-      (this.postToDelete = postId), (this.showModal = true);
+      this.postToDelete = postId
+      this.showModal = true
     },
 
     async deletePost() {
-      const axiosConfig = {
-        headers: { Authorization: `Bearer ${this.user.token}` },
-      };
       try {
-        await this.axios.delete("/posts/" + this.postToDelete, axiosConfig);
+        await this.axios.delete("/posts/" + this.postToDelete);
         this.$emit("post-deleted", this.postToDelete);
         this.showModal = false;
       } catch (err) {
@@ -174,16 +169,12 @@ export default {
     },
 
     async onClickLike(id) {
-      const axiosConfig = {
-        headers: { Authorization: `Bearer ${this.user.token}` },
-      };
-      this.data = { userId: this.user.userId };
+      this.data = { userId: this.$store.state.user.userId };
 
       try {
         const { data } = await this.axios.post(
           `/posts/${id}/like`,
           this.data,
-          axiosConfig
         );
         this.$emit("post-liked", data);
       } catch (err) {
@@ -192,16 +183,12 @@ export default {
     },
 
     async onClickDislike(id) {
-      const axiosConfig = {
-        headers: { Authorization: `Bearer ${this.user.token}` },
-      };
-      this.data = { userId: this.user.userId };
+      this.data = { userId: this.$store.state.user.userId };
 
       try {
         const { data } = await this.axios.post(
           `/posts/${id}/dislike`,
           this.data,
-          axiosConfig
         );
         this.$emit("post-liked", data);
       } catch (err) {

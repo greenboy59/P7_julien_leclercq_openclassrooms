@@ -3,13 +3,13 @@
     <div class="user-title">
       <h1>
         Bonjour,<br />
-        <strong>{{ user.firstname }} {{ user.lastname }}</strong>
+        <strong>{{ $store.state.user.firstname }} {{ $store.state.user.lastname }}</strong>
       </h1>
       <img
-        :src="user.image"
+        :src="$store.state.user.image"
         alt="photo_de_profil"
         class="profile-picture"
-        @click="goToProfile(user.userId)"
+        @click="goToProfile($store.state.user.userId)"
       />
     </div>
     <input
@@ -59,7 +59,6 @@
 
 <script>
 import FilePreview from "@/components/FilePreview";
-import UserClass from "@/classes/UserClass";
 import ModalWindow from "@/components/ModalWindow";
 
 export default {
@@ -68,7 +67,6 @@ export default {
 
   data() {
     return {
-      user: UserClass.user,
       errors: [],
       image: "",
       textarea: "",
@@ -99,9 +97,9 @@ export default {
 
     // Publication d'un post
     async publish() {
-      const userName = UserClass.user.firstname + " " + UserClass.user.lastname;
-      const userId = UserClass.user.userId;
-      const userImage = UserClass.user.image;
+      const userName = this.$store.state.user.firstname + " " + this.$store.state.user.lastname;
+      const userId = this.$store.state.user.userId;
+      const userImage = this.$store.state.user.image;
       const formData = new FormData();
       formData.append("image", this.image);
       formData.append("description", this.textarea);

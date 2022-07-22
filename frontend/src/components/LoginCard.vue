@@ -43,7 +43,7 @@
             :disabled="errors.length || !email || !password"
             class="button"
             type="button"
-            @click="login()"
+            @click="onClickLogin()"
           >
             Se connecter
           </button>
@@ -62,7 +62,7 @@
 <script>
 import { regExpEmail } from "@/helpers/regex.js";
 import { regExpStrongPassword } from "@/helpers/regex.js";
-import UserClass from "@/classes/UserClass";
+import { mapActions } from 'vuex'
 
 export default {
   name: "LoginCard",
@@ -77,6 +77,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(['login']),
+
     onClickCardAction() {
       this.$router.replace("/signup");
     },
@@ -100,18 +102,9 @@ export default {
       }
     },
 
-    async login() {
-      // Utilisation de axios (appelé dans main.js) afin de communiquer avec l'API
+    async onClickLogin() {
       try {
-        const { data } = await this.axios.post("/auth/login", {
-          email: this.email,
-          password: this.password,
-        });
-        // Récupération des infos du user afin de les envoyer dans le local storage
-        this.axios.defaults.headers.common["Authorization"] =
-          "Bearer" + data.token;
-        UserClass.setUser(data);
-        // Dès que les data ont bien été envoyées a l'API, on envoi l'utilisateur vers la page des posts
+        await this.login({ email: this.email, password: this.password })
         await this.$router.replace("/all-posts");
       } catch (err) {
         console.log(err);

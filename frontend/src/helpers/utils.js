@@ -1,14 +1,11 @@
-import UserClass from "@/classes/UserClass";
 import jwt_decode from "jwt-decode";
 
-function checkTokenValidity() {
-  const token = UserClass.user.token;
+export function checkTokenValidity(token) {
   const decodedToken = jwt_decode(token);
-  if (token && Date.now() <= decodedToken.exp * 1000) {
-    return true;
-  } else {
-    return false;
-  }
+  return token && Date.now() <= decodedToken.exp * 1000;
 }
 
-export { checkTokenValidity };
+export function isAdmin(token) {
+  const decodedToken = jwt_decode(token);
+  return !!decodedToken.isAdmin;
+}

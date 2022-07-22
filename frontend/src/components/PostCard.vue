@@ -46,7 +46,7 @@
         @reload-image="reloadImage"
         :opacity="uploadInputOpacity"
       />
-      <div v-if="user.userId === post.userId || isAdmin" class="post-options">
+      <div v-if="$store.state.user.userId === post.userId || $store.getters.isAdmin" class="post-options">
         <button class="button modify-button" @click="modifyPost(post._id)">
           <i class="fas fa-edit modify"></i>
           valider
@@ -86,7 +86,6 @@
 </template>
 
 <script>
-import UserClass from "@/classes/UserClass";
 import FilePreview from "@/components/FilePreview";
 import ModalWindow from "@/components/ModalWindow";
 
@@ -96,8 +95,6 @@ export default {
 
   data() {
     return {
-      user: UserClass.user,
-      isAdmin: UserClass.isAdmin,
       post: "",
       id: this.$route.params.id,
       image: "",
@@ -131,15 +128,13 @@ export default {
     },
 
     showModalDeletePost(postId) {
-      (this.postToDelete = postId), (this.showModal = true);
+      this.postToDelete = postId
+      this.showModal = true
     },
 
     async deletePost() {
-      const axiosConfig = {
-        headers: { Authorization: `Bearer ${this.user.token}` },
-      };
       try {
-        await this.axios.delete("/posts/" + this.postToDelete, axiosConfig);
+        await this.axios.delete("/posts/" + this.postToDelete);
         await this.$router.replace("/all-posts");
       } catch (err) {
         console.log(err);

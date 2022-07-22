@@ -14,15 +14,14 @@
 <script>
 import ModalWindow from "@/components/ModalWindow";
 import { checkTokenValidity } from "@/helpers/utils";
-import UserClass from "@/classes/UserClass";
 
 export default {
   name: "TokenValidity",
   components: { ModalWindow },
 
   async beforeMount() {
-    if (UserClass.isAuthenticated) {
-      const isTokenValid = checkTokenValidity();
+    if (this.$store.getters.isAuthenticated) {
+      const isTokenValid = checkTokenValidity(this.$store.state.user.token);
       if (!isTokenValid) {
         return this.logoutAndShowModal();
       }

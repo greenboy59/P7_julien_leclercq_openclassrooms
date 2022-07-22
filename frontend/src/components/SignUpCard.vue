@@ -88,7 +88,6 @@
 import { regExpEmail } from "@/helpers/regex.js";
 import { regExpStrongPassword } from "@/helpers/regex.js";
 import { regName } from "@/helpers/regex.js";
-import UserClass from "@/classes/UserClass";
 import FilePreview from "./FilePreview.vue";
 
 export default {
@@ -168,7 +167,7 @@ export default {
         // Récupération des infos du user afin de les envoyer dans le local storage
         this.axios.defaults.headers.common["Authorization"] =
           "Bearer" + data.token;
-        UserClass.setUser(data);
+        this.$store.dispatch('getUser', data)
         // Dès que les data ont bien été envoyées a l'API, on envoi l'utilisateur vers la page des posts
         await this.$router.replace("/all-posts");
       } catch (err) {

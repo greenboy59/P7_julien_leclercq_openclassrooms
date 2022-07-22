@@ -4,7 +4,7 @@ import SignUp from "@/views/SignUpPage.vue";
 import ProfilePage from "@/views/ProfilePage.vue";
 import PostsPage from "@/views/PostsPage";
 import PostPage from "@/views/PostPage.vue";
-import UserClass from "@/classes/UserClass";
+import store from '@/store'
 
 const routes = [
   {
@@ -52,10 +52,10 @@ const router = createRouter({
 
 // Routes guard via le token et la meta auth
 router.beforeEach((to, from, next) => {
-  if (UserClass.isAuthenticated && !to.meta.auth) {
+  if (store.getters.isAuthenticated && !to.meta.auth) {
     next("/all-posts")
   }
-  if (to.meta.auth && !UserClass.isAuthenticated) {
+  if (to.meta.auth && !store.getters.isAuthenticated) {
     next("/login");
   } else {
     next();

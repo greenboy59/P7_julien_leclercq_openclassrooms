@@ -14,7 +14,6 @@
 import MainNav from "@/components/MainNav";
 import PostsList from "@/components/PostsList";
 import CreatePost from "@/components/CreatePost";
-import UserClass from "@/classes/UserClass";
 
 export default {
   name: "PostsPage",
@@ -22,16 +21,12 @@ export default {
   data() {
     return {
       posts: [],
-      user: UserClass.user,
       showModal: false,
     };
   },
 
   async beforeMount() {
-    const axiosConfig = {
-      headers: { Authorization: `Bearer ${this.user.token}` },
-    };
-    const { data } = await this.axios.get("/posts", axiosConfig);
+    const { data } = await this.axios.get("/posts");
     this.posts = data;
   },
 

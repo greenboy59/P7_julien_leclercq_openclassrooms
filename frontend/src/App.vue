@@ -11,6 +11,11 @@ import TokenValidity from "@/components/TokenValidity";
 export default {
   name: "App",
   components: { TokenValidity },
+
+  beforeMount () {
+    this.$store.dispatch('getUser')
+    console.log(this.$store.getters.isAdmin)
+  }
 };
 </script>
 

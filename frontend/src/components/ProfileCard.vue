@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import UserClass from "@/classes/UserClass";
 import FilePreview from "@/components/FilePreview";
+import { mapState } from 'vuex'
 
 export default {
   name: "ProfileCard",
@@ -38,11 +38,13 @@ export default {
 
   data() {
     return {
-      user: UserClass.user,
       id: this.$route.params.id,
       image: "",
     };
   },
+
+  computed: mapState(['user']),
+
   methods: {
     // Récupération de l'image
     setImage(payload) {
@@ -58,16 +60,12 @@ export default {
       formData.append("image", this.image);
 
       try {
-        const axiosConfig = {
-          headers: { Authorization: `Bearer ${this.user.token}` },
-        };
         const { data } = await this.axios.put(
           "/auth/" + id,
           formData,
-          axiosConfig
         );
         this.user.image = data.image;
-        UserClass.setUser(this.user);
+        this.$store.dispatch('getUser', data)
         await this.$router.replace("/all-posts");
       } catch (err) {
         console.log(err);
