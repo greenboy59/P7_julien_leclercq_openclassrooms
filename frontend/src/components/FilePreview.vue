@@ -48,6 +48,7 @@ export default {
   props: {
     opacity: Number,
   },
+
   methods: {
     selectImage() {
       this.$refs.fileInput.click();
