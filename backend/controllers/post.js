@@ -27,40 +27,44 @@ exports.getOnePost = (req, res, next) => {
 
 // Création d'un nouveau post
 exports.createPost = (req, res, next) => {
-  // Vérification du nombre de caractères dans la description du post
-  if (req.body.description.length > 400) {
-    return res.status(403).json({ error: "Trop de caractères dans la description du post !" });
+  if (req.body.description.length >= 1 || req.file) {
+    // Vérification du nombre de caractères dans la description du post
+    if (req.body.description.length > 400) {
+      return res.status(403).json({ error: "Trop de caractères dans la description du post !" });
+    }
+
+    req.file
+      ? req.body.file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+      : req.body.file = null;
+
+    const date = new Date();
+
+    try {
+      const post = new Post({
+        image: req.body.file,
+        userImage: req.body.userImage,
+        description: req.body.description,
+        userId: req.body.userId,
+        userName: req.body.userName,
+        usersWhoLiked: [],
+        usersWhoDisliked: [],
+        comments: [],
+        date: date.toLocaleString("fr-FR", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+        }),
+      })
+      post.save()
+        .then((post) => { res.status(201).json(post) })
+        .catch((error) => res.status(400).json({ error }))
+    } catch { (error) => res.status(500).json(error) }
+  } else {
+    res.status(400).json({ message: "Un post ne peut pas être vide" })
   }
-
-  req.file
-    ? req.body.file = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
-    : req.body.file = null;
-
-  const date = new Date();
-
-  try {
-    const post = new Post({
-      image: req.body.file,
-      userImage: req.body.userImage,
-      description: req.body.description,
-      userId: req.body.userId,
-      userName: req.body.userName,
-      usersWhoLiked: [],
-      usersWhoDisliked: [],
-      comments: [],
-      date: date.toLocaleString("fr-FR", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-      }),
-    })
-    post.save()
-      .then((post) => { res.status(201).json(post) })
-      .catch((error) => res.status(400).json({ error }))
-  } catch { (error) => res.status(500).json(error) }
 };
 
 // Modification d'un post
