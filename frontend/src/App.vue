@@ -142,6 +142,7 @@ input:focus {
 .posts-options {
   margin-top: 15px;
   display: flex;
+  gap: 3.7%;
 }
 
 /* buttons */

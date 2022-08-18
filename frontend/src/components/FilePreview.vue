@@ -45,6 +45,7 @@ export default {
       isDisabled: true,
     };
   },
+
   props: {
     opacity: Number,
   },
@@ -68,8 +69,7 @@ export default {
         let reader = new FileReader();
         reader.onload = (e) => {
           this.previewImage = e.target.result;
-          document.querySelector(".image-preview-wrapper").style.display =
-            "block";
+          document.querySelector(".image-preview-wrapper").style.display = "block";
         };
         reader.readAsDataURL(file[0]);
         this.$emit("upload", file[0]);

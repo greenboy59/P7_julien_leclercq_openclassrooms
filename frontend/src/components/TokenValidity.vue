@@ -51,6 +51,6 @@ export default {
 <style scoped>
 .modal-button-validate {
   width: fit-content;
-  margin: 5px;
+  margin-top: 25px;
 }
 </style>
